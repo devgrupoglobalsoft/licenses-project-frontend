@@ -1,13 +1,12 @@
 import { useState } from 'react'
+import { useDeleteUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
 // import UtilizadorUpdateForm from '@/pages/platform/utilizadores/components/utilizador-forms/utilizador-update-form'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Edit, Trash } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import { AlertModal } from '@/components/shared/alert-modal'
-import { useDeleteUtilizador } from '../../queries/utilizadores-mutations'
 
 interface CellActionProps {
   data: UtilizadorDTO
@@ -18,7 +17,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [selectedUtilizador, setSelectedUtilizador] =
     useState<UtilizadorDTO | null>(null)
-  const navigate = useNavigate()
 
   const deleteUtilizadorMutation = useDeleteUtilizador()
 

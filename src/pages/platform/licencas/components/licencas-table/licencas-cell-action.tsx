@@ -1,59 +1,58 @@
-import { AlertModal } from '@/components/shared/alert-modal';
-import { Button } from '@/components/ui/button';
-import { Edit, Lock, Unlock, Trash } from 'lucide-react';
-import { useState } from 'react';
-import { EnhancedModal } from '@/components/ui/enhanced-modal';
-import { toast } from '@/utils/toast-utils';
-import { LicencaDTO } from '@/types/dtos';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import LicencaBlockDetailsForm from '@/pages/platform/licencas/components/licenca-forms/licenca-block-details-form'
+import LicencaBlockForm from '@/pages/platform/licencas/components/licenca-forms/licenca-block-form'
+import LicencaUpdateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-update-form'
 import {
   useDeleteLicenca,
   useBlockLicenca,
-  useUnblockLicenca
-} from '../../queries/licencas-mutations';
-import LicencaUpdateForm from '../licenca-forms/licenca-update-form';
-import LicencaBlockForm from '../licenca-forms/licenca-block-form';
-import LicencaBlockDetailsForm from '../licenca-forms/licenca-block-details-form';
+  useUnblockLicenca,
+} from '@/pages/platform/licencas/queries/licencas-mutations'
+import { LicencaDTO } from '@/types/dtos'
+import { Edit, Lock, Unlock, Trash } from 'lucide-react'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 
 interface CellActionProps {
-  data: LicencaDTO;
+  data: LicencaDTO
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [open, setOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false);
-  const [isBlockDetailsModalOpen, setIsBlockDetailsModalOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
+  const [isBlockModalOpen, setIsBlockModalOpen] = useState(false)
+  const [isBlockDetailsModalOpen, setIsBlockDetailsModalOpen] = useState(false)
   const [selectedLicenca, setSelectedLicenca] = useState<LicencaDTO | null>(
     null
-  );
+  )
 
-  const deleteLicencaMutation = useDeleteLicenca();
+  const deleteLicencaMutation = useDeleteLicenca()
 
   const handleDeleteConfirm = async () => {
     try {
-      await deleteLicencaMutation.mutateAsync(data.id || '');
-      toast.success('Licença removida com sucesso');
+      await deleteLicencaMutation.mutateAsync(data.id || '')
+      toast.success('Licença removida com sucesso')
     } catch (error) {
-      toast.error('Erro ao remover a licença');
+      toast.error('Erro ao remover a licença')
     } finally {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
 
   const handleUpdateClick = (licenca: LicencaDTO) => {
-    setSelectedLicenca(licenca);
-    setIsUpdateModalOpen(true);
-  };
+    setSelectedLicenca(licenca)
+    setIsUpdateModalOpen(true)
+  }
 
   return (
     <>
       <EnhancedModal
-        title="Atualizar Licença"
-        description="Atualize os dados da licença"
+        title='Atualizar Licença'
+        description='Atualize os dados da licença'
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        size="xl"
+        size='xl'
       >
         {selectedLicenca && (
           <LicencaUpdateForm
@@ -66,18 +65,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               numeroUtilizadores: selectedLicenca.numeroUtilizadores,
               ativo: selectedLicenca.ativo || false,
               aplicacaoId: selectedLicenca.aplicacaoId,
-              clienteId: selectedLicenca.clienteId
+              clienteId: selectedLicenca.clienteId,
             }}
           />
         )}
       </EnhancedModal>
 
       <EnhancedModal
-        title="Bloquear Licença"
-        description="Informe o motivo do bloqueio"
+        title='Bloquear Licença'
+        description='Informe o motivo do bloqueio'
         isOpen={isBlockModalOpen}
         onClose={() => setIsBlockModalOpen(false)}
-        size="md"
+        size='md'
       >
         <LicencaBlockForm
           licencaId={data.id || ''}
@@ -86,11 +85,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       </EnhancedModal>
 
       <EnhancedModal
-        title="Detalhes do Bloqueio"
-        description="Informações sobre o bloqueio da licença"
+        title='Detalhes do Bloqueio'
+        description='Informações sobre o bloqueio da licença'
         isOpen={isBlockDetailsModalOpen}
         onClose={() => setIsBlockDetailsModalOpen(false)}
-        size="md"
+        size='md'
       >
         <LicencaBlockDetailsForm
           licencaId={data.id || ''}
@@ -107,43 +106,43 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         loading={deleteLicencaMutation.isPending}
       />
 
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Button
           onClick={() => handleUpdateClick(data)}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <Edit color="hsl(var(--primary))" className="h-4 w-4" />
-          <span className="sr-only">Atualizar</span>
+          <Edit color='hsl(var(--primary))' className='h-4 w-4' />
+          <span className='sr-only'>Atualizar</span>
         </Button>
         <Button
           onClick={() => setOpen(true)}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <Trash color="hsl(var(--destructive))" className="h-4 w-4" />
-          <span className="sr-only">Apagar</span>
+          <Trash color='hsl(var(--destructive))' className='h-4 w-4' />
+          <span className='sr-only'>Apagar</span>
         </Button>
         {data.bloqueada ? (
           <Button
             onClick={() => setIsBlockDetailsModalOpen(true)}
-            variant="ghost"
-            className="h-8 w-8 p-0"
+            variant='ghost'
+            className='h-8 w-8 p-0'
           >
-            <Lock color="hsl(var(--destructive))" className="h-4 w-4" />
-            <span className="sr-only">Ver Detalhes do Bloqueio</span>
+            <Lock color='hsl(var(--destructive))' className='h-4 w-4' />
+            <span className='sr-only'>Ver Detalhes do Bloqueio</span>
           </Button>
         ) : (
           <Button
             onClick={() => setIsBlockModalOpen(true)}
-            variant="ghost"
-            className="h-8 w-8 p-0"
+            variant='ghost'
+            className='h-8 w-8 p-0'
           >
-            <Unlock color="hsl(var(--emerald))" className="h-4 w-4" />
-            <span className="sr-only">Bloquear</span>
+            <Unlock color='hsl(var(--emerald))' className='h-4 w-4' />
+            <span className='sr-only'>Bloquear</span>
           </Button>
         )}
       </div>
     </>
-  );
-};
+  )
+}

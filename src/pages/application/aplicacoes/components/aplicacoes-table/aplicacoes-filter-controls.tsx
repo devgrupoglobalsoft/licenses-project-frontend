@@ -1,83 +1,83 @@
-import { useState, useEffect } from 'react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useState, useEffect } from 'react'
+import { ColumnDef } from '@tanstack/react-table'
+import { filterFields } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-constants'
+import { useGetAreasSelect } from '@/pages/application/areas/queries/areas-queries'
+import { AplicacaoDTO } from '@/types/dtos'
+import { getColumnHeader } from '@/utils/table-utils'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-controls-base';
-import { ColumnDef } from '@tanstack/react-table';
-import { useGetAreasSelect } from '@/pages/application/areas/queries/areas-queries';
-import { AplicacaoDTO } from '@/types/dtos';
-import { filterFields } from './aplicacoes-constants';
-import { getColumnHeader } from '@/utils/table-utils';
+  SelectValue,
+} from '@/components/ui/select'
+import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-controls-base'
 
 export function AplicacoesFilterControls({
   table,
   columns,
   onApplyFilters,
-  onClearFilters
+  onClearFilters,
 }: BaseFilterControlsProps<AplicacaoDTO>) {
-  const [filterValues, setFilterValues] = useState<Record<string, string>>({});
-  const [initialParamApplied, setInitialParamApplied] = useState(false);
-  const searchParams = new URLSearchParams(window.location.search);
-  const areaIdParam = searchParams.get('areaId');
+  const [filterValues, setFilterValues] = useState<Record<string, string>>({})
+  const [initialParamApplied, setInitialParamApplied] = useState(false)
+  const searchParams = new URLSearchParams(window.location.search)
+  const areaIdParam = searchParams.get('areaId')
 
-  const { data: areasData } = useGetAreasSelect();
+  const { data: areasData } = useGetAreasSelect()
 
   useEffect(() => {
     // Get current filters from the table's state
-    const currentFilters = table.getState().columnFilters;
-    const newFilterValues: Record<string, string> = {};
+    const currentFilters = table.getState().columnFilters
+    const newFilterValues: Record<string, string> = {}
 
     // First, apply any existing table filters
     currentFilters.forEach((filter) => {
       if (filter.value) {
-        newFilterValues[filter.id] = filter.value as string;
+        newFilterValues[filter.id] = filter.value as string
       }
-    });
+    })
 
     // Only apply the areaIdParam if it hasn't been applied before
     if (areaIdParam && !initialParamApplied) {
-      newFilterValues['areaId'] = areaIdParam;
-      table.getColumn('areaId')?.setFilterValue(areaIdParam);
-      setInitialParamApplied(true);
+      newFilterValues['areaId'] = areaIdParam
+      table.getColumn('areaId')?.setFilterValue(areaIdParam)
+      setInitialParamApplied(true)
     }
 
-    setFilterValues(newFilterValues);
-  }, [table.getState().columnFilters, areaIdParam, initialParamApplied]);
+    setFilterValues(newFilterValues)
+  }, [table.getState().columnFilters, areaIdParam, initialParamApplied])
 
   const handleFilterChange = (columnId: string, value: string) => {
-    const newValue = value === 'all' ? '' : value;
+    const newValue = value === 'all' ? '' : value
 
     // Update local state
     setFilterValues((prev) => ({
       ...prev,
-      [columnId]: newValue
-    }));
+      [columnId]: newValue,
+    }))
 
     // Update table filter
-    table.getColumn(columnId)?.setFilterValue(newValue);
+    table.getColumn(columnId)?.setFilterValue(newValue)
 
     // Always update URL when changing filters after initial load
     if (initialParamApplied) {
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete('areaId');
-      window.history.pushState({}, '', newUrl);
+      const newUrl = new URL(window.location.href)
+      newUrl.searchParams.delete('areaId')
+      window.history.pushState({}, '', newUrl)
     }
-  };
+  }
 
   const renderFilterInput = (column: ColumnDef<AplicacaoDTO, unknown>) => {
-    if (!('accessorKey' in column) || !column.accessorKey) return null;
+    if (!('accessorKey' in column) || !column.accessorKey) return null
 
     const commonInputStyles =
-      'w-full justify-start px-4 py-6 text-left font-normal shadow-inner';
+      'w-full justify-start px-4 py-6 text-left font-normal shadow-inner'
 
     if (column.accessorKey === 'ativo') {
-      const currentValue = filterValues[column.accessorKey] ?? '';
+      const currentValue = filterValues[column.accessorKey] ?? ''
       return (
         <Select
           value={currentValue === '' ? 'all' : currentValue}
@@ -86,19 +86,19 @@ export function AplicacoesFilterControls({
           }
         >
           <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder="Selecione o estado" />
+            <SelectValue placeholder='Selecione o estado' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todos</SelectItem>
-            <SelectItem value="true">Ativo</SelectItem>
-            <SelectItem value="false">Inativo</SelectItem>
+            <SelectItem value='all'>Todos</SelectItem>
+            <SelectItem value='true'>Ativo</SelectItem>
+            <SelectItem value='false'>Inativo</SelectItem>
           </SelectContent>
         </Select>
-      );
+      )
     }
 
     if (column.accessorKey === 'areaId') {
-      const currentValue = filterValues[column.accessorKey] ?? '';
+      const currentValue = filterValues[column.accessorKey] ?? ''
       return (
         <Select
           value={currentValue === '' ? 'all' : currentValue}
@@ -107,10 +107,10 @@ export function AplicacoesFilterControls({
           }
         >
           <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder="Selecione uma área" />
+            <SelectValue placeholder='Selecione uma área' />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Todas</SelectItem>
+            <SelectItem value='all'>Todas</SelectItem>
             {areasData?.map((area) => (
               <SelectItem key={area.id} value={area.id || ''}>
                 {area.nome}
@@ -118,7 +118,7 @@ export function AplicacoesFilterControls({
             ))}
           </SelectContent>
         </Select>
-      );
+      )
     }
 
     return (
@@ -130,8 +130,8 @@ export function AplicacoesFilterControls({
         }
         className={commonInputStyles}
       />
-    );
-  };
+    )
+  }
 
   return (
     <>
@@ -141,29 +141,29 @@ export function AplicacoesFilterControls({
             'accessorKey' in column &&
             column.accessorKey &&
             filterFields.some((field) => field.value === column.accessorKey)
-          );
+          )
         })
         .sort((a, b) => {
           const aField = filterFields.find(
             (field) => 'accessorKey' in a && field.value === a.accessorKey
-          );
+          )
           const bField = filterFields.find(
             (field) => 'accessorKey' in b && field.value === b.accessorKey
-          );
-          return (aField?.order ?? Infinity) - (bField?.order ?? Infinity);
+          )
+          return (aField?.order ?? Infinity) - (bField?.order ?? Infinity)
         })
         .map((column) => {
-          if (!('accessorKey' in column) || !column.accessorKey) return null;
+          if (!('accessorKey' in column) || !column.accessorKey) return null
           return (
             <div
               key={`${column.id}-${column.accessorKey}`}
-              className="space-y-2"
+              className='space-y-2'
             >
               <Label>{getColumnHeader(column, filterFields)}</Label>
               {renderFilterInput(column)}
             </div>
-          );
+          )
         })}
     </>
-  );
+  )
 }

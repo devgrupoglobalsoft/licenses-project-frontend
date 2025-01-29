@@ -1,3 +1,6 @@
+import AplicacoesPorArea from '@/pages/dashboard/components/aplicacoes-por-area-chart'
+import RecentAplicacoes from '@/pages/dashboard/components/recent-aplicacoes'
+import { useGetDashboardCounts } from '@/pages/dashboard/queries/dashboard-queries'
 import {
   Card,
   CardContent,
@@ -12,9 +15,6 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs.js'
 import PageHead from '@/components/shared/page-head.jsx'
-import AplicacoesPorArea from './components/aplicacoes-por-area-chart'
-import RecentAplicacoes from './components/recent-aplicacoes'
-import { useGetDashboardCounts } from './queries/dashboard-queries'
 
 export default function DashboardPage() {
   const { areasCount, aplicacoesCount, activeAplicacoesCount, isLoading } =

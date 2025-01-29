@@ -1,20 +1,20 @@
-import { Button } from '@/components/ui/button';
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useCreateCliente } from '@/pages/platform/clientes/queries/clientes-mutations'
+import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Switch } from '@/components/ui/switch';
-import { useCreateCliente } from '../../queries/clientes-mutations';
-import { toast } from '@/utils/toast-utils';
-import { getErrorMessage, handleApiError } from '@/utils/error-handlers';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
 
 const clienteFormSchema = z.object({
   nome: z
@@ -30,13 +30,13 @@ const clienteFormSchema = z.object({
   dadosExternos: z.boolean(),
   dadosUrl: z
     .string({ required_error: 'A URL dos dados é obrigatória' })
-    .min(1, { message: 'A URL dos dados não pode estar vazia' })
-});
+    .min(1, { message: 'A URL dos dados não pode estar vazia' }),
+})
 
-type ClienteFormSchemaType = z.infer<typeof clienteFormSchema>;
+type ClienteFormSchemaType = z.infer<typeof clienteFormSchema>
 
 const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
-  const createCliente = useCreateCliente();
+  const createCliente = useCreateCliente()
 
   const form = useForm<ClienteFormSchemaType>({
     resolver: zodResolver(clienteFormSchema),
@@ -46,44 +46,44 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
       nif: '',
       ativo: true,
       dadosExternos: false,
-      dadosUrl: ''
-    }
-  });
+      dadosUrl: '',
+    },
+  })
 
   const onSubmit = async (data: ClienteFormSchemaType) => {
     try {
-      const response = await createCliente.mutateAsync(data);
+      const response = await createCliente.mutateAsync(data)
       if (response.info.succeeded) {
-        toast.success('Cliente criado com sucesso!');
-        modalClose();
+        toast.success('Cliente criado com sucesso!')
+        modalClose()
       } else {
-        toast.error(getErrorMessage(response, 'Erro ao criar cliente'));
+        toast.error(getErrorMessage(response, 'Erro ao criar cliente'))
       }
     } catch (error) {
-      toast.error(handleApiError(error, 'Erro ao criar cliente'));
+      toast.error(handleApiError(error, 'Erro ao criar cliente'))
     }
-  };
+  }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
-        autoComplete="off"
+        className='space-y-4'
+        autoComplete='off'
       >
-        <div className="grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-12">
-          <div className="col-span-1 md:col-span-8">
+        <div className='grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-12'>
+          <div className='col-span-1 md:col-span-8'>
             <FormField
               control={form.control}
-              name="nome"
+              name='nome'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Introduza o nome"
+                      placeholder='Introduza o nome'
                       {...field}
-                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                      className='px-4 py-6 shadow-inner drop-shadow-xl'
                     />
                   </FormControl>
                   <FormMessage />
@@ -92,18 +92,18 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             />
           </div>
 
-          <div className="col-span-1 md:col-span-4">
+          <div className='col-span-1 md:col-span-4'>
             <FormField
               control={form.control}
-              name="sigla"
+              name='sigla'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Sigla</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Introduza a sigla"
+                      placeholder='Introduza a sigla'
                       {...field}
-                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                      className='px-4 py-6 shadow-inner drop-shadow-xl'
                     />
                   </FormControl>
                   <FormMessage />
@@ -112,20 +112,20 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             />
           </div>
 
-          <div className="col-span-1 md:col-span-12">
-            <div className="grid grid-cols-12 gap-x-8">
-              <div className="col-span-4">
+          <div className='col-span-1 md:col-span-12'>
+            <div className='grid grid-cols-12 gap-x-8'>
+              <div className='col-span-4'>
                 <FormField
                   control={form.control}
-                  name="nif"
+                  name='nif'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>NIF</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Introduza o NIF"
+                          placeholder='Introduza o NIF'
                           {...field}
-                          className="px-4 py-6 shadow-inner drop-shadow-xl"
+                          className='px-4 py-6 shadow-inner drop-shadow-xl'
                         />
                       </FormControl>
                       <FormMessage />
@@ -134,18 +134,18 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 />
               </div>
 
-              <div className="col-span-8">
+              <div className='col-span-8'>
                 <FormField
                   control={form.control}
-                  name="dadosUrl"
+                  name='dadosUrl'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>URL dos Dados</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Introduza a URL dos dados"
+                          placeholder='Introduza a URL dos dados'
                           {...field}
-                          className="px-4 py-6 shadow-inner drop-shadow-xl"
+                          className='px-4 py-6 shadow-inner drop-shadow-xl'
                         />
                       </FormControl>
                       <FormMessage />
@@ -156,15 +156,15 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-12">
-            <div className="grid grid-cols-2 gap-x-8">
+          <div className='col-span-1 md:col-span-12'>
+            <div className='grid grid-cols-2 gap-x-8'>
               <FormField
                 control={form.control}
-                name="ativo"
+                name='ativo'
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Ativo</FormLabel>
+                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                    <div className='space-y-0.5'>
+                      <FormLabel className='text-base'>Ativo</FormLabel>
                     </div>
                     <FormControl>
                       <Switch
@@ -178,11 +178,11 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
 
               <FormField
                 control={form.control}
-                name="dadosExternos"
+                name='dadosExternos'
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">
+                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                    <div className='space-y-0.5'>
+                      <FormLabel className='text-base'>
                         Dados Externos
                       </FormLabel>
                     </div>
@@ -199,22 +199,22 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
           </div>
         </div>
 
-        <div className="flex justify-end space-x-4 pt-4">
+        <div className='flex justify-end space-x-4 pt-4'>
           <Button
-            type="button"
-            variant="outline"
+            type='button'
+            variant='outline'
             onClick={modalClose}
-            className="w-24"
+            className='w-24'
           >
             Cancelar
           </Button>
-          <Button type="submit" className="w-24">
+          <Button type='submit' className='w-24'>
             Criar
           </Button>
         </div>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default ClienteCreateForm;
+export default ClienteCreateForm

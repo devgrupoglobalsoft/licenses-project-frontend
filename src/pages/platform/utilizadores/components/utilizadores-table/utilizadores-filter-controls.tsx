@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadorDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
 import { roleLabelMap } from '@/constants/roles'
@@ -14,7 +15,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-controls-base'
-import { filterFields } from './utilizadores-constants'
 
 export function UtilizadoresFilterControls({
   table,

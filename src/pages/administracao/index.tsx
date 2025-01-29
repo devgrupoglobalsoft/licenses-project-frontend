@@ -1,11 +1,11 @@
+import LicencasCriadasTerminadasChart from '@/pages/administracao//components/licencas-criadas-terminadas-chart'
+import AreasComMaisLicencas from '@/pages/administracao/components/areas-com-mais-licencas-chart'
+import LicencasAExpirarChart from '@/pages/administracao/components/licencas-a-expirar-chart'
+import { LicencasPorAreaPieChart } from '@/pages/administracao/components/licencas-por-area-pie-chart'
+import { useGetAdministracaoCounts } from '@/pages/administracao/queries/administracao-queries'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import PageHead from '@/components/shared/page-head'
-import AreasComMaisLicencas from './components/areas-com-mais-licencas-chart'
-import LicencasAExpirarChart from './components/licencas-a-expirar-chart'
-import LicencasCriadasTerminadasChart from './components/licencas-criadas-terminadas-chart'
-import { LicencasPorAreaPieChart } from './components/licencas-por-area-pie-chart'
-import { useGetAdministracaoCounts } from './queries/administracao-queries'
 
 export default function AdministracaoPage() {
   const { clientesCount, licencasCount, activeLicencasCount, isLoading } =

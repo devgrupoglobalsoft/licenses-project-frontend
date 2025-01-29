@@ -6,19 +6,16 @@ import { useGetLicencas } from '@/pages/platform/licencas/queries/licencas-queri
 import { Label, Pie, PieChart, ResponsiveContainer } from 'recharts'
 import { getAreaColors } from '@/lib/constants/area-colors'
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart'
-import { chartConfig } from './areas-com-mais-licencas-chart'
 
 interface AreaCount {
   name: string
@@ -66,6 +63,7 @@ export function LicencasPorAreaPieChart() {
       acc.push({
         name: areaName,
         value: 1,
+        fill: '', // Will be set later by getAreaColors
       })
     }
     return acc

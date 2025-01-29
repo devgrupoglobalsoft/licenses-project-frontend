@@ -1,30 +1,30 @@
-import { Button } from '@/components/ui/button';
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries'
+import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { useUpdateLicenca } from '@/pages/platform/licencas/queries/licencas-mutations'
+import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
+import { DatePicker } from '@/components/ui/date-picker'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Switch } from '@/components/ui/switch';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { useUpdateLicenca } from '../../queries/licencas-mutations';
-import { toast } from '@/utils/toast-utils';
-import { getErrorMessage, handleApiError } from '@/utils/error-handlers';
-import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries';
-import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries';
-import { DatePicker } from '@/components/ui/date-picker';
+  SelectValue,
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 
 const licencaFormSchema = z.object({
   nome: z
@@ -35,33 +35,33 @@ const licencaFormSchema = z.object({
   numeroUtilizadores: z.number().min(1, { message: 'Mínimo de 1 utilizador' }),
   ativo: z.boolean(),
   aplicacaoId: z.string({ required_error: 'A Aplicação é obrigatória' }),
-  clienteId: z.string({ required_error: 'O Cliente é obrigatório' })
-});
+  clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
+})
 
-type LicencaFormSchemaType = z.infer<typeof licencaFormSchema>;
+type LicencaFormSchemaType = z.infer<typeof licencaFormSchema>
 
 interface LicencaUpdateFormProps {
-  modalClose: () => void;
-  licencaId: string;
+  modalClose: () => void
+  licencaId: string
   initialData: {
-    nome: string;
-    dataInicio?: string | Date;
-    dataFim?: string | Date;
-    numeroUtilizadores: number;
-    ativo: boolean;
-    aplicacaoId: string;
-    clienteId: string;
-  };
+    nome: string
+    dataInicio?: string | Date
+    dataFim?: string | Date
+    numeroUtilizadores: number
+    ativo: boolean
+    aplicacaoId: string
+    clienteId: string
+  }
 }
 
 const LicencaUpdateForm = ({
   modalClose,
   licencaId,
-  initialData
+  initialData,
 }: LicencaUpdateFormProps) => {
-  const { data: aplicacoesData } = useGetAplicacoesSelect();
-  const { data: clientesData } = useGetClientesSelect();
-  const updateLicenca = useUpdateLicenca();
+  const { data: aplicacoesData } = useGetAplicacoesSelect()
+  const { data: clientesData } = useGetClientesSelect()
+  const updateLicenca = useUpdateLicenca()
 
   const form = useForm<LicencaFormSchemaType>({
     resolver: zodResolver(licencaFormSchema),
@@ -74,49 +74,49 @@ const LicencaUpdateForm = ({
       numeroUtilizadores: initialData.numeroUtilizadores,
       ativo: initialData.ativo,
       aplicacaoId: initialData.aplicacaoId,
-      clienteId: initialData.clienteId
-    }
-  });
+      clienteId: initialData.clienteId,
+    },
+  })
 
   const onSubmit = async (data: LicencaFormSchemaType) => {
     try {
       const response = await updateLicenca.mutateAsync({
         id: licencaId,
-        data: { ...data, id: licencaId }
-      });
+        data: { ...data, id: licencaId },
+      })
       if (response.info.succeeded) {
-        toast.success('Licença atualizada com sucesso!');
-        modalClose();
+        toast.success('Licença atualizada com sucesso!')
+        modalClose()
       } else {
-        toast.error(getErrorMessage(response, 'Erro ao atualizar licença'));
+        toast.error(getErrorMessage(response, 'Erro ao atualizar licença'))
       }
     } catch (error) {
-      toast.error(handleApiError(error, 'Erro ao atualizar licença'));
+      toast.error(handleApiError(error, 'Erro ao atualizar licença'))
     }
-  };
+  }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full space-y-4"
-        autoComplete="off"
+        className='w-full space-y-4'
+        autoComplete='off'
       >
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-8">
-          <div className="col-span-1 md:col-span-12">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-8">
-              <div className="col-span-1 md:col-span-8">
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-8'>
+          <div className='col-span-1 md:col-span-12'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-8'>
+              <div className='col-span-1 md:col-span-8'>
                 <FormField
                   control={form.control}
-                  name="nome"
+                  name='nome'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="Introduza o nome"
+                          placeholder='Introduza o nome'
                           {...field}
-                          className="px-4 py-6 shadow-inner drop-shadow-xl"
+                          className='px-4 py-6 shadow-inner drop-shadow-xl'
                         />
                       </FormControl>
                       <FormMessage />
@@ -125,22 +125,22 @@ const LicencaUpdateForm = ({
                 />
               </div>
 
-              <div className="col-span-1 md:col-span-4">
+              <div className='col-span-1 md:col-span-4'>
                 <FormField
                   control={form.control}
-                  name="numeroUtilizadores"
+                  name='numeroUtilizadores'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Número de Utilizadores</FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="Introduza o número de utilizadores"
+                          type='number'
+                          placeholder='Introduza o número de utilizadores'
                           {...field}
                           onChange={(e) =>
                             field.onChange(Number(e.target.value))
                           }
-                          className="px-4 py-6 shadow-inner drop-shadow-xl"
+                          className='px-4 py-6 shadow-inner drop-shadow-xl'
                         />
                       </FormControl>
                       <FormMessage />
@@ -151,19 +151,19 @@ const LicencaUpdateForm = ({
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-12">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8">
+          <div className='col-span-1 md:col-span-12'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8'>
               <FormField
                 control={form.control}
-                name="dataInicio"
+                name='dataInicio'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Data Início</FormLabel>
                     <FormControl>
                       <DatePicker
                         {...field}
-                        className="w-full"
-                        placeholder="Selecione a data de início"
+                        className='w-full'
+                        placeholder='Selecione a data de início'
                       />
                     </FormControl>
                     <FormMessage />
@@ -173,15 +173,15 @@ const LicencaUpdateForm = ({
 
               <FormField
                 control={form.control}
-                name="dataFim"
+                name='dataFim'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Data Fim</FormLabel>
                     <FormControl>
                       <DatePicker
                         {...field}
-                        className="w-full"
-                        placeholder="Selecione a data de fim"
+                        className='w-full'
+                        placeholder='Selecione a data de fim'
                       />
                     </FormControl>
                     <FormMessage />
@@ -191,12 +191,12 @@ const LicencaUpdateForm = ({
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-12">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-8">
-              <div className="col-span-1 md:col-span-6">
+          <div className='col-span-1 md:col-span-12'>
+            <div className='grid grid-cols-1 gap-4 md:grid-cols-12 md:gap-8'>
+              <div className='col-span-1 md:col-span-6'>
                 <FormField
                   control={form.control}
-                  name="aplicacaoId"
+                  name='aplicacaoId'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Aplicação</FormLabel>
@@ -205,8 +205,8 @@ const LicencaUpdateForm = ({
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="px-4 py-6 shadow-inner drop-shadow-xl">
-                            <SelectValue placeholder="Selecione uma aplicação" />
+                          <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                            <SelectValue placeholder='Selecione uma aplicação' />
                           </SelectTrigger>
                           <SelectContent>
                             {aplicacoesData?.map((aplicacao) => (
@@ -226,10 +226,10 @@ const LicencaUpdateForm = ({
                 />
               </div>
 
-              <div className="col-span-1 md:col-span-6">
+              <div className='col-span-1 md:col-span-6'>
                 <FormField
                   control={form.control}
-                  name="clienteId"
+                  name='clienteId'
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Cliente</FormLabel>
@@ -238,8 +238,8 @@ const LicencaUpdateForm = ({
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="px-4 py-6 shadow-inner drop-shadow-xl">
-                            <SelectValue placeholder="Selecione um cliente" />
+                          <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                            <SelectValue placeholder='Selecione um cliente' />
                           </SelectTrigger>
                           <SelectContent>
                             {clientesData?.map((cliente) => (
@@ -258,14 +258,14 @@ const LicencaUpdateForm = ({
             </div>
           </div>
 
-          <div className="col-span-1 md:col-span-6">
+          <div className='col-span-1 md:col-span-6'>
             <FormField
               control={form.control}
-              name="ativo"
+              name='ativo'
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Ativo</FormLabel>
+                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                  <div className='space-y-0.5'>
+                    <FormLabel className='text-base'>Ativo</FormLabel>
                   </div>
                   <FormControl>
                     <Switch
@@ -279,26 +279,26 @@ const LicencaUpdateForm = ({
           </div>
         </div>
 
-        <div className="flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0">
+        <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
           <Button
-            type="button"
-            variant="outline"
+            type='button'
+            variant='outline'
             onClick={modalClose}
-            className="w-full md:w-auto"
+            className='w-full md:w-auto'
           >
             Cancelar
           </Button>
           <Button
-            type="submit"
+            type='submit'
             disabled={updateLicenca.isPending}
-            className="w-full md:w-auto"
+            className='w-full md:w-auto'
           >
             Atualizar
           </Button>
         </div>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default LicencaUpdateForm;
+export default LicencaUpdateForm

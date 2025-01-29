@@ -1,30 +1,30 @@
-import { FuncionalidadeDTO } from './funcionalidade.dto';
+import { FuncionalidadeDTO } from '@/types/dtos/funcionalidade.dto'
 
 export interface CreateModuloDTO {
-  nome: string;
-  descricao: string;
-  ativo?: boolean;
-  aplicacaoId?: string;
+  nome: string
+  descricao: string
+  ativo?: boolean
+  aplicacaoId?: string
 }
 
 export interface UpdateModuloDTO extends CreateModuloDTO {
-  id: string;
+  id: string
 }
 
 export interface ModuloDTO {
-  id: string;
-  nome: string;
-  descricao: string;
-  ativo?: boolean;
-  aplicacaoId?: string;
-  funcionalidades?: FuncionalidadeDTO[];
+  id: string
+  nome: string
+  descricao: string
+  ativo?: boolean
+  aplicacaoId?: string
+  funcionalidades?: FuncionalidadeDTO[]
   aplicacao?: {
-    nome: string;
-  };
-  createdOn: string;
+    nome: string
+  }
+  createdOn: string
 }
 
 export interface ModuloPerfilDTO {
-  id: string;
-  nome: string;
+  id: string
+  nome: string
 }

@@ -1,17 +1,8 @@
 'use client'
 
-import { subDays } from 'date-fns'
 import { useGetLicencas } from '@/pages/platform/licencas/queries/licencas-queries'
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts'
-import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,

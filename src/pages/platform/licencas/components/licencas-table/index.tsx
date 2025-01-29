@@ -1,42 +1,42 @@
-import DataTable from '@/components/shared/data-table';
-import { columns } from './licencas-columns';
-import LicencasTableActions from './licencas-table-actions';
-import { filterFields } from './licencas-constants';
-import { LicencaDTO } from '@/types/dtos';
-import { LicencasFilterControls } from '@/pages/platform/licencas/components/licencas-table/licencas-filter-controls';
+import { columns } from '@/pages/platform/licencas/components/licencas-table/licencas-columns'
+import { filterFields } from '@/pages/platform/licencas/components/licencas-table/licencas-constants'
+import { LicencasFilterControls } from '@/pages/platform/licencas/components/licencas-table/licencas-filter-controls'
+import LicencasTableActions from '@/pages/platform/licencas/components/licencas-table/licencas-table-actions'
+import { LicencaDTO } from '@/types/dtos'
+import DataTable from '@/components/shared/data-table'
 
 type TLicencasTableProps = {
-  licencas: LicencaDTO[];
-  page: number;
-  totalLicencas: number;
-  pageCount: number;
-  onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void;
-  onPaginationChange?: (page: number, pageSize: number) => void;
-};
+  licencas: LicencaDTO[]
+  page: number
+  totalLicencas: number
+  pageCount: number
+  onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
+  onPaginationChange?: (page: number, pageSize: number) => void
+}
 
 export function LicencasTable({
   licencas,
   pageCount,
   onFiltersChange,
-  onPaginationChange
+  onPaginationChange,
 }: TLicencasTableProps) {
-  const searchParams = new URLSearchParams(window.location.search);
-  const clienteIdParam = searchParams.get('clienteId');
-  const initialActiveFiltersCount = clienteIdParam ? 1 : 0;
+  const searchParams = new URLSearchParams(window.location.search)
+  const clienteIdParam = searchParams.get('clienteId')
+  const initialActiveFiltersCount = clienteIdParam ? 1 : 0
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {
     if (onFiltersChange) {
-      onFiltersChange(filters);
+      onFiltersChange(filters)
     }
-  };
+  }
 
   const handlePaginationChange = (page: number, pageSize: number) => {
     if (onPaginationChange) {
-      onPaginationChange(page, pageSize);
+      onPaginationChange(page, pageSize)
     }
-  };
+  }
 
   return (
     <>
@@ -51,9 +51,9 @@ export function LicencasTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute="/licencas"
+          baseRoute='/licencas'
         />
       )}
     </>
-  );
+  )
 }

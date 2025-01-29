@@ -1,56 +1,56 @@
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/utils/toast-utils';
-import { useBlockLicenca } from '../../queries/licencas-mutations';
-import { useState } from 'react';
-import { getErrorMessage, handleApiError } from '@/utils/error-handlers';
+import { useState } from 'react'
+import { useBlockLicenca } from '@/pages/platform/licencas/queries/licencas-mutations'
+import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 
 interface LicencaBlockFormProps {
-  licencaId: string;
-  modalClose: () => void;
+  licencaId: string
+  modalClose: () => void
 }
 
 const LicencaBlockForm = ({ licencaId, modalClose }: LicencaBlockFormProps) => {
-  const [motivoBloqueio, setMotivoBloqueio] = useState('');
-  const blockLicencaMutation = useBlockLicenca();
+  const [motivoBloqueio, setMotivoBloqueio] = useState('')
+  const blockLicencaMutation = useBlockLicenca()
 
   const handleBlockConfirm = async () => {
     if (!motivoBloqueio.trim()) {
-      toast.error('O motivo do bloqueio é obrigatório');
-      return;
+      toast.error('O motivo do bloqueio é obrigatório')
+      return
     }
 
     try {
       const response = await blockLicencaMutation.mutateAsync({
         licencaId,
-        motivoBloqueio: motivoBloqueio.trim()
-      });
+        motivoBloqueio: motivoBloqueio.trim(),
+      })
 
       if (response.info.succeeded) {
-        toast.success('Licença bloqueada com sucesso!');
-        modalClose();
+        toast.success('Licença bloqueada com sucesso!')
+        modalClose()
       } else {
-        toast.error(getErrorMessage(response, 'Erro ao bloquear licença'));
+        toast.error(getErrorMessage(response, 'Erro ao bloquear licença'))
       }
     } catch (error) {
-      toast.error(handleApiError(error, 'Erro ao bloquear licença'));
+      toast.error(handleApiError(error, 'Erro ao bloquear licença'))
     }
-  };
+  }
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       <Textarea
-        placeholder="Digite o motivo do bloqueio"
+        placeholder='Digite o motivo do bloqueio'
         value={motivoBloqueio}
         onChange={(e) => setMotivoBloqueio(e.target.value)}
-        className="min-h-[100px]"
+        className='min-h-[100px]'
       />
-      <div className="flex justify-end space-x-2">
-        <Button variant="outline" onClick={modalClose}>
+      <div className='flex justify-end space-x-2'>
+        <Button variant='outline' onClick={modalClose}>
           Cancelar
         </Button>
         <Button
-          variant="destructive"
+          variant='destructive'
           onClick={handleBlockConfirm}
           disabled={blockLicencaMutation.isPending}
         >
@@ -58,7 +58,7 @@ const LicencaBlockForm = ({ licencaId, modalClose }: LicencaBlockFormProps) => {
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LicencaBlockForm;
+export default LicencaBlockForm

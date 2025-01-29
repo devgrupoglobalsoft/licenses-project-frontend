@@ -1,49 +1,49 @@
-import { Button } from '@/components/ui/button';
-import { useState } from 'react';
-import { Edit, Trash } from 'lucide-react';
-import { toast } from '@/utils/toast-utils';
-import { AlertModal } from '@/components/shared/alert-modal';
-import { EnhancedModal } from '@/components/ui/enhanced-modal';
-import { FuncionalidadeDTO } from '@/types/dtos';
-import { useDeleteFuncionalidade } from '../../queries/funcionalidades-mutations';
-import FuncionalidadeUpdateForm from '../funcionalidade-forms/funcionalidade-update-form';
+import { useState } from 'react'
+import FuncionalidadeUpdateForm from '@/pages/application/funcionalidades/components/funcionalidade-forms/funcionalidade-update-form'
+import { useDeleteFuncionalidade } from '@/pages/application/funcionalidades/queries/funcionalidades-mutations'
+import { FuncionalidadeDTO } from '@/types/dtos'
+import { Edit, Trash } from 'lucide-react'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 
 interface CellActionProps {
-  data: FuncionalidadeDTO;
+  data: FuncionalidadeDTO
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [open, setOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [selectedFuncionalidade, setSelectedFuncionalidade] =
-    useState<FuncionalidadeDTO | null>(null);
+    useState<FuncionalidadeDTO | null>(null)
 
-  const deleteFuncionalidadeMutation = useDeleteFuncionalidade();
+  const deleteFuncionalidadeMutation = useDeleteFuncionalidade()
 
   const handleDeleteConfirm = async () => {
     try {
-      await deleteFuncionalidadeMutation.mutateAsync(data.id || '');
-      toast.success('Funcionalidade removida com sucesso');
+      await deleteFuncionalidadeMutation.mutateAsync(data.id || '')
+      toast.success('Funcionalidade removida com sucesso')
     } catch (error) {
-      toast.error('Erro ao remover a funcionalidade');
+      toast.error('Erro ao remover a funcionalidade')
     } finally {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
 
   const handleUpdateClick = (funcionalidade: FuncionalidadeDTO) => {
-    setSelectedFuncionalidade(funcionalidade);
-    setIsUpdateModalOpen(true);
-  };
+    setSelectedFuncionalidade(funcionalidade)
+    setIsUpdateModalOpen(true)
+  }
 
   return (
     <>
       <EnhancedModal
-        title="Atualizar Funcionalidade"
-        description="Atualize os dados da funcionalidade"
+        title='Atualizar Funcionalidade'
+        description='Atualize os dados da funcionalidade'
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        size="md"
+        size='md'
       >
         {selectedFuncionalidade && (
           <FuncionalidadeUpdateForm
@@ -53,7 +53,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               nome: selectedFuncionalidade.nome,
               descricao: selectedFuncionalidade.descricao,
               ativo: selectedFuncionalidade.ativo || true,
-              moduloId: selectedFuncionalidade.moduloId || ''
+              moduloId: selectedFuncionalidade.moduloId || '',
             }}
           />
         )}
@@ -66,24 +66,24 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         loading={deleteFuncionalidadeMutation.isPending}
       />
 
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Button
           onClick={() => handleUpdateClick(data)}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <Edit color="hsl(var(--primary))" className="h-4 w-4" />
-          <span className="sr-only">Atualizar</span>
+          <Edit color='hsl(var(--primary))' className='h-4 w-4' />
+          <span className='sr-only'>Atualizar</span>
         </Button>
         <Button
           onClick={() => setOpen(true)}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <Trash color="hsl(var(--destructive))" className="h-4 w-4" />
-          <span className="sr-only">Apagar</span>
+          <Trash color='hsl(var(--destructive))' className='h-4 w-4' />
+          <span className='sr-only'>Apagar</span>
         </Button>
       </div>
     </>
-  );
-};
+  )
+}

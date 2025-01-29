@@ -1,55 +1,55 @@
-import { AlertModal } from '@/components/shared/alert-modal';
-import { Button } from '@/components/ui/button';
-import { AppWindow, Edit, Trash } from 'lucide-react';
-import { useState } from 'react';
-import { EnhancedModal } from '@/components/ui/enhanced-modal';
-import { toast } from '@/utils/toast-utils';
-import AplicacaoUpdateForm from '@/pages/application/aplicacoes/components/aplicacao-forms/aplicacao-update-form';
-import { useDeleteAplicacao } from '../../queries/aplicacoes-mutations';
-import { AplicacaoDTO } from '@/types/dtos';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import AplicacaoUpdateForm from '@/pages/application/aplicacoes/components/aplicacao-forms/aplicacao-update-form'
+import { useDeleteAplicacao } from '@/pages/application/aplicacoes/queries/aplicacoes-mutations'
+import { AplicacaoDTO } from '@/types/dtos'
+import { AppWindow, Edit, Trash } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 
 interface CellActionProps {
-  data: AplicacaoDTO;
+  data: AplicacaoDTO
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [open, setOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [selectedAplicacao, setSelectedAplicacao] =
-    useState<AplicacaoDTO | null>(null);
-  const navigate = useNavigate();
+    useState<AplicacaoDTO | null>(null)
+  const navigate = useNavigate()
 
-  const deleteAplicacaoMutation = useDeleteAplicacao();
+  const deleteAplicacaoMutation = useDeleteAplicacao()
 
   const handleDeleteConfirm = async () => {
     try {
-      await deleteAplicacaoMutation.mutateAsync(data.id || '');
-      toast.success('Aplicação removida com sucesso');
+      await deleteAplicacaoMutation.mutateAsync(data.id || '')
+      toast.success('Aplicação removida com sucesso')
     } catch (error) {
-      toast.error('Erro ao remover a aplicação');
+      toast.error('Erro ao remover a aplicação')
     } finally {
-      setOpen(false);
+      setOpen(false)
     }
-  };
+  }
 
   const handleUpdateClick = (aplicacao: AplicacaoDTO) => {
-    setSelectedAplicacao(aplicacao);
-    setIsUpdateModalOpen(true);
-  };
+    setSelectedAplicacao(aplicacao)
+    setIsUpdateModalOpen(true)
+  }
 
   const handleViewModulos = (aplicacaoId: string) => {
-    navigate(`/modulos?aplicacaoId=${aplicacaoId}`);
-  };
+    navigate(`/modulos?aplicacaoId=${aplicacaoId}`)
+  }
 
   return (
     <>
       <EnhancedModal
-        title="Atualizar Aplicação"
-        description="Atualize os dados da aplicação"
+        title='Atualizar Aplicação'
+        description='Atualize os dados da aplicação'
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        size="md"
+        size='md'
       >
         {selectedAplicacao && (
           <AplicacaoUpdateForm
@@ -60,7 +60,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               descricao: selectedAplicacao.descricao,
               ativo: selectedAplicacao.ativo,
               areaId: selectedAplicacao.areaId,
-              versao: selectedAplicacao.versao || '1'
+              versao: selectedAplicacao.versao || '1',
             }}
           />
         )}
@@ -73,32 +73,32 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         loading={deleteAplicacaoMutation.isPending}
       />
 
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Button
           onClick={() => handleUpdateClick(data)}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <Edit color="hsl(var(--primary))" className="h-4 w-4" />
-          <span className="sr-only">Atualizar</span>
+          <Edit color='hsl(var(--primary))' className='h-4 w-4' />
+          <span className='sr-only'>Atualizar</span>
         </Button>
         <Button
           onClick={() => setOpen(true)}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <Trash color="hsl(var(--destructive))" className="h-4 w-4" />
-          <span className="sr-only">Apagar</span>
+          <Trash color='hsl(var(--destructive))' className='h-4 w-4' />
+          <span className='sr-only'>Apagar</span>
         </Button>
         <Button
           onClick={() => handleViewModulos(data.id || '')}
-          variant="ghost"
-          className="h-8 w-8 p-0"
+          variant='ghost'
+          className='h-8 w-8 p-0'
         >
-          <AppWindow className="h-4 w-4" />
-          <span className="sr-only">Ver Modulos</span>
+          <AppWindow className='h-4 w-4' />
+          <span className='sr-only'>Ver Modulos</span>
         </Button>
       </div>
     </>
-  );
-};
+  )
+}
