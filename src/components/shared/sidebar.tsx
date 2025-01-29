@@ -1,32 +1,33 @@
-'use client';
-import DashboardNav from '@/components/shared/dashboard-nav';
-import { useSidebar } from '@/hooks/use-sidebar';
-import { useMenuItems } from '@/hooks/use-menu-items';
-import { cn } from '@/lib/utils';
-import { ChevronsLeft } from 'lucide-react';
-import { useState } from 'react';
-import { Logo } from '@/assets/logo';
+'use client'
+
+import { useState } from 'react'
+import { ChevronsLeft } from 'lucide-react'
+import { Logo } from '@/assets/logo'
+import { cn } from '@/lib/utils'
+import { useMenuItems } from '@/hooks/use-menu-items'
+import { useSidebar } from '@/hooks/use-sidebar'
+import DashboardNav from '@/components/shared/dashboard-nav'
 
 type SidebarProps = {
-  className?: string;
-};
+  className?: string
+}
 
 export default function Sidebar({ className }: SidebarProps) {
-  const { isMinimized, toggle } = useSidebar();
-  const [status, setStatus] = useState(false);
-  const menuItems = useMenuItems();
+  const { isMinimized, toggle } = useSidebar()
+  const [status, setStatus] = useState(false)
+  const menuItems = useMenuItems()
 
   const handleToggle = () => {
-    setStatus(true);
-    toggle();
-    setTimeout(() => setStatus(false), 500);
-  };
+    setStatus(true)
+    toggle()
+    setTimeout(() => setStatus(false), 300)
+  }
 
   return (
     <nav
       className={cn(
         `relative z-10 hidden h-screen flex-none px-3 md:block`,
-        status && 'duration-500',
+        status && 'duration-300',
         !isMinimized ? 'w-72' : 'w-[80px]',
         className
       )}
@@ -34,22 +35,26 @@ export default function Sidebar({ className }: SidebarProps) {
       <div
         className={cn(
           'flex items-center px-0 py-5 md:px-2',
-          isMinimized ? 'justify-center' : 'justify-between'
+          isMinimized ? 'justify-center' : 'justify-between',
+          'transition-all duration-300'
         )}
       >
         <div
-          className={cn(isMinimized && 'cursor-pointer')}
+          className={cn(
+            isMinimized && 'cursor-pointer',
+            'transition-all duration-300'
+          )}
           onClick={isMinimized ? handleToggle : undefined}
         >
           <Logo
             width={isMinimized ? 40 : 95}
-            className="text-foreground"
+            className={cn('text-foreground', 'transition-all duration-300')}
             disableLink={true}
           />
         </div>
         {!isMinimized && (
           <div
-            className="flex size-8 cursor-pointer items-center justify-center rounded-full border bg-background text-foreground"
+            className='flex size-8 cursor-pointer items-center justify-center rounded-full border bg-background text-foreground'
             onClick={handleToggle}
           >
             <ChevronsLeft
@@ -58,13 +63,13 @@ export default function Sidebar({ className }: SidebarProps) {
           </div>
         )}
       </div>
-      <div className="space-y-4 py-4">
-        <div className="px-2 py-2">
-          <div className="mt-3 space-y-1">
+      <div className='space-y-4 py-4'>
+        <div className='px-2 py-2'>
+          <div className='mt-3 space-y-1'>
             <DashboardNav items={menuItems} />
           </div>
         </div>
       </div>
     </nav>
-  );
+  )
 }
