@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { ColumnFilter } from '@tanstack/react-table'
 import { filterFields } from '@/pages/application/areas/components/areas-table/areas-constants'
 import { AreaDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
@@ -18,7 +19,7 @@ export function AreasFilterControls({
     const currentFilters = table.getState().columnFilters
     const newFilterValues: Record<string, string> = {}
 
-    currentFilters.forEach((filter: { id: string; value: unknown }) => {
+    currentFilters.forEach((filter: ColumnFilter) => {
       if (filter.value) {
         newFilterValues[filter.id] = filter.value as string
       }

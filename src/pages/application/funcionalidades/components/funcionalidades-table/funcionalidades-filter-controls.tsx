@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { filterFields } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-constants'
 import { useGetModulosSelect } from '@/pages/application/modulos/queries/modulos-queries'
 import { FuncionalidadeDTO } from '@/types/dtos'
@@ -32,7 +32,7 @@ export function FuncionalidadesFilterControls({
     const currentFilters = table.getState().columnFilters
     const newFilterValues: Record<string, string> = {}
 
-    currentFilters.forEach((filter) => {
+    currentFilters.forEach((filter: ColumnFilter) => {
       if (filter.value) {
         newFilterValues[filter.id] = filter.value as string
       }

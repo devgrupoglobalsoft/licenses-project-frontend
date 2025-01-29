@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadorDTO } from '@/types/dtos'
@@ -29,7 +29,7 @@ export function UtilizadoresFilterControls({
     const currentFilters = table.getState().columnFilters
     const newFilterValues: Record<string, string> = {}
 
-    currentFilters.forEach((filter: { id: string; value: unknown }) => {
+    currentFilters.forEach((filter: ColumnFilter) => {
       if (filter.value) {
         newFilterValues[filter.id] = filter.value as string
       }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { filterFields } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-constants'
 import { useGetAreasSelect } from '@/pages/application/areas/queries/areas-queries'
 import { AplicacaoDTO } from '@/types/dtos'
@@ -34,7 +34,7 @@ export function AplicacoesFilterControls({
     const newFilterValues: Record<string, string> = {}
 
     // First, apply any existing table filters
-    currentFilters.forEach((filter) => {
+    currentFilters.forEach((filter: ColumnFilter) => {
       if (filter.value) {
         newFilterValues[filter.id] = filter.value as string
       }

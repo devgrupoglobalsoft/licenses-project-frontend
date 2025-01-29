@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { filterFields } from '@/pages/platform/clientes/components/clientes-table/clientes-constants'
 import { ClienteDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
@@ -26,7 +26,7 @@ export function ClientesFilterControls({
     const currentFilters = table.getState().columnFilters
     const newFilterValues: Record<string, string> = {}
 
-    currentFilters.forEach((filter) => {
+    currentFilters.forEach((filter: ColumnFilter) => {
       if (filter.value) {
         newFilterValues[filter.id] = filter.value as string
       }

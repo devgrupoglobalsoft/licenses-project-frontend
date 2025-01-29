@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ColumnDef } from '@tanstack/react-table'
+import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
 import { filterFields } from '@/pages/platform/licencas/components/licencas-table/licencas-constants'
@@ -35,7 +35,7 @@ export function LicencasFilterControls({
     const currentFilters = table.getState().columnFilters
     const newFilterValues: Record<string, string> = {}
 
-    currentFilters.forEach((filter: { id: string; value: string }) => {
+    currentFilters.forEach((filter: ColumnFilter) => {
       if (filter.value) {
         newFilterValues[filter.id] = filter.value as string
       }
