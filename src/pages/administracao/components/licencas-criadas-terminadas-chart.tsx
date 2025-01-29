@@ -101,7 +101,7 @@ export default function LicencasCriadasTerminadasChart() {
   )
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <CardTitle>Licenças Criadas vs. Terminadas</CardTitle>
         <CardDescription>Últimos 2 meses</CardDescription>
@@ -145,6 +145,6 @@ export default function LicencasCriadasTerminadasChart() {
           </BarChart>
         </ChartContainer>
       </ResponsiveContainer>
-    </Card>
+    </div>
   )
 }

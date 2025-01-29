@@ -104,7 +104,7 @@ export function LicencasPorAreaPieChart() {
   )
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <CardTitle>Distribuição de Licenças por Área</CardTitle>
         <CardDescription>Últimos 30 dias</CardDescription>
@@ -161,6 +161,6 @@ export function LicencasPorAreaPieChart() {
           </ChartContainer>
         </ResponsiveContainer>
       </CardContent>
-    </Card>
+    </div>
   )
 }

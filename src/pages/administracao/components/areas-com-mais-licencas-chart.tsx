@@ -113,7 +113,7 @@ export default function LicenseDistributionByArea() {
     }))
 
   return (
-    <Card>
+    <div>
       <CardHeader>
         <CardTitle>Áreas com mais licenças</CardTitle>
         <CardDescription>Geral</CardDescription>
@@ -160,6 +160,6 @@ export default function LicenseDistributionByArea() {
           </ChartContainer>
         </ResponsiveContainer>
       </CardContent>
-    </Card>
+    </div>
   )
 }

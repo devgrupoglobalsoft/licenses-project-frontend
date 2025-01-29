@@ -73,7 +73,7 @@ export default function LicencasAExpirarChart() {
   })
 
   return (
-    <Card className='col-span-4'>
+    <div>
       <CardHeader>
         <CardTitle>Licenças a Expirar</CardTitle>
         <CardDescription>Próximos 30 dias</CardDescription>
@@ -97,6 +97,6 @@ export default function LicencasAExpirarChart() {
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
-    </Card>
+    </div>
   )
 }
