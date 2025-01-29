@@ -1,4 +1,4 @@
-import { Icons } from '@/components/ui/icons';
+import { Icons } from '@/components/ui/icons'
 
 export const roleMenuItems = {
   administrator: [
@@ -6,31 +6,31 @@ export const roleMenuItems = {
       title: 'dashboard',
       href: '/',
       icon: 'dashboard' as keyof typeof Icons,
-      label: 'Dashboard'
+      label: 'Dashboard',
     },
     {
       title: 'administracao',
       href: '/administracao',
       icon: 'user' as keyof typeof Icons,
-      label: 'Administração'
-    }
+      label: 'Administração',
+    },
   ],
   admin: [
     {
       title: 'dashboard',
       href: '/',
       icon: 'dashboard' as keyof typeof Icons,
-      label: 'Dashboard'
+      label: 'Dashboard',
     },
     {
       title: 'administracao',
       href: '/administracao',
       icon: 'user' as keyof typeof Icons,
-      label: 'Administração'
-    }
+      label: 'Administração',
+    },
   ],
-  guest: []
-};
+  guest: [],
+}
 
 export const roleHeaderMenus = {
   administrator: {
@@ -42,27 +42,27 @@ export const roleHeaderMenus = {
           {
             label: 'Áreas',
             href: '/areas',
-            description: 'Faca a gestão das áreas da sua empresa'
+            description: 'Faca a gestão das áreas da sua empresa',
           },
           {
             label: 'Aplicações',
             href: '/aplicacoes',
             description: 'Faça a gestão das aplicações da sua empresa',
-            icon: 'application' as keyof typeof Icons
+            icon: 'application' as keyof typeof Icons,
           },
           {
             label: 'Modulos',
             href: '/modulos',
             description: 'Faça a gestão dos modulos da sua empresa',
-            icon: 'application' as keyof typeof Icons
+            icon: 'application' as keyof typeof Icons,
           },
           {
             label: 'Funcionalidades',
             href: '/funcionalidades',
             description: 'Faça a gestão das funcionalidades da sua empresa',
-            icon: 'application' as keyof typeof Icons
-          }
-        ]
+            icon: 'application' as keyof typeof Icons,
+          },
+        ],
       },
       {
         label: 'Clientes',
@@ -71,17 +71,22 @@ export const roleHeaderMenus = {
           {
             label: 'Clientes',
             href: '/clientes',
-            description: 'Faca a gestão dos clientes da sua empresa'
+            description: 'Faca a gestão dos clientes da sua empresa',
           },
           {
             label: 'Licenças',
             href: '/licencas',
             description: 'Faça a gestão das licenças da sua empresa',
-            icon: 'application' as keyof typeof Icons
-          }
-        ]
-      }
-    ]
+            icon: 'application' as keyof typeof Icons,
+          },
+        ],
+      },
+      {
+        label: 'Utilizadores',
+        href: '/utilizadores',
+        description: 'Faça a gestão dos utilizadores da sua empresa',
+      },
+    ],
   },
   admin: {
     administracao: [
@@ -92,12 +97,12 @@ export const roleHeaderMenus = {
           {
             label: 'Licenças',
             href: '/licencas/admin',
-            description: 'Faca a gestão da sua licença'
-          }
-        ]
-      }
-    ]
+            description: 'Faca a gestão da sua licença',
+          },
+        ],
+      },
+    ],
   },
   user: {},
-  guest: {}
-};
+  guest: {},
+}

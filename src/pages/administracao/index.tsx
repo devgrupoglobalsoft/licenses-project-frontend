@@ -1,14 +1,7 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import PageHead from '@/components/shared/page-head'
 import AreasComMaisLicencas from './components/areas-com-mais-licencas-chart'
-import { AreasGrowthChart } from './components/areas-growth-chart'
 import LicencasAExpirarChart from './components/licencas-a-expirar-chart'
 import LicencasCriadasTerminadasChart from './components/licencas-criadas-terminadas-chart'
 import { LicencasPorAreaPieChart } from './components/licencas-por-area-pie-chart'
