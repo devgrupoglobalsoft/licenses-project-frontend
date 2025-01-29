@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { MenuIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { useSidebar } from '@/hooks/use-sidebar'
 import Header from '@/components/shared/header'
 import { HeaderNav } from '@/components/shared/header-nav'
 import MobileSidebar from '@/components/shared/mobile-sidebar'
@@ -11,6 +13,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+  const { isMinimized } = useSidebar()
 
   return (
     <div className='flex h-screen overflow-hidden bg-secondary'>
@@ -21,8 +24,20 @@ export default function DashboardLayout({
       <div className='fixed left-0 z-30 hidden h-full md:block'>
         <Sidebar />
       </div>
-      <div className='flex w-full flex-1 flex-col md:ml-[288px] md:w-[calc(100%-288px)]'>
-        <div className='fixed left-0 right-0 top-0 z-20 hidden bg-background md:block md:ml-[288px]'>
+      <div
+        className={cn(
+          'flex w-full flex-1 flex-col',
+          isMinimized
+            ? 'md:ml-[80px] md:w-[calc(100%-80px)]'
+            : 'md:ml-[288px] md:w-[calc(100%-288px)]'
+        )}
+      >
+        <div
+          className={cn(
+            'fixed left-0 right-0 top-0 z-20 hidden bg-background md:block',
+            isMinimized ? 'md:ml-[80px]' : 'md:ml-[288px]'
+          )}
+        >
           <HeaderNav />
         </div>
         <div className='relative z-10 flex h-20 flex-shrink-0 md:hidden'>
