@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
-import { UserDTO } from '@/types/dtos'
+import { UtilizadorDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
 import { roleLabelMap } from '@/constants/roles'
 import { Input } from '@/components/ui/input'
@@ -21,7 +21,7 @@ export function UtilizadoresFilterControls({
   columns,
   onApplyFilters,
   onClearFilters,
-}: BaseFilterControlsProps<UserDTO>) {
+}: BaseFilterControlsProps<UtilizadorDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const { data: clientes } = useGetClientesSelect()
 
@@ -49,7 +49,7 @@ export function UtilizadoresFilterControls({
     table.getColumn(columnId)?.setFilterValue(newValue)
   }
 
-  const renderFilterInput = (column: ColumnDef<UserDTO, unknown>) => {
+  const renderFilterInput = (column: ColumnDef<UtilizadorDTO, unknown>) => {
     if (!('accessorKey' in column) || !column.accessorKey) return null
 
     const commonInputStyles =

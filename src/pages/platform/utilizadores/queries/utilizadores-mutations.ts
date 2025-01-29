@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { CreateUserDTO, UpdateUserDTO } from '@/types/dtos'
+import { CreateUtilizadorDTO, UpdateUtilizadorDTO } from '@/types/dtos'
 import UtilizadoresService from '@/lib/services/platform/utilizadores-service'
 
 export const useDeleteUtilizador = () => {
@@ -20,7 +20,7 @@ export const useCreateUtilizador = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreateUserDTO) =>
+    mutationFn: (data: CreateUtilizadorDTO) =>
       UtilizadoresService('utilizadores').createUtilizador(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
@@ -34,7 +34,7 @@ export const useUpdateUtilizador = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateUserDTO }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdateUtilizadorDTO }) =>
       UtilizadoresService('utilizadores').updateUtilizador(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })

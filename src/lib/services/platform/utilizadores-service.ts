@@ -4,7 +4,11 @@ import {
   PaginatedRequest,
   PaginatedResponse,
 } from '@/types/api/responses'
-import { CreateUserDTO, UpdateUserDTO, UserDTO } from '@/types/dtos'
+import {
+  CreateUtilizadorDTO,
+  UpdateUtilizadorDTO,
+  UtilizadorDTO,
+} from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
@@ -15,7 +19,7 @@ export class UtilizadorError extends BaseApiError {
 class UtilizadoresClient extends BaseApiClient {
   public async getUtilizadoresPaginated(
     params: PaginatedRequest
-  ): Promise<ResponseApi<PaginatedResponse<UserDTO>>> {
+  ): Promise<ResponseApi<PaginatedResponse<UtilizadorDTO>>> {
     const cacheKey = this.getCacheKey(
       'POST',
       '/api/identity/users/users-paginated',
@@ -26,7 +30,7 @@ class UtilizadoresClient extends BaseApiClient {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
-            PaginatedResponse<UserDTO>
+            PaginatedResponse<UtilizadorDTO>
           >('/api/identity/users/users-paginated', params)
 
           if (!response.info || !response.info.data) {
@@ -46,13 +50,15 @@ class UtilizadoresClient extends BaseApiClient {
     )
   }
 
-  public async getUtilizadores(): Promise<ResponseApi<GSResponse<UserDTO[]>>> {
+  public async getUtilizadores(): Promise<
+    ResponseApi<GSResponse<UtilizadorDTO[]>>
+  > {
     const cacheKey = this.getCacheKey('GET', '/api/identity/users')
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.getRequest<
-            GSResponse<UserDTO[]>
+            GSResponse<UtilizadorDTO[]>
           >('/api/identity/users')
 
           if (!response.info || !response.info.data) {
@@ -73,12 +79,12 @@ class UtilizadoresClient extends BaseApiClient {
   }
 
   public async createUtilizador(
-    data: CreateUserDTO
+    data: CreateUtilizadorDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.postRequest<
-          CreateUserDTO,
+          CreateUtilizadorDTO,
           GSResponse<string>
         >('/api/identity/users', data)
 
@@ -103,12 +109,12 @@ class UtilizadoresClient extends BaseApiClient {
 
   public async updateUtilizador(
     id: string,
-    data: UpdateUserDTO
+    data: UpdateUtilizadorDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.putRequest<
-          UpdateUserDTO,
+          UpdateUtilizadorDTO,
           GSResponse<string>
         >(`/api/identity/users/${id}`, data)
 
@@ -155,13 +161,13 @@ class UtilizadoresClient extends BaseApiClient {
 
   public async getUtilizadorById(
     id: string
-  ): Promise<ResponseApi<GSResponse<UserDTO>>> {
+  ): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
     const cacheKey = this.getCacheKey('GET', `/api/identity/users/${id}`)
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.getRequest<
-            GSResponse<UserDTO>
+            GSResponse<UtilizadorDTO>
           >(`/api/identity/users/${id}`)
 
           if (!response.info || !response.info.data) {

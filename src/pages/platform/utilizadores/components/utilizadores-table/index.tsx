@@ -2,11 +2,11 @@ import { columns } from '@/pages/platform/utilizadores/components/utilizadores-t
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadoresFilterControls } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-filter-controls'
 import UtilizadoresTableActions from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-table-action'
-import { UserDTO } from '@/types/dtos'
+import { UtilizadorDTO } from '@/types/dtos'
 import DataTable from '@/components/shared/data-table'
 
 type TUtilizadoresTableProps = {
-  utilizadores: UserDTO[]
+  utilizadores: UtilizadorDTO[]
   page: number
   totalUtilizadores: number
   pageCount: number

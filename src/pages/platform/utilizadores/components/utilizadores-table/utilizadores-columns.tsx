@@ -1,12 +1,12 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-cell-action'
-import { UserDTO } from '@/types/dtos'
+import { UtilizadorDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { roleVariants, roleLabelMap } from '@/constants/roles'
 import { Checkbox } from '@/components/ui/checkbox'
 
-export const columns: ColumnDef<UserDTO>[] = [
+export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (

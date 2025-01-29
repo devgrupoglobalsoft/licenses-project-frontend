@@ -1,4 +1,4 @@
-export interface CreateUserDTO {
+export interface CreateUtilizadorDTO {
   clienteId: string
   email: string
   firstName: string
@@ -8,7 +8,7 @@ export interface CreateUserDTO {
   roleId: string
 }
 
-export interface UpdateUserDTO {
+export interface UpdateUtilizadorDTO {
   clienteId: string
   email: string
   firstName: string
@@ -19,7 +19,7 @@ export interface UpdateUserDTO {
   roleId: string
 }
 
-export interface UserDTO {
+export interface UtilizadorDTO {
   clienteId?: string
   cliente: {
     nome: string
@@ -35,7 +35,9 @@ export interface UserDTO {
 }
 
 // Helper functions
-export const toCreateUserDTO = (user: UserDTO): CreateUserDTO => ({
+export const toCreateUtilizadorDTO = (
+  user: UtilizadorDTO
+): CreateUtilizadorDTO => ({
   clienteId: user.clienteId ?? '',
   email: user.email,
   firstName: user.firstName,
@@ -45,10 +47,10 @@ export const toCreateUserDTO = (user: UserDTO): CreateUserDTO => ({
   roleId: user.roleId,
 })
 
-export const toUpdateUserDTO = (
-  user: UserDTO,
+export const toUpdateUtilizadorDTO = (
+  user: UtilizadorDTO,
   perfilId: string
-): UpdateUserDTO => ({
+): UpdateUtilizadorDTO => ({
   clienteId: user.clienteId ?? '',
   email: user.email,
   firstName: user.firstName,

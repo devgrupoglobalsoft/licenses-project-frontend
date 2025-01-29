@@ -32,6 +32,7 @@ export default function ClientesPage() {
   ) => {
     setFilters(newFilters)
     setPage(1) // Reset to first page when filters change
+    console.log('newFilters', newFilters)
   }
 
   const handlePaginationChange = (newPage: number, newPageSize: number) => {

@@ -1,7 +1,7 @@
-import { UserDTO } from '@/types/dtos'
+import { UtilizadorDTO } from '@/types/dtos'
 import { DataTableFilterField } from '@/components/shared/data-table-types'
 
-export const filterFields: DataTableFilterField<UserDTO>[] = [
+export const filterFields: DataTableFilterField<UtilizadorDTO>[] = [
   {
     label: 'Nome',
     value: 'nome',
