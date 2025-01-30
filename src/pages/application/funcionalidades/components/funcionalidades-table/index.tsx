@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-columns'
 import { filterFields } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-constants'
 import { FuncionalidadesFilterControls } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-filter-controls'
@@ -22,11 +23,15 @@ export default function FuncionalidadesTable({
 }: TFuncionalidadesTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const moduloIdParam = searchParams.get('moduloId')
-  const initialActiveFiltersCount = moduloIdParam ? 1 : 0
+
+  const [currentFilters, setCurrentFilters] = useState<
+    Array<{ id: string; value: string }>
+  >(moduloIdParam ? [{ id: 'moduloId', value: moduloIdParam }] : [])
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {
+    setCurrentFilters(filters)
     if (onFiltersChange) {
       onFiltersChange(filters)
     }
@@ -38,9 +43,11 @@ export default function FuncionalidadesTable({
     }
   }
 
+  const initialActiveFiltersCount = moduloIdParam ? 1 : 0
+
   return (
     <>
-      <FuncionalidadesTableActions />
+      <FuncionalidadesTableActions currentFilters={currentFilters} />
       {funcionalidades && (
         <DataTable
           columns={columns}

@@ -1,70 +1,72 @@
-import { useState, useEffect } from 'react';
-import FuncionalidadesTable from '@/pages/application/funcionalidades/components/funcionalidades-table';
-import { DataTableSkeleton } from '@/components/shared/data-table-skeleton';
+import { useState, useEffect } from 'react'
+import FuncionalidadesTable from '@/pages/application/funcionalidades/components/funcionalidades-table'
 import {
   useGetFuncionalidadesPaginated,
-  usePrefetchAdjacentFuncionalidades
-} from '@/pages/application/funcionalidades/queries/funcionalidades-queries';
-import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+  usePrefetchAdjacentFuncionalidades,
+} from '@/pages/application/funcionalidades/queries/funcionalidades-queries'
+import { Breadcrumbs } from '@/components/shared/breadcrumbs'
+import { DataTableSkeleton } from '@/components/shared/data-table-skeleton'
+import PageHead from '@/components/shared/page-head'
 
 export default function FuncionalidadesPage() {
-  const searchParams = new URLSearchParams(window.location.search);
-  const moduloIdParam = searchParams.get('moduloId');
+  const searchParams = new URLSearchParams(window.location.search)
+  const moduloIdParam = searchParams.get('moduloId')
 
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     moduloIdParam ? [{ id: 'moduloId', value: moduloIdParam }] : []
-  );
+  )
 
   const { data, isLoading } = useGetFuncionalidadesPaginated(
     page,
     pageSize,
     filters,
     null
-  );
+  )
   const { prefetchPreviousPage, prefetchNextPage } =
-    usePrefetchAdjacentFuncionalidades(page, pageSize, filters);
+    usePrefetchAdjacentFuncionalidades(page, pageSize, filters)
 
   const handleFiltersChange = (
     newFilters: Array<{ id: string; value: string }>
   ) => {
-    setFilters(newFilters);
-    setPage(1);
-  };
+    setFilters(newFilters)
+    setPage(1)
+  }
 
   const handlePaginationChange = (newPage: number, newPageSize: number) => {
-    setPage(newPage);
-    setPageSize(newPageSize);
-  };
+    setPage(newPage)
+    setPageSize(newPageSize)
+  }
 
   useEffect(() => {
-    prefetchPreviousPage();
-    prefetchNextPage();
-  }, [page, pageSize, filters]);
+    prefetchPreviousPage()
+    prefetchNextPage()
+  }, [page, pageSize, filters])
 
-  const funcionalidades = data?.info?.data || [];
-  const totalFuncionalidades = data?.info?.totalCount || 0;
-  const pageCount = data?.info?.totalPages || 0;
+  const funcionalidades = data?.info?.data || []
+  const totalFuncionalidades = data?.info?.totalCount || 0
+  const pageCount = data?.info?.totalPages || 0
 
   if (isLoading) {
     return (
-      <div className="p-5">
+      <div className='p-5'>
         <DataTableSkeleton
           columnCount={6}
           filterableColumnCount={2}
           searchableColumnCount={1}
         />
       </div>
-    );
+    )
   }
 
   return (
-    <div className="flex flex-col gap-5 p-5">
+    <div className='p-4 md:p-8'>
+      <PageHead title='Funcionalidades | GSLP' />
       <Breadcrumbs
         items={[
           { title: 'Início', link: '/' },
-          { title: 'Funcionalidades', link: '/funcionalidades' }
+          { title: 'Funcionalidades', link: '/funcionalidades' },
         ]}
       />
       <FuncionalidadesTable
@@ -76,5 +78,5 @@ export default function FuncionalidadesPage() {
         onPaginationChange={handlePaginationChange}
       />
     </div>
-  );
+  )
 }

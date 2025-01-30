@@ -38,11 +38,15 @@ const funcionalidadeFormSchema = z.object({
 
 type FuncionalidadeFormSchemaType = z.infer<typeof funcionalidadeFormSchema>
 
+interface FuncionalidadeCreateFormProps {
+  modalClose: () => void
+  preSelectedModuloId?: string
+}
+
 const FuncionalidadeCreateForm = ({
   modalClose,
-}: {
-  modalClose: () => void
-}) => {
+  preSelectedModuloId,
+}: FuncionalidadeCreateFormProps) => {
   const { data: modulosData } = useGetModulosSelect()
   const createFuncionalidade = useCreateFuncionalidade()
 
@@ -52,7 +56,7 @@ const FuncionalidadeCreateForm = ({
       nome: '',
       descricao: '',
       ativo: true,
-      moduloId: '',
+      moduloId: preSelectedModuloId || '',
     },
   })
 
