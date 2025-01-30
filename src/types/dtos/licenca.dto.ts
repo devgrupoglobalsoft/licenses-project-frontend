@@ -1,52 +1,57 @@
 export interface CreateLicencaDTO {
-  nome: string;
-  dataInicio?: Date;
-  dataFim?: Date;
-  numeroUtilizadores: number;
-  aplicacaoId: string;
-  clienteId: string;
+  nome: string
+  dataInicio?: Date
+  dataFim?: Date
+  numeroUtilizadores: number
+  aplicacaoId: string
+  clienteId: string
 }
 
 export interface UpdateLicencaDTO extends CreateLicencaDTO {
-  id: string;
-  ativo: boolean;
+  id: string
+  ativo: boolean
 }
 
 export interface LicencaDTO {
-  id: string;
-  nome: string;
-  dataInicio?: Date;
-  dataFim?: Date;
-  numeroUtilizadores: number;
-  ativo?: boolean;
-  aplicacaoId: string;
-  bloqueada?: boolean;
-  dataBloqueio?: Date;
-  motivoBloqueio?: string;
+  id: string
+  nome: string
+  dataInicio?: Date
+  dataFim?: Date
+  numeroUtilizadores: number
+  ativo?: boolean
+  aplicacaoId: string
+  bloqueada?: boolean
+  dataBloqueio?: Date
+  motivoBloqueio?: string
   aplicacao?: {
-    nome: string;
+    nome: string
     area?: {
-      nome: string;
-    };
-  };
+      nome: string
+    }
+  }
   cliente?: {
-    nome: string;
-  };
-  clienteId: string;
-  licencasFuncionalidades?: LicencaFuncionalidadeDTO[];
-  licencasModulos?: LicencaModuloDTO[];
+    nome: string
+  }
+  clienteId: string
+  licencasFuncionalidades?: LicencaFuncionalidadeDTO[]
+  licencasModulos?: LicencaModuloDTO[]
 }
 
 export interface LicencaFuncionalidadeDTO {
-  licencaId: string;
-  funcionalidadeId: string;
+  licencaId: string
+  funcionalidadeId: string
 }
 
 export interface LicencaModuloDTO {
-  licencaId: string;
-  moduloId: string;
+  licencaId: string
+  moduloId: string
 }
 
 export interface BloqueioLicencaDTO {
-  motivoBloqueio: string;
+  motivoBloqueio: string
+}
+
+export interface ModuloFuncionalidadeDTO {
+  moduloId: string
+  funcionalidadeId: string
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import LicencaBlockDetailsForm from '@/pages/platform/licencas/components/licenca-forms/licenca-block-details-form'
 import LicencaBlockForm from '@/pages/platform/licencas/components/licenca-forms/licenca-block-form'
+import LicencaModulosForm from '@/pages/platform/licencas/components/licenca-forms/licenca-modulos-form'
 import LicencaUpdateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-update-form'
 import {
   useDeleteLicenca,
@@ -8,7 +9,7 @@ import {
   useUnblockLicenca,
 } from '@/pages/platform/licencas/queries/licencas-mutations'
 import { LicencaDTO } from '@/types/dtos'
-import { Edit, Lock, Unlock, Trash } from 'lucide-react'
+import { Edit, Lock, Unlock, Trash, ListTree } from 'lucide-react'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
@@ -23,6 +24,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [isBlockModalOpen, setIsBlockModalOpen] = useState(false)
   const [isBlockDetailsModalOpen, setIsBlockDetailsModalOpen] = useState(false)
+  const [isModulosModalOpen, setIsModulosModalOpen] = useState(false)
   const [selectedLicenca, setSelectedLicenca] = useState<LicencaDTO | null>(
     null
   )
@@ -99,6 +101,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         />
       </EnhancedModal>
 
+      <EnhancedModal
+        title='Módulos e Funcionalidades'
+        description='Selecione os módulos e funcionalidades para esta licença'
+        isOpen={isModulosModalOpen}
+        onClose={() => setIsModulosModalOpen(false)}
+        size='xl'
+      >
+        <LicencaModulosForm
+          licencaId={data.id || ''}
+          aplicacaoId={data.aplicacaoId}
+          modalClose={() => setIsModulosModalOpen(false)}
+        />
+      </EnhancedModal>
+
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -142,6 +158,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             <span className='sr-only'>Bloquear</span>
           </Button>
         )}
+        <Button
+          onClick={() => setIsModulosModalOpen(true)}
+          variant='ghost'
+          className='h-8 w-8 p-0'
+        >
+          <ListTree color='hsl(var(--primary))' className='h-4 w-4' />
+          <span className='sr-only'>Módulos e Funcionalidades</span>
+        </Button>
       </div>
     </>
   )

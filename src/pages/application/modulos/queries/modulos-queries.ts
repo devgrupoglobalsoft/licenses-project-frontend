@@ -1,5 +1,5 @@
-import ModulosService from '@/lib/services/application/modulos-service';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import ModulosService from '@/lib/services/application/modulos-service'
 
 export const useGetModulosPaginated = (
   pageNumber: number,
@@ -14,20 +14,20 @@ export const useGetModulosPaginated = (
         pageNumber: pageNumber,
         pageSize: pageLimit,
         filters: (filters as unknown as Record<string, string>) ?? undefined,
-        sorting: sorting ?? undefined
+        sorting: sorting ?? undefined,
       }),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const usePrefetchAdjacentModulos = (
   page: number,
   pageSize: number,
   filters: Array<{ id: string; value: string }> | null
 ) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const prefetchPreviousPage = async () => {
     if (page > 1) {
@@ -39,11 +39,11 @@ export const usePrefetchAdjacentModulos = (
             pageSize: pageSize,
             filters:
               (filters as unknown as Record<string, string>) ?? undefined,
-            sorting: undefined
-          })
-      });
+            sorting: undefined,
+          }),
+      })
     }
-  };
+  }
 
   const prefetchNextPage = async () => {
     await queryClient.prefetchQuery({
@@ -53,13 +53,13 @@ export const usePrefetchAdjacentModulos = (
           pageNumber: page + 1,
           pageSize: pageSize,
           filters: (filters as unknown as Record<string, string>) ?? undefined,
-          sorting: undefined
-        })
-    });
-  };
+          sorting: undefined,
+        }),
+    })
+  }
 
-  return { prefetchPreviousPage, prefetchNextPage };
-};
+  return { prefetchPreviousPage, prefetchNextPage }
+}
 
 export const useGetModulos = () => {
   return useQuery({
@@ -67,27 +67,35 @@ export const useGetModulos = () => {
     queryFn: () => ModulosService('modulos').getModulos(),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const useGetModulosCount = () => {
   return useQuery({
     queryKey: ['modulos-count'],
     queryFn: async () => {
-      const response = await ModulosService('modulos').getModulos();
-      return response.info?.data?.length || 0;
-    }
-  });
-};
+      const response = await ModulosService('modulos').getModulos()
+      return response.info?.data?.length || 0
+    },
+  })
+}
 
 export const useGetModulosSelect = () => {
   return useQuery({
     queryKey: ['modulos-select'],
     queryFn: async () => {
-      const response = await ModulosService('modulos').getModulos();
-      return response.info.data || [];
+      const response = await ModulosService('modulos').getModulos()
+      return response.info.data || []
     },
-    staleTime: 30000
-  });
-};
+    staleTime: 30000,
+  })
+}
+
+export const useGetModulosByAplicacao = (aplicacaoId: string) => {
+  return useQuery({
+    queryKey: ['modulos-aplicacao', aplicacaoId],
+    queryFn: () => ModulosService('modulos').getModulos(aplicacaoId),
+    enabled: !!aplicacaoId,
+  })
+}

@@ -1,5 +1,5 @@
-import FuncionalidadesService from '@/lib/services/application/funcionalidade-service';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import FuncionalidadesService from '@/lib/services/application/funcionalidade-service'
 
 export const useGetFuncionalidadesPaginated = (
   pageNumber: number,
@@ -13,27 +13,27 @@ export const useGetFuncionalidadesPaginated = (
       pageNumber,
       pageLimit,
       filters,
-      sorting
+      sorting,
     ],
     queryFn: () =>
       FuncionalidadesService('funcionalidades').getFuncionalidadesPaginated({
         pageNumber: pageNumber,
         pageSize: pageLimit,
         filters: (filters as unknown as Record<string, string>) ?? undefined,
-        sorting: sorting ?? undefined
+        sorting: sorting ?? undefined,
       }),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const usePrefetchAdjacentFuncionalidades = (
   page: number,
   pageSize: number,
   filters: Array<{ id: string; value: string }> | null
 ) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const prefetchPreviousPage = async () => {
     if (page > 1) {
@@ -43,7 +43,7 @@ export const usePrefetchAdjacentFuncionalidades = (
           page - 1,
           pageSize,
           filters,
-          null
+          null,
         ],
         queryFn: () =>
           FuncionalidadesService('funcionalidades').getFuncionalidadesPaginated(
@@ -52,12 +52,12 @@ export const usePrefetchAdjacentFuncionalidades = (
               pageSize: pageSize,
               filters:
                 (filters as unknown as Record<string, string>) ?? undefined,
-              sorting: undefined
+              sorting: undefined,
             }
-          )
-      });
+          ),
+      })
     }
-  };
+  }
 
   const prefetchNextPage = async () => {
     await queryClient.prefetchQuery({
@@ -66,20 +66,20 @@ export const usePrefetchAdjacentFuncionalidades = (
         page + 1,
         pageSize,
         filters,
-        null
+        null,
       ],
       queryFn: () =>
         FuncionalidadesService('funcionalidades').getFuncionalidadesPaginated({
           pageNumber: page + 1,
           pageSize: pageSize,
           filters: (filters as unknown as Record<string, string>) ?? undefined,
-          sorting: undefined
-        })
-    });
-  };
+          sorting: undefined,
+        }),
+    })
+  }
 
-  return { prefetchPreviousPage, prefetchNextPage };
-};
+  return { prefetchPreviousPage, prefetchNextPage }
+}
 
 export const useGetFuncionalidades = () => {
   return useQuery({
@@ -88,29 +88,38 @@ export const useGetFuncionalidades = () => {
       FuncionalidadesService('funcionalidades').getFuncionalidades(),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const useGetFuncionalidadesCount = () => {
   return useQuery({
     queryKey: ['funcionalidades-count'],
     queryFn: async () => {
       const response =
-        await FuncionalidadesService('funcionalidades').getFuncionalidades();
-      return response.info?.data?.length || 0;
-    }
-  });
-};
+        await FuncionalidadesService('funcionalidades').getFuncionalidades()
+      return response.info?.data?.length || 0
+    },
+  })
+}
 
 export const useGetFuncionalidadesSelect = () => {
   return useQuery({
     queryKey: ['funcionalidades-select'],
     queryFn: async () => {
       const response =
-        await FuncionalidadesService('funcionalidades').getFuncionalidades();
-      return response.info.data || [];
+        await FuncionalidadesService('funcionalidades').getFuncionalidades()
+      return response.info.data || []
     },
-    staleTime: 30000
-  });
-};
+    staleTime: 30000,
+  })
+}
+
+export const useGetFuncionalidadesByModulo = (moduloId: string) => {
+  return useQuery({
+    queryKey: ['funcionalidades-modulo', moduloId],
+    queryFn: () =>
+      FuncionalidadesService('funcionalidades').getFuncionalidades(moduloId),
+    enabled: !!moduloId,
+  })
+}
