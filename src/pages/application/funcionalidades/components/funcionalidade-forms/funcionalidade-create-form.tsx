@@ -36,6 +36,7 @@ const funcionalidadeFormSchema = z.object({
     .min(1, { message: 'A Descrição deve ter pelo menos 1 caractere' }),
   ativo: z.boolean(),
   moduloId: z.string({ required_error: 'O Módulo é obrigatório' }),
+  aplicacaoFilter: z.string(),
 })
 
 type FuncionalidadeFormSchemaType = z.infer<typeof funcionalidadeFormSchema>
@@ -67,7 +68,8 @@ const FuncionalidadeCreateForm = ({
       nome: '',
       descricao: '',
       ativo: true,
-      moduloId: preSelectedModuloId || '',
+      moduloId: preSelectedModuloId || undefined,
+      aplicacaoFilter: 'all',
     },
   })
 
@@ -94,25 +96,37 @@ const FuncionalidadeCreateForm = ({
       >
         <div className='grid grid-cols-1 gap-x-8 gap-y-4'>
           <div className='grid grid-cols-2 gap-x-8'>
-            <FormItem>
-              <FormLabel>Filtrar por Aplicação</FormLabel>
-              <Select
-                onValueChange={(value) => setSelectedAplicacaoId(value)}
-                value={selectedAplicacaoId}
-              >
-                <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                  <SelectValue placeholder='Selecione uma aplicação para filtrar' />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='all'>Todas as Aplicações</SelectItem>
-                  {aplicacoesData?.map((aplicacao) => (
-                    <SelectItem key={aplicacao.id} value={aplicacao.id}>
-                      {aplicacao.nome}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
+            <FormField
+              control={form.control}
+              name='aplicacaoFilter'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Filtrar por Aplicação</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value)
+                        setSelectedAplicacaoId(value)
+                      }}
+                      value={field.value}
+                    >
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione uma aplicação para filtrar' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='all'>Todas as Aplicações</SelectItem>
+                        {aplicacoesData?.map((aplicacao) => (
+                          <SelectItem key={aplicacao.id} value={aplicacao.id}>
+                            {aplicacao.nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -121,10 +135,7 @@ const FuncionalidadeCreateForm = ({
                 <FormItem>
                   <FormLabel>Módulo</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
                         <SelectValue placeholder='Selecione um módulo' />
                       </SelectTrigger>
