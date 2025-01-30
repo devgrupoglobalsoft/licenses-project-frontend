@@ -47,7 +47,6 @@ const AplicacaoCreateForm = ({
   modalClose,
   preSelectedAreaId,
 }: AplicacaoCreateFormProps) => {
-  console.log(preSelectedAreaId)
   const { data: areasData } = useGetAreasSelect()
   const createAplicacaoMutation = useCreateAplicacao()
 
@@ -137,25 +136,26 @@ const AplicacaoCreateForm = ({
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue>
-                          {field.value ? (
-                            <div className='flex items-center gap-2'>
-                              <div
-                                className='h-4 w-4 rounded-full'
-                                style={{
-                                  backgroundColor: areasData?.find(
-                                    (a) => a.id === field.value
-                                  )?.color,
-                                }}
-                              />
-                              <span>
-                                {areasData?.find((a) => a.id === field.value)
-                                  ?.nome || 'Selecione uma área'}
-                              </span>
-                            </div>
-                          ) : (
-                            'Selecione uma área'
-                          )}
+                        <SelectValue placeholder='Selecione uma área'>
+                          {field.value &&
+                            areasData?.find((a) => a.id === field.value) && (
+                              <div className='flex items-center gap-2'>
+                                <div
+                                  className='h-4 w-4 rounded-full'
+                                  style={{
+                                    backgroundColor: areasData?.find(
+                                      (a) => a.id === field.value
+                                    )?.color,
+                                  }}
+                                />
+                                <span>
+                                  {
+                                    areasData?.find((a) => a.id === field.value)
+                                      ?.nome
+                                  }
+                                </span>
+                              </div>
+                            )}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>

@@ -1,15 +1,15 @@
-import { BaseApiClient, BaseApiError } from '@/lib/base-client';
-import { ResponseApi } from '@/types/responses';
-import { AreaDTO, CreateAreaDTO, UpdateAreaDTO } from '@/types/dtos';
 import {
   GSGenericResponse,
   GSResponse,
-  PaginatedRequest
-} from '@/types/api/responses';
-import { PaginatedResponse } from '@/types/api/responses';
+  PaginatedRequest,
+} from '@/types/api/responses'
+import { PaginatedResponse } from '@/types/api/responses'
+import { AreaDTO, CreateAreaDTO, UpdateAreaDTO } from '@/types/dtos'
+import { ResponseApi } from '@/types/responses'
+import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
 export class AreaError extends BaseApiError {
-  name: string = 'AreaError';
+  name: string = 'AreaError'
 }
 
 class AreasClient extends BaseApiClient {
@@ -20,56 +20,54 @@ class AreasClient extends BaseApiClient {
       'POST',
       '/api/areas/areas-paginated',
       params
-    );
+    )
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
             PaginatedResponse<AreaDTO>
-          >('/api/areas/areas-paginated', params);
-
-          console.log('Areas API Response:', response);
+          >('/api/areas/areas-paginated', params)
 
           if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new AreaError('Formato de resposta inválido');
+            console.error('Formato de resposta inválido:', response)
+            throw new AreaError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
-          console.error('Falha ao obter áreas paginadas:', error);
+          console.error('Falha ao obter áreas paginadas:', error)
           throw new AreaError(
             'Falha ao obter áreas paginadas',
             undefined,
             error
-          );
+          )
         }
       })
-    );
+    )
   }
 
   public async getAreas(): Promise<ResponseApi<GSResponse<AreaDTO[]>>> {
-    const cacheKey = this.getCacheKey('GET', '/api/areas');
+    const cacheKey = this.getCacheKey('GET', '/api/areas')
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
             await this.httpClient.getRequest<GSResponse<AreaDTO[]>>(
               '/api/areas'
-            );
+            )
 
           if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new AreaError('Formato de resposta inválido');
+            console.error('Formato de resposta inválido:', response)
+            throw new AreaError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
-          throw new AreaError('Falha ao obter áreas', undefined, error);
+          throw new AreaError('Falha ao obter áreas', undefined, error)
         }
       })
-    );
+    )
   }
 
   public async createArea(
@@ -80,18 +78,18 @@ class AreasClient extends BaseApiClient {
         const response = await this.httpClient.postRequest<
           CreateAreaDTO,
           GSResponse<string>
-        >('/api/areas', data);
+        >('/api/areas', data)
 
         if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new AreaError('Formato de resposta inválido');
+          console.error('Formato de resposta inválido:', response)
+          throw new AreaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new AreaError('Falha ao criar área', undefined, error);
+        throw new AreaError('Falha ao criar área', undefined, error)
       }
-    });
+    })
   }
 
   public async updateArea(
@@ -103,18 +101,18 @@ class AreasClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           UpdateAreaDTO,
           GSResponse<string>
-        >(`/api/areas/${id}`, data);
+        >(`/api/areas/${id}`, data)
 
         if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new AreaError('Formato de resposta inválido');
+          console.error('Formato de resposta inválido:', response)
+          throw new AreaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new AreaError('Falha ao atualizar área', undefined, error);
+        throw new AreaError('Falha ao atualizar área', undefined, error)
       }
-    });
+    })
   }
 
   public async deleteArea(id: string): Promise<ResponseApi<GSGenericResponse>> {
@@ -122,21 +120,21 @@ class AreasClient extends BaseApiClient {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
           `/api/areas/${id}`
-        );
+        )
 
         if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new AreaError('Formato de resposta inválido');
+          console.error('Formato de resposta inválido:', response)
+          throw new AreaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new AreaError('Falha ao deletar área', undefined, error);
+        throw new AreaError('Falha ao deletar área', undefined, error)
       }
-    });
+    })
   }
 }
 
 const AreasService = (idFuncionalidade: string) =>
-  new AreasClient(idFuncionalidade);
-export default AreasService;
+  new AreasClient(idFuncionalidade)
+export default AreasService
