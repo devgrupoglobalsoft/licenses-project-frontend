@@ -5,7 +5,7 @@ import ModulosTableActions from '@/pages/application/modulos/components/modulos-
 import { ModuloDTO } from '@/types/dtos'
 import DataTable from '@/components/shared/data-table'
 
-type TAplicacoesTableProps = {
+type TModulosTableProps = {
   modulos: ModuloDTO[]
   page: number
   totalModulos: number
@@ -19,7 +19,7 @@ export default function ModulosTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
-}: TAplicacoesTableProps) {
+}: TModulosTableProps) {
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {

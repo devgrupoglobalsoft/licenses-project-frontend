@@ -1,29 +1,29 @@
-import { Button } from '@/components/ui/button';
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useUpdateAplicacao } from '@/pages/application/aplicacoes/queries/aplicacoes-mutations'
+import { useGetAreasSelect } from '@/pages/application/areas/queries/areas-queries'
+import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { toast } from '@/utils/toast-utils';
-import { getErrorMessage, handleApiError } from '@/utils/error-handlers';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { useGetAreasSelect } from '@/pages/application/areas/queries/areas-queries';
-import { useUpdateAplicacao } from '@/pages/application/aplicacoes/queries/aplicacoes-mutations';
+  SelectValue,
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
 
 const aplicacaoFormSchema = z.object({
   nome: z
@@ -31,30 +31,30 @@ const aplicacaoFormSchema = z.object({
     .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
   descricao: z.string().optional(),
   ativo: z.boolean().default(true),
-  areaId: z.string({ required_error: 'A Área é obrigatória' })
-});
+  areaId: z.string({ required_error: 'A Área é obrigatória' }),
+})
 
-type AplicacaoFormSchemaType = z.infer<typeof aplicacaoFormSchema>;
+type AplicacaoFormSchemaType = z.infer<typeof aplicacaoFormSchema>
 
 interface AplicacaoUpdateFormProps {
-  modalClose: () => void;
-  aplicacaoId: string;
+  modalClose: () => void
+  aplicacaoId: string
   initialData: {
-    nome: string;
-    descricao?: string;
-    ativo: boolean;
-    areaId: string;
-    versao: string;
-  };
+    nome: string
+    descricao?: string
+    ativo: boolean
+    areaId: string
+    versao: string
+  }
 }
 
 const AplicacaoUpdateForm = ({
   modalClose,
   aplicacaoId,
-  initialData
+  initialData,
 }: AplicacaoUpdateFormProps) => {
-  const { data: areasData } = useGetAreasSelect();
-  const updateAplicacaoMutation = useUpdateAplicacao();
+  const { data: areasData } = useGetAreasSelect()
+  const updateAplicacaoMutation = useUpdateAplicacao()
 
   const form = useForm<AplicacaoFormSchemaType>({
     resolver: zodResolver(aplicacaoFormSchema),
@@ -62,9 +62,9 @@ const AplicacaoUpdateForm = ({
       nome: initialData.nome,
       descricao: initialData.descricao || '',
       ativo: initialData.ativo,
-      areaId: initialData.areaId
-    }
-  });
+      areaId: initialData.areaId,
+    },
+  })
 
   const onSubmit = async (values: AplicacaoFormSchemaType) => {
     try {
@@ -76,41 +76,41 @@ const AplicacaoUpdateForm = ({
           ativo: values.ativo,
           areaId: values.areaId,
           id: aplicacaoId,
-          versao: initialData.versao
-        }
-      });
+          versao: initialData.versao,
+        },
+      })
 
       if (response.info.succeeded) {
-        toast.success('Aplicação atualizada com sucesso');
-        modalClose();
+        toast.success('Aplicação atualizada com sucesso')
+        modalClose()
       } else {
-        toast.error(getErrorMessage(response, 'Erro ao atualizar aplicação'));
+        toast.error(getErrorMessage(response, 'Erro ao atualizar aplicação'))
       }
     } catch (error) {
-      toast.error(handleApiError(error, 'Erro ao atualizar aplicação'));
+      toast.error(handleApiError(error, 'Erro ao atualizar aplicação'))
     }
-  };
+  }
 
   return (
-    <div className="space-y-4">
+    <div className='space-y-4'>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-4"
-          autoComplete="off"
+          className='space-y-4'
+          autoComplete='off'
         >
-          <div className="grid grid-cols-1 gap-x-8 gap-y-4">
+          <div className='grid grid-cols-1 gap-x-8 gap-y-4'>
             <FormField
               control={form.control}
-              name="nome"
+              name='nome'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Introduza o nome"
+                      placeholder='Introduza o nome'
                       {...field}
-                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                      className='px-4 py-6 shadow-inner drop-shadow-xl'
                     />
                   </FormControl>
                   <FormMessage />
@@ -120,15 +120,15 @@ const AplicacaoUpdateForm = ({
 
             <FormField
               control={form.control}
-              name="descricao"
+              name='descricao'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Descrição</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Introduza a descrição"
+                      placeholder='Introduza a descrição'
                       {...field}
-                      className="shadow-inner drop-shadow-xl"
+                      className='shadow-inner drop-shadow-xl'
                     />
                   </FormControl>
                   <FormMessage />
@@ -138,19 +138,25 @@ const AplicacaoUpdateForm = ({
 
             <FormField
               control={form.control}
-              name="areaId"
+              name='areaId'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Área</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="px-4 py-6 shadow-inner drop-shadow-xl">
-                        <SelectValue placeholder="Selecione uma área" />
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione uma área' />
                       </SelectTrigger>
                       <SelectContent>
                         {areasData?.map((area) => (
                           <SelectItem key={area.id || ''} value={area.id || ''}>
-                            {area.nome}
+                            <div className='flex items-center gap-2'>
+                              <div
+                                className='h-4 w-4 rounded-full'
+                                style={{ backgroundColor: area.color }}
+                              />
+                              {area.nome}
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -163,10 +169,10 @@ const AplicacaoUpdateForm = ({
 
             <FormField
               control={form.control}
-              name="ativo"
+              name='ativo'
               render={({ field }) => (
                 <FormItem>
-                  <div className="flex items-center space-x-2">
+                  <div className='flex items-center space-x-2'>
                     <FormLabel>Ativo</FormLabel>
                     <FormControl>
                       <Switch
@@ -181,11 +187,11 @@ const AplicacaoUpdateForm = ({
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-2">
-            <Button type="button" variant="outline" onClick={modalClose}>
+          <div className='flex items-center justify-end space-x-2'>
+            <Button type='button' variant='outline' onClick={modalClose}>
               Cancelar
             </Button>
-            <Button type="submit" disabled={updateAplicacaoMutation.isPending}>
+            <Button type='submit' disabled={updateAplicacaoMutation.isPending}>
               {updateAplicacaoMutation.isPending
                 ? 'Atualizando...'
                 : 'Atualizar'}
@@ -194,7 +200,7 @@ const AplicacaoUpdateForm = ({
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default AplicacaoUpdateForm;
+export default AplicacaoUpdateForm
