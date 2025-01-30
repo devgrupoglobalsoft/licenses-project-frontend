@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/application/areas/components/areas-table/areas-cell-action'
 import { AreaDTO } from '@/types/dtos'
-import { PREDEFINED_COLORS } from '@/lib/constants/area-colors'
+import { PREDEFINED_COLORS } from '@/lib/constants/colors'
 import { Checkbox } from '@/components/ui/checkbox'
 
 export const columns: ColumnDef<AreaDTO>[] = [

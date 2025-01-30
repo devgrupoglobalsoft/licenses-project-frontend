@@ -4,7 +4,7 @@ import * as React from 'react'
 import { subDays } from 'date-fns'
 import { useGetLicencas } from '@/pages/platform/licencas/queries/licencas-queries'
 import { Label, Pie, PieChart, ResponsiveContainer } from 'recharts'
-import { PREDEFINED_COLORS } from '@/lib/constants/area-colors'
+import { PREDEFINED_COLORS } from '@/lib/constants/colors'
 import {
   CardContent,
   CardDescription,
