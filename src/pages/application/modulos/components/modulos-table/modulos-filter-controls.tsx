@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries'
+import { useGetAreasSelect } from '@/pages/application/areas/queries/areas-queries'
 import { filterFields } from '@/pages/application/modulos/components/modulos-table/modulos-constants'
 import { ModuloDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
@@ -27,6 +28,7 @@ export function ModulosFilterControls({
   const aplicacaoIdParam = searchParams.get('aplicacaoId')
 
   const { data: aplicacoesData } = useGetAplicacoesSelect()
+  const { data: areasData } = useGetAreasSelect()
 
   useEffect(() => {
     const currentFilters = table.getState().columnFilters
@@ -121,6 +123,39 @@ export function ModulosFilterControls({
       )
     }
 
+    if (column.accessorKey === 'areaId') {
+      const currentValue = filterValues[column.accessorKey] ?? ''
+      return (
+        <Select
+          value={currentValue === '' ? 'all' : currentValue}
+          onValueChange={(value) =>
+            handleFilterChange(
+              column.accessorKey!.toString(),
+              value === 'all' ? '' : value
+            )
+          }
+        >
+          <SelectTrigger className={commonInputStyles}>
+            <SelectValue placeholder='Selecione uma área' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='all'>Todas</SelectItem>
+            {areasData?.map((area) => (
+              <SelectItem key={area.id} value={area.id || ''}>
+                <div className='flex items-center gap-2'>
+                  <div
+                    className='h-4 w-4 rounded-full'
+                    style={{ backgroundColor: area.color }}
+                  />
+                  {area.nome}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )
+    }
+
     return (
       <Input
         placeholder={`Filtrar por ${getColumnHeader(column, filterFields).toLowerCase()}...`}
@@ -137,28 +172,25 @@ export function ModulosFilterControls({
     <>
       {columns
         .filter((column) => {
+          const columnKey =
+            'accessorKey' in column ? column.accessorKey : column.id
           return (
-            'accessorKey' in column &&
-            column.accessorKey &&
-            filterFields.some((field) => field.value === column.accessorKey)
+            columnKey && filterFields.some((field) => field.value === columnKey)
           )
         })
         .sort((a, b) => {
-          const aField = filterFields.find(
-            (field) => 'accessorKey' in a && field.value === a.accessorKey
-          )
-          const bField = filterFields.find(
-            (field) => 'accessorKey' in b && field.value === b.accessorKey
-          )
+          const aKey = 'accessorKey' in a ? a.accessorKey : a.id
+          const bKey = 'accessorKey' in b ? b.accessorKey : b.id
+          const aField = filterFields.find((field) => field.value === aKey)
+          const bField = filterFields.find((field) => field.value === bKey)
           return (aField?.order ?? Infinity) - (bField?.order ?? Infinity)
         })
         .map((column) => {
-          if (!('accessorKey' in column) || !column.accessorKey) return null
+          const columnKey =
+            'accessorKey' in column ? column.accessorKey : column.id
+          if (!columnKey) return null
           return (
-            <div
-              key={`${column.id}-${column.accessorKey}`}
-              className='space-y-2'
-            >
+            <div key={columnKey} className='space-y-2'>
               <Label>{getColumnHeader(column, filterFields)}</Label>
               {renderFilterInput(column)}
             </div>

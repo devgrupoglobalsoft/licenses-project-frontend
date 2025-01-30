@@ -103,7 +103,10 @@ export function AplicacoesFilterControls({
         <Select
           value={currentValue === '' ? 'all' : currentValue}
           onValueChange={(value) =>
-            handleFilterChange(column.accessorKey!.toString(), value)
+            handleFilterChange(
+              column.accessorKey!.toString(),
+              value === 'all' ? '' : value
+            )
           }
         >
           <SelectTrigger className={commonInputStyles}>
@@ -113,7 +116,13 @@ export function AplicacoesFilterControls({
             <SelectItem value='all'>Todas</SelectItem>
             {areasData?.map((area) => (
               <SelectItem key={area.id} value={area.id || ''}>
-                {area.nome}
+                <div className='flex items-center gap-2'>
+                  <div
+                    className='h-4 w-4 rounded-full'
+                    style={{ backgroundColor: area.color }}
+                  />
+                  {area.nome}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>

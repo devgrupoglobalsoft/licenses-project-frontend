@@ -71,6 +71,19 @@ export const columns: ColumnDef<ModuloDTO>[] = [
     },
   },
   {
+    accessorKey: 'areaId',
+    accessorFn: (row) => row.aplicacao?.area?.nome,
+    header: 'Área',
+    enableHiding: true,
+    enableSorting: false,
+    size: 0,
+    minSize: 0,
+    maxSize: 0,
+    meta: {
+      hidden: true,
+    },
+  },
+  {
     id: 'actions',
     header: () => <div className='text-right'></div>,
     cell: ({ row }) => (
