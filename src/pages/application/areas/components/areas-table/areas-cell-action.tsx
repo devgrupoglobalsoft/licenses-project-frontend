@@ -55,7 +55,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <AreaUpdateForm
             modalClose={() => setIsUpdateModalOpen(false)}
             areaId={selectedArea.id || ''}
-            initialData={{ nome: selectedArea.nome }}
+            initialData={{
+              nome: selectedArea.nome,
+              color: selectedArea.color,
+              id: selectedArea.id || '',
+            }}
           />
         )}
       </EnhancedModal>

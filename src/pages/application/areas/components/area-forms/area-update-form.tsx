@@ -2,6 +2,8 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateArea } from '@/pages/application/areas/queries/areas-mutations'
+import { AreaDTO } from '@/types/dtos'
+import { PREDEFINED_COLORS } from '@/lib/constants/area-colors'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
@@ -10,99 +12,124 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
-const areaFormSchema = z.object({
-  nome: z
-    .string({ required_error: 'O Nome é obrigatório' })
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+const formSchema = z.object({
+  nome: z.string().min(1, 'Nome é obrigatório'),
+  color: z.string().min(1, 'Cor é obrigatória'),
 })
 
-type AreaFormSchemaType = z.infer<typeof areaFormSchema>
-
-interface AreaUpdateFormProps {
+type AreaUpdateFormProps = {
   modalClose: () => void
   areaId: string
-  initialData: {
-    nome: string
-  }
+  initialData: AreaDTO
 }
 
-const AreaUpdateForm = ({
+export default function AreaUpdateForm({
   modalClose,
   areaId,
   initialData,
-}: AreaUpdateFormProps) => {
-  const updateAreaMutation = useUpdateArea()
-
-  const form = useForm<AreaFormSchemaType>({
-    resolver: zodResolver(areaFormSchema),
+}: AreaUpdateFormProps) {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       nome: initialData.nome,
+      color: initialData.color,
     },
   })
 
-  const onSubmit = async (values: AreaFormSchemaType) => {
-    try {
-      const response = await updateAreaMutation.mutateAsync({
-        id: areaId,
-        data: {
-          nome: values.nome,
-        },
-      })
+  const updateAreaMutation = useUpdateArea()
 
-      if (response.info.succeeded) {
-        toast.success('Área atualizada com sucesso')
-        modalClose()
-      } else {
-        toast.error(getErrorMessage(response, 'Erro ao atualizar área'))
-      }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await updateAreaMutation.mutateAsync({
+        id: areaId,
+        data: values,
+      })
+      modalClose()
     } catch (error) {
       toast.error(handleApiError(error, 'Erro ao atualizar área'))
     }
   }
 
   return (
-    <div className='px-2'>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-4'
-          autoComplete='off'
-        >
-          <div className='grid grid-cols-1 gap-x-8 gap-y-4'>
-            <FormField
-              control={form.control}
-              name='nome'
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder='Introduza o nome'
-                      {...field}
-                      className='px-4 py-6 shadow-inner drop-shadow-xl'
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
+        <FormField
+          control={form.control}
+          name='nome'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <div className='flex items-center justify-center gap-4'>
-            <Button type='button' variant='secondary' onClick={modalClose}>
-              Cancelar
-            </Button>
-            <Button type='submit' disabled={updateAreaMutation.isPending}>
-              {updateAreaMutation.isPending ? 'Atualizando...' : 'Atualizar'}
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+        <FormField
+          control={form.control}
+          name='color'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cor</FormLabel>
+              <FormControl>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue>
+                      <div className='flex items-center gap-2'>
+                        <div
+                          className='h-4 w-4 rounded-full'
+                          style={{ backgroundColor: field.value }}
+                        />
+                        <span>
+                          {PREDEFINED_COLORS.find(
+                            (c) => c.value === field.value
+                          )?.label || field.value}
+                        </span>
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PREDEFINED_COLORS.map((color) => (
+                      <SelectItem key={color.value} value={color.value}>
+                        <div className='flex items-center gap-2'>
+                          <div
+                            className='h-4 w-4 rounded-full'
+                            style={{ backgroundColor: color.value }}
+                          />
+                          <span>{color.label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type='submit'
+          className='w-full'
+          disabled={updateAreaMutation.isPending}
+        >
+          {updateAreaMutation.isPending ? 'Atualizando...' : 'Atualizar'}
+        </Button>
+      </form>
+    </Form>
   )
 }
-
-export default AreaUpdateForm

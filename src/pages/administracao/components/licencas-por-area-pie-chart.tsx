@@ -4,7 +4,7 @@ import * as React from 'react'
 import { subDays } from 'date-fns'
 import { useGetLicencas } from '@/pages/platform/licencas/queries/licencas-queries'
 import { Label, Pie, PieChart, ResponsiveContainer } from 'recharts'
-import { getAreaColors } from '@/lib/constants/area-colors'
+import { PREDEFINED_COLORS } from '@/lib/constants/area-colors'
 import {
   CardContent,
   CardDescription,
@@ -21,6 +21,10 @@ interface AreaCount {
   name: string
   value: number
   fill: string
+  area?: {
+    nome: string
+    color: string
+  }
 }
 
 export function LicencasPorAreaPieChart() {
@@ -54,7 +58,8 @@ export function LicencasPorAreaPieChart() {
   )
 
   const processedData = recentLicencas.reduce<AreaCount[]>((acc, lic) => {
-    const areaName = lic.aplicacao?.area?.nome || 'Sem área'
+    const area = lic.aplicacao?.area
+    const areaName = area?.nome || 'Sem área'
     const existingArea = acc.find((item) => item.name === areaName)
 
     if (existingArea) {
@@ -63,7 +68,8 @@ export function LicencasPorAreaPieChart() {
       acc.push({
         name: areaName,
         value: 1,
-        fill: '', // Will be set later by getAreaColors
+        fill: area?.color || PREDEFINED_COLORS[0].value,
+        area,
       })
     }
     return acc
@@ -77,20 +83,16 @@ export function LicencasPorAreaPieChart() {
       name: area.name.length > 20 ? `${area.name.slice(0, 20)}...` : area.name,
     }))
 
-  const areaNames = topAreas.map((area) => area.name)
-  const colors = getAreaColors(areaNames)
-
-  // Map colors to data
-  const chartData = topAreas.map((area, index) => ({
+  const chartData = topAreas.map((area) => ({
     ...area,
-    fill: colors[index],
+    fill: area.area?.color || PREDEFINED_COLORS[0].value,
   }))
 
-  const chartConfig = areaNames.reduce(
-    (acc, name, index) => {
-      acc[name] = {
-        label: name,
-        color: colors[index],
+  const chartConfig = topAreas.reduce(
+    (acc, area) => {
+      acc[area.name] = {
+        label: area.name,
+        color: area.area?.color || PREDEFINED_COLORS[0].value,
       }
       return acc
     },

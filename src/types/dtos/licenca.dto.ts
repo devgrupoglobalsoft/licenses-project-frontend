@@ -27,6 +27,7 @@ export interface LicencaDTO {
     nome: string
     area?: {
       nome: string
+      color: string
     }
   }
   cliente?: {

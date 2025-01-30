@@ -20,6 +20,10 @@ export interface ModuloDTO {
   funcionalidades?: FuncionalidadeDTO[]
   aplicacao?: {
     nome: string
+    area?: {
+      nome: string
+      color: string
+    }
   }
   createdOn: string
 }
