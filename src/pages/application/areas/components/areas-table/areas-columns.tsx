@@ -40,7 +40,7 @@ export const columns: ColumnDef<AreaDTO>[] = [
             style={{ backgroundColor: color }}
           />
           <div
-            className='inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold'
+            className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold'
             style={{
               backgroundColor: `${color}20`,
               color: color,
