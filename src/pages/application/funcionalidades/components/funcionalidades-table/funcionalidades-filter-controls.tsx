@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
+import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries'
 import { filterFields } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-constants'
 import { useGetModulosSelect } from '@/pages/application/modulos/queries/modulos-queries'
 import { FuncionalidadeDTO } from '@/types/dtos'
@@ -26,8 +27,8 @@ export function FuncionalidadesFilterControls({
   const searchParams = new URLSearchParams(window.location.search)
   const moduloIdParam = searchParams.get('moduloId')
 
+  const { data: aplicacoesData } = useGetAplicacoesSelect()
   const { data: modulosData } = useGetModulosSelect()
-
   useEffect(() => {
     const currentFilters = table.getState().columnFilters
     const newFilterValues: Record<string, string> = {}
@@ -89,6 +90,33 @@ export function FuncionalidadesFilterControls({
             <SelectItem value='all'>Todos</SelectItem>
             <SelectItem value='true'>Ativo</SelectItem>
             <SelectItem value='false'>Inativo</SelectItem>
+          </SelectContent>
+        </Select>
+      )
+    }
+
+    if (column.accessorKey === 'aplicacaoId') {
+      const currentValue = filterValues[column.accessorKey] ?? ''
+      return (
+        <Select
+          value={currentValue === '' ? 'all' : currentValue}
+          onValueChange={(value) =>
+            handleFilterChange(
+              column.accessorKey!.toString(),
+              value === 'all' ? '' : value
+            )
+          }
+        >
+          <SelectTrigger className={commonInputStyles}>
+            <SelectValue placeholder='Selecione uma aplicação' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='all'>Todas as Aplicações</SelectItem>
+            {aplicacoesData?.map((aplicacao) => (
+              <SelectItem key={aplicacao.id} value={aplicacao.id || ''}>
+                {aplicacao.nome}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       )
