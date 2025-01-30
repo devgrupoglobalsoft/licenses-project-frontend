@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/application/modulos/components/modulos-table/modulos-columns'
 import { filterFields } from '@/pages/application/modulos/components/modulos-table/modulos-constants'
 import { ModulosFilterControls } from '@/pages/application/modulos/components/modulos-table/modulos-filter-controls'
@@ -20,9 +21,17 @@ export default function ModulosTable({
   onFiltersChange,
   onPaginationChange,
 }: TModulosTableProps) {
+  const searchParams = new URLSearchParams(window.location.search)
+  const aplicacaoIdParam = searchParams.get('aplicacaoId')
+
+  const [currentFilters, setCurrentFilters] = useState<
+    Array<{ id: string; value: string }>
+  >(aplicacaoIdParam ? [{ id: 'aplicacaoId', value: aplicacaoIdParam }] : [])
+
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {
+    setCurrentFilters(filters)
     if (onFiltersChange) {
       onFiltersChange(filters)
     }
@@ -34,13 +43,11 @@ export default function ModulosTable({
     }
   }
 
-  const searchParams = new URLSearchParams(window.location.search)
-  const aplicacaoIdParam = searchParams.get('aplicacaoId')
   const initialActiveFiltersCount = aplicacaoIdParam ? 1 : 0
 
   return (
     <>
-      <ModulosTableActions />
+      <ModulosTableActions currentFilters={currentFilters} />
       {modulos && (
         <DataTable
           columns={columns}
