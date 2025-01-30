@@ -46,31 +46,6 @@ export const columns: ColumnDef<FuncionalidadeDTO>[] = [
     ),
   },
   {
-    accessorKey: 'moduloId',
-    header: 'Módulo',
-    cell: ({ row }) => {
-      const area = row.original.modulo?.aplicacao?.area
-      const moduleName = row.original.modulo?.nome || '-'
-
-      if (!area) {
-        return <div>{moduleName}</div>
-      }
-
-      return (
-        <div
-          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-          style={{
-            backgroundColor: `${area.color}20`,
-            color: area.color,
-            border: `1px solid ${area.color}`,
-          }}
-        >
-          {moduleName}
-        </div>
-      )
-    },
-  },
-  {
     accessorKey: 'aplicacaoId',
     header: 'Aplicação',
     cell: ({ row }) => {
@@ -91,6 +66,31 @@ export const columns: ColumnDef<FuncionalidadeDTO>[] = [
           }}
         >
           {appName}
+        </div>
+      )
+    },
+  },
+  {
+    accessorKey: 'moduloId',
+    header: 'Módulo',
+    cell: ({ row }) => {
+      const area = row.original.modulo?.aplicacao?.area
+      const moduleName = row.original.modulo?.nome || '-'
+
+      if (!area) {
+        return <div>{moduleName}</div>
+      }
+
+      return (
+        <div
+          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+          style={{
+            backgroundColor: `${area.color}20`,
+            color: area.color,
+            border: `1px solid ${area.color}`,
+          }}
+        >
+          {moduleName}
         </div>
       )
     },
