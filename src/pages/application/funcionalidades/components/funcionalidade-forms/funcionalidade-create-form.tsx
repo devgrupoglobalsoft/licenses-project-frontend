@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries'
 import { useCreateFuncionalidade } from '@/pages/application/funcionalidades/queries/funcionalidades-mutations'
 import { useGetModulosSelect } from '@/pages/application/modulos/queries/modulos-queries'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
@@ -47,8 +49,17 @@ const FuncionalidadeCreateForm = ({
   modalClose,
   preSelectedModuloId,
 }: FuncionalidadeCreateFormProps) => {
+  const [selectedAplicacaoId, setSelectedAplicacaoId] = useState<string>('all')
+  const { data: aplicacoesData } = useGetAplicacoesSelect()
   const { data: modulosData } = useGetModulosSelect()
   const createFuncionalidade = useCreateFuncionalidade()
+
+  const filteredModulos =
+    selectedAplicacaoId === 'all'
+      ? modulosData
+      : modulosData?.filter(
+          (modulo) => modulo.aplicacaoId === selectedAplicacaoId
+        )
 
   const form = useForm<FuncionalidadeFormSchemaType>({
     resolver: zodResolver(funcionalidadeFormSchema),
@@ -82,6 +93,56 @@ const FuncionalidadeCreateForm = ({
         autoComplete='off'
       >
         <div className='grid grid-cols-1 gap-x-8 gap-y-4'>
+          <div className='grid grid-cols-2 gap-x-8'>
+            <FormItem>
+              <FormLabel>Filtrar por Aplicação</FormLabel>
+              <Select
+                onValueChange={(value) => setSelectedAplicacaoId(value)}
+                value={selectedAplicacaoId}
+              >
+                <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                  <SelectValue placeholder='Selecione uma aplicação para filtrar' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='all'>Todas as Aplicações</SelectItem>
+                  {aplicacoesData?.map((aplicacao) => (
+                    <SelectItem key={aplicacao.id} value={aplicacao.id}>
+                      {aplicacao.nome}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+
+            <FormField
+              control={form.control}
+              name='moduloId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Módulo</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione um módulo' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {filteredModulos?.map((modulo) => (
+                          <SelectItem key={modulo.id} value={modulo.id}>
+                            {modulo.nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <FormField
             control={form.control}
             name='nome'
@@ -112,34 +173,6 @@ const FuncionalidadeCreateForm = ({
                     {...field}
                     className='shadow-inner drop-shadow-xl'
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name='moduloId'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Módulo</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                      <SelectValue placeholder='Selecione um módulo' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {modulosData?.map((modulo) => (
-                        <SelectItem key={modulo.id} value={modulo.id}>
-                          {modulo.nome}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

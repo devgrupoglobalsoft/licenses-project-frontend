@@ -33,7 +33,7 @@ export default function FuncionalidadeTableActions({
           description='Crie uma nova funcionalidade'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          size='md'
+          size='lg'
         >
           <FuncionalidadeCreateForm
             modalClose={() => setIsCreateModalOpen(false)}
