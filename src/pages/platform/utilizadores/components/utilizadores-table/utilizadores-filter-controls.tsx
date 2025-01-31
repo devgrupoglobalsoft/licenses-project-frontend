@@ -4,7 +4,7 @@ import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadorDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
-import { roleLabelMap } from '@/constants/roles'
+import { roleColors, roleLabelMap } from '@/constants/roles'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -68,7 +68,14 @@ export function UtilizadoresFilterControls({
             <SelectItem value='all'>Todos</SelectItem>
             {Object.entries(roleLabelMap).map(([role, label]) => (
               <SelectItem key={role} value={role}>
-                {label}
+                <div className='flex items-center gap-2'>
+                  <div
+                    className={`h-4 w-4 rounded-full ${
+                      roleColors[role as keyof typeof roleColors].indicator
+                    }`}
+                  />
+                  <span>{label}</span>
+                </div>
               </SelectItem>
             ))}
           </SelectContent>

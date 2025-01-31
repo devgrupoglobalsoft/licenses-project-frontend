@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { UtilizadorCreateForm } from '../utilizador-forms/utilizador-create-form'
 
 export default function UtilizadoresTableActions() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -17,7 +18,7 @@ export default function UtilizadoresTableActions() {
           <Plus className='mr-2 h-4 w-4' /> Adicionar
         </Button>
 
-        {/* <EnhancedModal
+        <EnhancedModal
           title='Criar Novo Utilizador'
           description='Crie um novo utilizador'
           isOpen={isCreateModalOpen}
@@ -27,7 +28,7 @@ export default function UtilizadoresTableActions() {
           <UtilizadorCreateForm
             modalClose={() => setIsCreateModalOpen(false)}
           />
-        </EnhancedModal> */}
+        </EnhancedModal>
       </div>
     </div>
   )

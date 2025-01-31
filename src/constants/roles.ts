@@ -1,10 +1,19 @@
 import { cva } from 'class-variance-authority'
 
 export const roleColors = {
-  administrator:
-    'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
-  admin: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
-  client: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+  administrator: {
+    indicator: 'bg-purple-500',
+    badge:
+      'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+  },
+  admin: {
+    indicator: 'bg-blue-500',
+    badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+  },
+  client: {
+    indicator: 'bg-green-500',
+    badge: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+  },
 } as const
 
 export const roleLabelMap = {
@@ -18,9 +27,9 @@ export const roleVariants = cva(
   {
     variants: {
       role: {
-        administrator: roleColors.administrator,
-        admin: roleColors.admin,
-        client: roleColors.client,
+        administrator: roleColors.administrator.badge,
+        admin: roleColors.admin.badge,
+        client: roleColors.client.badge,
       },
     },
     defaultVariants: {
