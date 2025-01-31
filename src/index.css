@@ -86,3 +86,44 @@
     font-family: 'Montserrat', sans-serif;
   }
 }
+
+/* Add this after your existing @layer base styles */
+@layer components {
+  /* Light theme styles */
+  .ant-tree {
+    @apply bg-background text-foreground;
+  }
+
+  .ant-tree .ant-tree-node-content-wrapper:hover {
+    @apply bg-accent;
+  }
+
+  .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    @apply bg-accent;
+  }
+
+  /* Dark theme styles */
+  .dark .ant-tree {
+    @apply bg-background text-foreground;
+  }
+
+  .dark .ant-tree .ant-tree-node-content-wrapper:hover {
+    @apply bg-accent;
+  }
+
+  .dark .ant-tree .ant-tree-node-content-wrapper.ant-tree-node-selected {
+    @apply bg-accent;
+  }
+
+  .dark .ant-tree .ant-tree-checkbox-inner {
+    @apply border-border bg-background;
+  }
+
+  .dark .ant-tree .ant-tree-checkbox-checked .ant-tree-checkbox-inner {
+    @apply border-primary bg-primary;
+  }
+
+  .dark .ant-tree .ant-tree-switcher {
+    @apply bg-transparent text-foreground;
+  }
+}

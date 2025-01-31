@@ -116,6 +116,7 @@ export default function LicencaModulosForm({
             onCheck={onCheck}
             checkedKeys={checkedKeys}
             treeData={treeData}
+            className='bg-transparent' // Add this line
           />
         ) : (
           <div className='flex items-center justify-center p-4 text-muted-foreground'>
