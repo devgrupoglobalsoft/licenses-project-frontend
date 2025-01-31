@@ -59,7 +59,7 @@ export default function ModulosTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/modulos'
+          baseRoute='/administracao/modulos'
         />
       )}
     </>

@@ -39,7 +39,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   }
 
   const handleViewModulos = (aplicacaoId: string) => {
-    navigate(`/modulos?aplicacaoId=${aplicacaoId}`)
+    navigate(`/administracao/modulos?aplicacaoId=${aplicacaoId}`)
   }
 
   return (

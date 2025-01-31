@@ -39,7 +39,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   }
 
   const handleViewApplications = (areaId: string) => {
-    navigate(`/aplicacoes?areaId=${areaId}`)
+    navigate(`/administracao/aplicacoes?areaId=${areaId}`)
   }
 
   return (

@@ -51,7 +51,7 @@ export default function UtilizadoresTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/utilizadores'
+          baseRoute='/administracao/utilizadores'
         />
       )}
     </>

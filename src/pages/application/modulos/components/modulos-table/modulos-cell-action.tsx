@@ -38,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   }
 
   const handleViewFuncionalidades = (moduloId: string) => {
-    navigate(`/funcionalidades?moduloId=${moduloId}`)
+    navigate(`/administracao/funcionalidades?moduloId=${moduloId}`)
   }
 
   return (

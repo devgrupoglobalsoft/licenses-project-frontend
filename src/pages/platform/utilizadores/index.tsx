@@ -67,7 +67,7 @@ export default function ClientesPage() {
       <Breadcrumbs
         items={[
           { title: 'Administração', link: '/administracao' },
-          { title: 'Utilizadores', link: '/utilizadores' },
+          { title: 'Utilizadores', link: '/administracao/utilizadores' },
         ]}
       />
       <UtilizadoresTable
