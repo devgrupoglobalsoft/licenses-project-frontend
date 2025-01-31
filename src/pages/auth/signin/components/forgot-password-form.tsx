@@ -2,6 +2,8 @@ import { useState } from 'react'
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import UtilizadoresService from '@/lib/services/platform/utilizadores-service'
+import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -38,21 +40,30 @@ export default function ForgotPasswordForm({
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setLoading(true)
-      // TODO: Implement your password reset logic here
-      // await PasswordService.resetPassword(data.email);
+      const utilizadoresService = UtilizadoresService('forgot-password')
+      const response = await utilizadoresService.forgotPassword(data.email)
 
-      toast({
-        title: 'Success',
-        description:
-          'Se o email existir, você receberá as instruções de recuperação',
-        variant: 'default',
-      })
+      if (response.info.succeeded) {
+        toast({
+          title: 'Sucesso',
+          description: response.info.data,
+          variant: 'success',
+        })
 
-      onBack()
+        onBack()
+      } else {
+        toast({
+          title: 'Erro',
+          description: getErrorMessage(response, 'Erro ao recuperar senha'),
+          variant: 'destructive',
+        })
+      }
     } catch (error) {
+      console.log(error)
+
       toast({
-        title: 'Error',
-        description: 'Algo correu mal',
+        title: 'Erro',
+        description: handleApiError(error, 'Algo correu mal'),
         variant: 'destructive',
       })
     } finally {

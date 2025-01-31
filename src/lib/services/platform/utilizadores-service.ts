@@ -189,6 +189,35 @@ class UtilizadoresClient extends BaseApiClient {
       })
     )
   }
+
+  public async forgotPassword(
+    email: string
+  ): Promise<ResponseApi<GSResponse<string>>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.postRequestWithoutAuth<
+          { email: string },
+          GSResponse<string>
+        >('/api/identity/forgot-password', { email })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new UtilizadorError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        if (error instanceof BaseApiError && error.data) {
+          return {
+            info: error.data as GSResponse<string>,
+            status: error.statusCode || 400,
+            statusText: error.message,
+          }
+        }
+        throw error
+      }
+    })
+  }
 }
 
 const UtilizadoresService = (idFuncionalidade: string) =>
