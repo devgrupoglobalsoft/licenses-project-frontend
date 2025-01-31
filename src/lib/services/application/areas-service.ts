@@ -29,7 +29,7 @@ class AreasClient extends BaseApiClient {
             PaginatedResponse<AreaDTO>
           >('/api/areas/areas-paginated', params)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new AreaError('Formato de resposta inválido')
           }
@@ -57,7 +57,7 @@ class AreasClient extends BaseApiClient {
               '/api/areas'
             )
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new AreaError('Formato de resposta inválido')
           }
@@ -80,7 +80,7 @@ class AreasClient extends BaseApiClient {
           GSResponse<string>
         >('/api/areas', data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new AreaError('Formato de resposta inválido')
         }
@@ -103,7 +103,7 @@ class AreasClient extends BaseApiClient {
           GSResponse<string>
         >(`/api/areas/${id}`, data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new AreaError('Formato de resposta inválido')
         }
@@ -122,7 +122,7 @@ class AreasClient extends BaseApiClient {
           `/api/areas/${id}`
         )
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new AreaError('Formato de resposta inválido')
         }

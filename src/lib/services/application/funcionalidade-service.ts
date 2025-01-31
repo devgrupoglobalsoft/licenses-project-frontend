@@ -33,7 +33,7 @@ class FuncionalidadesClient extends BaseApiClient {
             PaginatedResponse<FuncionalidadeDTO>
           >('/api/funcionalidades/funcionalidades-paginated', params)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new FuncionalidadeError('Formato de resposta inválido')
           }
@@ -66,7 +66,7 @@ class FuncionalidadesClient extends BaseApiClient {
               endpoint
             )
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new FuncionalidadeError('Formato de resposta inválido')
           }
@@ -93,7 +93,7 @@ class FuncionalidadesClient extends BaseApiClient {
           GSResponse<string>
         >('/api/funcionalidades', data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new FuncionalidadeError('Formato de resposta inválido')
         }
@@ -123,7 +123,7 @@ class FuncionalidadesClient extends BaseApiClient {
           GSResponse<string>
         >(`/api/funcionalidades/${id}`, data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new FuncionalidadeError('Formato de resposta inválido')
         }
@@ -148,7 +148,7 @@ class FuncionalidadesClient extends BaseApiClient {
           `/api/funcionalidades/${id}`
         )
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new FuncionalidadeError('Formato de resposta inválido')
         }

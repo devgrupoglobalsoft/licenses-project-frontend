@@ -2,14 +2,14 @@ import {
   GSGenericResponse,
   GSResponse,
   PaginatedRequest,
-  PaginatedResponse
-} from '@/types/api/responses';
-import { BaseApiClient, BaseApiError } from '@/lib/base-client';
-import { ClienteDTO, CreateClienteDTO, UpdateClienteDTO } from '@/types/dtos';
-import { ResponseApi } from '@/types/responses';
+  PaginatedResponse,
+} from '@/types/api/responses'
+import { ClienteDTO, CreateClienteDTO, UpdateClienteDTO } from '@/types/dtos'
+import { ResponseApi } from '@/types/responses'
+import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
 export class ClienteError extends BaseApiError {
-  name: string = 'ClienteError';
+  name: string = 'ClienteError'
 }
 
 class ClientesClient extends BaseApiClient {
@@ -20,53 +20,53 @@ class ClientesClient extends BaseApiClient {
       'POST',
       '/api/clientes/clientes-paginated',
       params
-    );
+    )
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
             PaginatedResponse<ClienteDTO>
-          >('/api/clientes/clientes-paginated', params);
+          >('/api/clientes/clientes-paginated', params)
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new ClienteError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new ClienteError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
           throw new ClienteError(
             'Falha ao obter clientes paginados',
             undefined,
             error
-          );
+          )
         }
       })
-    );
+    )
   }
 
   public async getClientes(): Promise<ResponseApi<GSResponse<ClienteDTO[]>>> {
-    const cacheKey = this.getCacheKey('GET', '/api/clientes');
+    const cacheKey = this.getCacheKey('GET', '/api/clientes')
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
             await this.httpClient.getRequest<GSResponse<ClienteDTO[]>>(
               '/api/clientes'
-            );
+            )
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new ClienteError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new ClienteError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
-          throw new ClienteError('Falha ao obter clientes', undefined, error);
+          throw new ClienteError('Falha ao obter clientes', undefined, error)
         }
       })
-    );
+    )
   }
 
   public async createCliente(
@@ -77,25 +77,25 @@ class ClientesClient extends BaseApiClient {
         const response = await this.httpClient.postRequest<
           CreateClienteDTO,
           GSResponse<string>
-        >('/api/clientes', data);
+        >('/api/clientes', data)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new ClienteError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new ClienteError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
         if (error instanceof BaseApiError && error.data) {
           return {
             info: error.data as GSResponse<string>,
             status: error.statusCode || 400,
-            statusText: error.message
-          };
+            statusText: error.message,
+          }
         }
-        throw error;
+        throw error
       }
-    });
+    })
   }
 
   public async updateCliente(
@@ -107,18 +107,18 @@ class ClientesClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           UpdateClienteDTO,
           GSResponse<string>
-        >(`/api/clientes/${id}`, data);
+        >(`/api/clientes/${id}`, data)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new ClienteError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new ClienteError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new ClienteError('Falha ao atualizar cliente', undefined, error);
+        throw new ClienteError('Falha ao atualizar cliente', undefined, error)
       }
-    });
+    })
   }
 
   public async deleteCliente(
@@ -128,21 +128,21 @@ class ClientesClient extends BaseApiClient {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
           `/api/clientes/${id}`
-        );
+        )
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new ClienteError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new ClienteError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new ClienteError('Falha ao deletar cliente', undefined, error);
+        throw new ClienteError('Falha ao deletar cliente', undefined, error)
       }
-    });
+    })
   }
 }
 
 const ClientesService = (idFuncionalidade: string) =>
-  new ClientesClient(idFuncionalidade);
-export default ClientesService;
+  new ClientesClient(idFuncionalidade)
+export default ClientesService

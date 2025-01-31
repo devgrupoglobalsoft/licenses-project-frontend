@@ -2,19 +2,19 @@ import {
   GSGenericResponse,
   GSResponse,
   PaginatedRequest,
-  PaginatedResponse
-} from '@/types/api/responses';
-import { BaseApiClient, BaseApiError } from '@/lib/base-client';
+  PaginatedResponse,
+} from '@/types/api/responses'
 import {
   BloqueioLicencaDTO,
   CreateLicencaDTO,
   LicencaDTO,
-  UpdateLicencaDTO
-} from '@/types/dtos';
-import { ResponseApi } from '@/types/responses';
+  UpdateLicencaDTO,
+} from '@/types/dtos'
+import { ResponseApi } from '@/types/responses'
+import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
 export class LicencaError extends BaseApiError {
-  name: string = 'LicencaError';
+  name: string = 'LicencaError'
 }
 
 class LicencasClient extends BaseApiClient {
@@ -25,53 +25,53 @@ class LicencasClient extends BaseApiClient {
       'POST',
       '/api/licencas/licencas-paginated',
       params
-    );
+    )
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
             PaginatedResponse<LicencaDTO>
-          >('/api/licencas/licencas-paginated', params);
+          >('/api/licencas/licencas-paginated', params)
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new LicencaError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
           throw new LicencaError(
             'Falha ao obter licenças paginadas',
             undefined,
             error
-          );
+          )
         }
       })
-    );
+    )
   }
 
   public async getLicencas(): Promise<ResponseApi<GSResponse<LicencaDTO[]>>> {
-    const cacheKey = this.getCacheKey('GET', '/api/licencas');
+    const cacheKey = this.getCacheKey('GET', '/api/licencas')
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
             await this.httpClient.getRequest<GSResponse<LicencaDTO[]>>(
               '/api/licencas'
-            );
+            )
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new LicencaError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
-          throw new LicencaError('Falha ao obter licenças', undefined, error);
+          throw new LicencaError('Falha ao obter licenças', undefined, error)
         }
       })
-    );
+    )
   }
 
   public async createLicenca(
@@ -82,25 +82,25 @@ class LicencasClient extends BaseApiClient {
         const response = await this.httpClient.postRequest<
           CreateLicencaDTO,
           GSResponse<string>
-        >('/api/licencas', data);
+        >('/api/licencas', data)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
         if (error instanceof BaseApiError && error.data) {
           return {
             info: error.data as GSResponse<string>,
             status: error.statusCode || 400,
-            statusText: error.message
-          };
+            statusText: error.message,
+          }
         }
-        throw error;
+        throw error
       }
-    });
+    })
   }
 
   public async updateLicenca(
@@ -112,25 +112,25 @@ class LicencasClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           UpdateLicencaDTO,
           GSResponse<string>
-        >(`/api/licencas/${id}`, data);
+        >(`/api/licencas/${id}`, data)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
         if (error instanceof BaseApiError && error.data) {
           return {
             info: error.data as GSResponse<string>,
             status: error.statusCode || 400,
-            statusText: error.message
-          };
+            statusText: error.message,
+          }
         }
-        throw error;
+        throw error
       }
-    });
+    })
   }
 
   public async deleteLicenca(
@@ -140,18 +140,18 @@ class LicencasClient extends BaseApiClient {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
           `/api/licencas/${id}`
-        );
+        )
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new LicencaError('Falha ao deletar licença', undefined, error);
+        throw new LicencaError('Falha ao deletar licença', undefined, error)
       }
-    });
+    })
   }
 
   public async getLicencaByApiKey(): Promise<
@@ -161,50 +161,50 @@ class LicencasClient extends BaseApiClient {
       try {
         const response = await this.httpClient.getRequest<
           GSResponse<LicencaDTO>
-        >('/api/licencas/by-api-key');
+        >('/api/licencas/by-api-key')
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
         throw new LicencaError(
           'Falha ao obter licença por API key',
           undefined,
           error
-        );
+        )
       }
-    });
+    })
   }
 
   public async getLicencaById(
     id: string
   ): Promise<ResponseApi<GSResponse<LicencaDTO>>> {
-    const cacheKey = this.getCacheKey('GET', `/api/licencas/${id}`);
+    const cacheKey = this.getCacheKey('GET', `/api/licencas/${id}`)
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.getRequest<
             GSResponse<LicencaDTO>
-          >(`/api/licencas/${id}`);
+          >(`/api/licencas/${id}`)
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new LicencaError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
           throw new LicencaError(
             'Falha ao obter licença por ID',
             undefined,
             error
-          );
+          )
         }
       })
-    );
+    )
   }
 
   public async createLicencaApiKey(
@@ -215,18 +215,18 @@ class LicencasClient extends BaseApiClient {
         const response = await this.httpClient.postRequest<
           null,
           GSResponse<string>
-        >(`/api/keys/${licencaId}/create`, null);
+        >(`/api/keys/${licencaId}/create`, null)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new LicencaError('Falha ao criar API key', undefined, error);
+        throw new LicencaError('Falha ao criar API key', undefined, error)
       }
-    });
+    })
   }
 
   public async blockLicenca(
@@ -238,18 +238,18 @@ class LicencasClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           BloqueioLicencaDTO,
           GSResponse<string>
-        >(`/api/licencas/${licencaId}/block`, data);
+        >(`/api/licencas/${licencaId}/block`, data)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new LicencaError('Falha ao bloquear licença', undefined, error);
+        throw new LicencaError('Falha ao bloquear licença', undefined, error)
       }
-    });
+    })
   }
 
   public async unblockLicenca(
@@ -260,25 +260,21 @@ class LicencasClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           null,
           GSResponse<string>
-        >(`/api/licencas/${licencaId}/unblock`, null);
+        >(`/api/licencas/${licencaId}/unblock`, null)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new LicencaError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new LicencaError(
-          'Falha ao desbloquear licença',
-          undefined,
-          error
-        );
+        throw new LicencaError('Falha ao desbloquear licença', undefined, error)
       }
-    });
+    })
   }
 }
 
 const LicencasService = (idFuncionalidade: string) =>
-  new LicencasClient(idFuncionalidade);
-export default LicencasService;
+  new LicencasClient(idFuncionalidade)
+export default LicencasService

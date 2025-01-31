@@ -20,7 +20,7 @@ class LicencasFuncionalidadesClient extends BaseApiClient {
           GSResponse<string>
         >(`/api/licencas/${licencaId}/modulos/funcionalidades`, data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new LicencaFuncionalidadeError('Formato de resposta inválido')
         }
@@ -50,7 +50,7 @@ class LicencasFuncionalidadesClient extends BaseApiClient {
             GSResponse<ResponseModuloFuncionalidadeLicenca>
           >(`/api/licencas/${licencaId}/modulos/funcionalidades`)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new LicencaFuncionalidadeError('Formato de resposta inválido')
           }
@@ -81,7 +81,7 @@ class LicencasFuncionalidadesClient extends BaseApiClient {
             GSResponse<ResponseModuloFuncionalidadeLicenca>
           >('/api/licencas/by-api-key/modulos/funcionalidades')
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new LicencaFuncionalidadeError('Formato de resposta inválido')
           }

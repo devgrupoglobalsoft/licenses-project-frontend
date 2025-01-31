@@ -2,18 +2,18 @@ import {
   GSGenericResponse,
   GSResponse,
   PaginatedRequest,
-  PaginatedResponse
-} from '@/types/api/responses';
-import { BaseApiClient, BaseApiError } from '@/lib/base-client';
+  PaginatedResponse,
+} from '@/types/api/responses'
 import {
   AplicacaoDTO,
   CreateAplicacaoDTO,
-  UpdateAplicacaoDTO
-} from '@/types/dtos';
-import { ResponseApi } from '@/types/responses';
+  UpdateAplicacaoDTO,
+} from '@/types/dtos'
+import { ResponseApi } from '@/types/responses'
+import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
 export class AplicacaoError extends BaseApiError {
-  name: string = 'AplicacaoError';
+  name: string = 'AplicacaoError'
 }
 
 class AplicacoesClient extends BaseApiClient {
@@ -24,59 +24,59 @@ class AplicacoesClient extends BaseApiClient {
       'POST',
       '/api/aplicacoes/aplicacoes-paginated',
       params
-    );
+    )
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
             PaginatedResponse<AplicacaoDTO>
-          >('/api/aplicacoes/aplicacoes-paginated', params);
+          >('/api/aplicacoes/aplicacoes-paginated', params)
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new AplicacaoError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new AplicacaoError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
           throw new AplicacaoError(
             'Falha ao obter aplicacoes paginadas',
             undefined,
             error
-          );
+          )
         }
       })
-    );
+    )
   }
 
   public async getAplicacoes(): Promise<
     ResponseApi<GSResponse<AplicacaoDTO[]>>
   > {
-    const cacheKey = this.getCacheKey('GET', '/api/aplicacoes');
+    const cacheKey = this.getCacheKey('GET', '/api/aplicacoes')
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
             await this.httpClient.getRequest<GSResponse<AplicacaoDTO[]>>(
               '/api/aplicacoes'
-            );
+            )
 
-          if (!response.info || !response.info.data) {
-            console.error('Formato de resposta inválido:', response);
-            throw new AplicacaoError('Formato de resposta inválido');
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new AplicacaoError('Formato de resposta inválido')
           }
 
-          return response;
+          return response
         } catch (error) {
           throw new AplicacaoError(
             'Falha ao obter aplicacoes',
             undefined,
             error
-          );
+          )
         }
       })
-    );
+    )
   }
 
   public async createAplicacao(
@@ -87,21 +87,21 @@ class AplicacoesClient extends BaseApiClient {
         const response = await this.httpClient.postRequest<
           CreateAplicacaoDTO,
           GSResponse<string>
-        >('/api/aplicacoes', data);
+        >('/api/aplicacoes', data)
 
-        return response;
+        return response
       } catch (error) {
         if (error instanceof BaseApiError && error.data) {
           // If it's a validation error, return it as a response
           return {
             info: error.data as GSResponse<string>,
             status: error.statusCode || 400,
-            statusText: error.message
-          };
+            statusText: error.message,
+          }
         }
-        throw error;
+        throw error
       }
-    });
+    })
   }
 
   public async updateAplicacao(
@@ -113,22 +113,22 @@ class AplicacoesClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           UpdateAplicacaoDTO,
           GSResponse<string>
-        >(`/api/aplicacoes/${id}`, data);
+        >(`/api/aplicacoes/${id}`, data)
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new AplicacaoError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new AplicacaoError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
         throw new AplicacaoError(
           'Falha ao atualizar aplicacao',
           undefined,
           error
-        );
+        )
       }
-    });
+    })
   }
 
   public async deleteAplicacao(
@@ -138,25 +138,21 @@ class AplicacoesClient extends BaseApiClient {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
           `/api/aplicacoes/${id}`
-        );
+        )
 
-        if (!response.info || !response.info.data) {
-          console.error('Formato de resposta inválido:', response);
-          throw new AplicacaoError('Formato de resposta inválido');
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new AplicacaoError('Formato de resposta inválido')
         }
 
-        return response;
+        return response
       } catch (error) {
-        throw new AplicacaoError(
-          'Falha ao deletar aplicacao',
-          undefined,
-          error
-        );
+        throw new AplicacaoError('Falha ao deletar aplicacao', undefined, error)
       }
-    });
+    })
   }
 }
 
 const AplicacoesService = (idFuncionalidade: string) =>
-  new AplicacoesClient(idFuncionalidade);
-export default AplicacoesService;
+  new AplicacoesClient(idFuncionalidade)
+export default AplicacoesService

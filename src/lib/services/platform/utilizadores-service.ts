@@ -33,7 +33,7 @@ class UtilizadoresClient extends BaseApiClient {
             PaginatedResponse<UtilizadorDTO>
           >('/api/identity/users/users-paginated', params)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new UtilizadorError('Formato de resposta inválido')
           }
@@ -61,7 +61,7 @@ class UtilizadoresClient extends BaseApiClient {
             GSResponse<UtilizadorDTO[]>
           >('/api/identity/users')
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new UtilizadorError('Formato de resposta inválido')
           }
@@ -88,7 +88,7 @@ class UtilizadoresClient extends BaseApiClient {
           GSResponse<string>
         >('/api/identity/users', data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new UtilizadorError('Formato de resposta inválido')
         }
@@ -118,18 +118,21 @@ class UtilizadoresClient extends BaseApiClient {
           GSResponse<string>
         >(`/api/identity/users/${id}`, data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new UtilizadorError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new UtilizadorError(
-          'Falha ao atualizar utilizador',
-          undefined,
-          error
-        )
+        if (error instanceof BaseApiError && error.data) {
+          return {
+            info: error.data as GSResponse<string>,
+            status: error.statusCode || 400,
+            statusText: error.message,
+          }
+        }
+        throw error
       }
     })
   }
@@ -143,7 +146,7 @@ class UtilizadoresClient extends BaseApiClient {
           `/api/identity/users/${id}`
         )
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new UtilizadorError('Formato de resposta inválido')
         }
@@ -170,7 +173,7 @@ class UtilizadoresClient extends BaseApiClient {
             GSResponse<UtilizadorDTO>
           >(`/api/identity/users/${id}`)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new UtilizadorError('Formato de resposta inválido')
           }

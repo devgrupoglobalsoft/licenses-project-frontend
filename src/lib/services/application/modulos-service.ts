@@ -29,7 +29,7 @@ class ModulosClient extends BaseApiClient {
             PaginatedResponse<ModuloDTO>
           >('/api/modulos/modulos-paginated', params)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new ModuloError('Formato de resposta inválido')
           }
@@ -61,7 +61,7 @@ class ModulosClient extends BaseApiClient {
           const response =
             await this.httpClient.getRequest<GSResponse<ModuloDTO[]>>(endpoint)
 
-          if (!response.info || !response.info.data) {
+          if (!response.info) {
             console.error('Formato de resposta inválido:', response)
             throw new ModuloError('Formato de resposta inválido')
           }
@@ -84,7 +84,7 @@ class ModulosClient extends BaseApiClient {
           GSResponse<string>
         >('/api/modulos', data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new ModuloError('Formato de resposta inválido')
         }
@@ -114,7 +114,7 @@ class ModulosClient extends BaseApiClient {
           GSResponse<string>
         >(`/api/modulos/${id}`, data)
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new ModuloError('Formato de resposta inválido')
         }
@@ -135,7 +135,7 @@ class ModulosClient extends BaseApiClient {
           `/api/modulos/${id}`
         )
 
-        if (!response.info || !response.info.data) {
+        if (!response.info) {
           console.error('Formato de resposta inválido:', response)
           throw new ModuloError('Formato de resposta inválido')
         }
