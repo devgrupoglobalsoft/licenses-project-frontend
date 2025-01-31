@@ -28,7 +28,7 @@ import { Textarea } from '@/components/ui/textarea'
 const aplicacaoFormSchema = z.object({
   nome: z
     .string({ required_error: 'O Nome é obrigatório' })
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
   descricao: z.string().optional(),
   ativo: z.boolean().default(true),
   areaId: z.string({ required_error: 'A Área é obrigatória' }),

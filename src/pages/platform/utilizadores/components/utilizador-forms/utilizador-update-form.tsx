@@ -30,10 +30,10 @@ import { Switch } from '@/components/ui/switch'
 const utilizadorFormSchema = z.object({
   firstName: z
     .string()
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
   lastName: z
     .string()
-    .min(1, { message: 'O Apelido deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
   email: z.string().email({ message: 'Email inválido' }),
   clienteId: z.string().min(1, { message: 'Cliente é obrigatório' }),
   roleId: z.string().min(1, { message: 'Role é obrigatória' }),

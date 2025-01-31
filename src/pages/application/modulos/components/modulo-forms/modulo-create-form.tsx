@@ -29,10 +29,10 @@ import { Textarea } from '@/components/ui/textarea'
 const moduloFormSchema = z.object({
   nome: z
     .string({ required_error: 'O Nome é obrigatório' })
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
   descricao: z
     .string({ required_error: 'A Descrição é obrigatória' })
-    .min(1, { message: 'A Descrição deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'A Descrição deve ter pelo menos 1 caráter' }),
   ativo: z.boolean(),
   aplicacaoId: z.string({ required_error: 'A Aplicação é obrigatória' }),
 })

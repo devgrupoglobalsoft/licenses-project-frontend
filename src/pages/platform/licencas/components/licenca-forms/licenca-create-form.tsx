@@ -28,7 +28,7 @@ import {
 const licencaFormSchema = z.object({
   nome: z
     .string({ required_error: 'O Nome é obrigatório' })
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
   dataInicio: z.date({ required_error: 'A Data de Início é obrigatória' }),
   dataFim: z.date({ required_error: 'A Data de Fim é obrigatória' }),
   numeroUtilizadores: z.number().min(1, { message: 'Mínimo de 1 utilizador' }),

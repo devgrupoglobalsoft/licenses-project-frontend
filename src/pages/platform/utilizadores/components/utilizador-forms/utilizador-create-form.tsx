@@ -30,10 +30,10 @@ const utilizadorFormSchema = z
   .object({
     firstName: z
       .string({ required_error: 'O Nome é obrigatório' })
-      .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+      .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
     lastName: z
       .string({ required_error: 'O Apelido é obrigatório' })
-      .min(1, { message: 'O Apelido deve ter pelo menos 1 caractere' }),
+      .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
     email: z
       .string({ required_error: 'O Email é obrigatório' })
       .email({ message: 'Email inválido' }),

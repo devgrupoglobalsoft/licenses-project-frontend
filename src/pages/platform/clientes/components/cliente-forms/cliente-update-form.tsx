@@ -19,10 +19,10 @@ import { Switch } from '@/components/ui/switch'
 const clienteFormSchema = z.object({
   nome: z
     .string({ required_error: 'O Nome é obrigatório' })
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
   sigla: z
     .string({ required_error: 'A Sigla é obrigatória' })
-    .min(1, { message: 'A Sigla deve ter pelo menos 1 caractere' }),
+    .min(1, { message: 'A Sigla deve ter pelo menos 1 caráter' }),
   nif: z
     .string({ required_error: 'O NIF é obrigatório' })
     .length(9, { message: 'O NIF deve ter exatamente 9 caracteres' }),
