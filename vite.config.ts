@@ -18,24 +18,47 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-            '@tanstack/react-query',
-            'axios',
-            'zustand',
+          // Core React chunk
+          'react-core': ['react', 'react-dom', 'react-router-dom'],
+
+          // State management and data fetching
+          'data-management': ['@tanstack/react-query', 'zustand', 'axios'],
+
+          // Form handling
+          'form-handling': ['react-hook-form', '@hookform/resolvers', 'zod'],
+
+          // UI Components - Radix
+          'radix-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-select',
+            '@radix-ui/react-label',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-switch',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-tabs',
           ],
-          ui: [
+
+          // UI Components - Custom
+          'ui-components': [
             '@/components/ui/button',
             '@/components/ui/form',
             '@/components/ui/input',
             '@/components/ui/select',
             '@/components/ui/switch',
             '@/components/ui/label',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-select',
+            '@/components/ui/dialog',
+            '@/components/ui/checkbox',
           ],
+
+          // Charts and visualization
+          charts: ['recharts'],
+
+          // Date handling
+          'date-utils': ['date-fns'],
+
+          // Icons
+          icons: ['@tabler/icons-react', 'lucide-react'],
         },
       },
     },
