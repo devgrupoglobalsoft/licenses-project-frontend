@@ -82,7 +82,7 @@ export class HttpClient {
   protected getHeaders() {
     const { token } = useAuthStore.getState()
 
-    const headers = {
+    const headers: Record<string, string> = {
       tenant: 'root',
       'Accept-Language': 'en-US',
       'Content-Type': 'application/json',
