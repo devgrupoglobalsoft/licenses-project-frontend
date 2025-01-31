@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useDeleteUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
-// import UtilizadorUpdateForm from '@/pages/platform/utilizadores/components/utilizador-forms/utilizador-update-form'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Edit, Trash } from 'lucide-react'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import { AlertModal } from '@/components/shared/alert-modal'
+import { UtilizadorUpdateForm } from '../utilizador-forms/utilizador-update-form'
 
 interface CellActionProps {
   data: UtilizadorDTO
@@ -38,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <EnhancedModal
+      <EnhancedModal
         title='Atualizar Utilizador'
         description='Atualize os dados do utilizador'
         isOpen={isUpdateModalOpen}
@@ -54,13 +54,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               email: selectedUtilizador.email,
               firstName: selectedUtilizador.firstName,
               lastName: selectedUtilizador.lastName,
-              password: selectedUtilizador.password || '',
-              perfilId: selectedUtilizador.perfisUtilizador?.[0] || '',
               roleId: selectedUtilizador.roleId || '',
+              isActive: selectedUtilizador.isActive || true,
+              perfilId: selectedUtilizador.perfisUtilizador?.[0] || '',
             }}
           />
         )}
-      </EnhancedModal> */}
+      </EnhancedModal>
 
       <AlertModal
         isOpen={open}

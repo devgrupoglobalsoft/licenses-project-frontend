@@ -14,8 +14,7 @@ export interface UpdateUtilizadorDTO {
   firstName: string
   isActive: boolean
   lastName: string
-  phoneNumber?: string
-  perfilId: string
+  perfilId?: string
   roleId: string
 }
 
