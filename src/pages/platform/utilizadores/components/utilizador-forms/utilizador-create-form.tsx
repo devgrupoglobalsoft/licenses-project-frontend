@@ -81,14 +81,10 @@ export function UtilizadorCreateForm({
   })
 
   const onSubmit = async (data: UtilizadorFormSchemaType) => {
-    console.log('Form submission triggered')
     try {
-      console.log('Form submitted with data:', data)
       const { confirmPassword, ...submitData } = data
 
-      console.log('Data to be sent to API:', submitData)
       const response = await createUtilizador.mutateAsync(submitData)
-      console.log('API Response:', response)
 
       if (response.info.succeeded) {
         toast.success('Utilizador criado com sucesso!')

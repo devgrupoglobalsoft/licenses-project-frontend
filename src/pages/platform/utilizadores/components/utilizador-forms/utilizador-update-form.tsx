@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 
 const utilizadorFormSchema = z.object({
   firstName: z
@@ -91,6 +92,9 @@ export function UtilizadorUpdateForm({
           perfilId: data.perfilId || '',
         },
       })
+
+      console.log(response)
+
       if (response.info.succeeded) {
         toast.success('Utilizador atualizado com sucesso!')
         modalClose()
@@ -224,6 +228,26 @@ export function UtilizadorUpdateForm({
                     </Select>
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
+            <FormField
+              control={form.control}
+              name='isActive'
+              render={({ field }) => (
+                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
+                  <div className='space-y-0.5'>
+                    <FormLabel className='text-base'>Ativo</FormLabel>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
                 </FormItem>
               )}
             />
