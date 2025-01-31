@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -72,7 +72,6 @@ export default function DataTable<TData, TValue>({
   columns,
   data,
   pageCount,
-  filterFields = [],
   pageSizeOptions = [10, 20, 30, 40, 50],
   initialFilters = [],
   initialActiveFiltersCount,

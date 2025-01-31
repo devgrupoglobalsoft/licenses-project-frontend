@@ -21,8 +21,6 @@ import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-c
 export function LicencasFilterControls({
   table,
   columns,
-  onApplyFilters,
-  onClearFilters,
 }: BaseFilterControlsProps<LicencaDTO>) {
   const { data: clientes } = useGetClientesSelect()
   const { data: aplicacoes } = useGetAplicacoesSelect()

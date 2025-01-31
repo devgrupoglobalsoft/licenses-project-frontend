@@ -19,8 +19,6 @@ import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-c
 export function ModulosFilterControls({
   table,
   columns,
-  onApplyFilters,
-  onClearFilters,
 }: BaseFilterControlsProps<ModuloDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [initialParamApplied, setInitialParamApplied] = useState(false)

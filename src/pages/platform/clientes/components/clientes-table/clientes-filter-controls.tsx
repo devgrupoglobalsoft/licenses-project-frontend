@@ -17,8 +17,6 @@ import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-c
 export function ClientesFilterControls({
   table,
   columns,
-  onApplyFilters,
-  onClearFilters,
 }: BaseFilterControlsProps<ClienteDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
 

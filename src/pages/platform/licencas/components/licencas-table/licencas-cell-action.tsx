@@ -3,11 +3,7 @@ import LicencaBlockDetailsForm from '@/pages/platform/licencas/components/licenc
 import LicencaBlockForm from '@/pages/platform/licencas/components/licenca-forms/licenca-block-form'
 import LicencaModulosForm from '@/pages/platform/licencas/components/licenca-forms/licenca-modulos-form'
 import LicencaUpdateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-update-form'
-import {
-  useDeleteLicenca,
-  useBlockLicenca,
-  useUnblockLicenca,
-} from '@/pages/platform/licencas/queries/licencas-mutations'
+import { useDeleteLicenca } from '@/pages/platform/licencas/queries/licencas-mutations'
 import { LicencaDTO } from '@/types/dtos'
 import { Edit, Lock, Unlock, Trash, ListTree } from 'lucide-react'
 import { toast } from '@/utils/toast-utils'

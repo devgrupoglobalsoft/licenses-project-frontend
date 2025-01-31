@@ -49,7 +49,7 @@ const ModuloCreateForm = ({
   preSelectedAplicacaoId,
 }: ModuloCreateFormProps) => {
   const { data: aplicacoesData } = useGetAplicacoesSelect()
-  const { data: modulosData } = useGetModulosSelect()
+  const { data: _ } = useGetModulosSelect()
   const createModuloMutation = useCreateModulo()
 
   const form = useForm<ModuloFormSchemaType>({

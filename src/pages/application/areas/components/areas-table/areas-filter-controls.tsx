@@ -10,8 +10,6 @@ import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-c
 export function AreasFilterControls({
   table,
   columns,
-  onApplyFilters,
-  onClearFilters,
 }: BaseFilterControlsProps<AreaDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
 

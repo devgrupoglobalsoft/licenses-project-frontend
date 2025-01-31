@@ -38,7 +38,7 @@ export default function DashboardNav({
     if (setOpen) setOpen(false)
   }
 
-  const isItemActive = (itemTitle: string, itemHref: string) => {
+  const isItemActive = (_itemTitle: string, itemHref: string) => {
     // Check if current path exactly matches the item's href
     const isExactMatch = location.pathname === itemHref
 

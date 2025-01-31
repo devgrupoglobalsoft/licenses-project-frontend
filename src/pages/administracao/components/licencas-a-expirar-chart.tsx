@@ -1,4 +1,4 @@
-import { addDays, format, isWithinInterval, startOfDay } from 'date-fns'
+import { addDays, isWithinInterval, startOfDay } from 'date-fns'
 import { useGetLicencas } from '@/pages/platform/licencas/queries/licencas-queries'
 import {
   BarChart,
@@ -9,7 +9,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts'
-import { Card } from '@/components/ui/card'
 import { CardDescription, CardTitle } from '@/components/ui/card'
 import { CardHeader } from '@/components/ui/card'
 import { CardContent } from '@/components/ui/card'

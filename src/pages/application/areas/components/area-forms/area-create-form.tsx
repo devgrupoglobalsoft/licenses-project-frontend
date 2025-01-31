@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useCreateArea } from '@/pages/application/areas/queries/areas-mutations'
 import { PREDEFINED_COLORS } from '@/lib/constants/colors'
-import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
+import { handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import {

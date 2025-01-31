@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useUpdateArea } from '@/pages/application/areas/queries/areas-mutations'
 import { AreaDTO } from '@/types/dtos'
 import { PREDEFINED_COLORS } from '@/lib/constants/colors'
-import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
+import { handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import {

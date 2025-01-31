@@ -12,7 +12,6 @@ import {
 } from 'recharts'
 import { CardContent } from '@/components/ui/card'
 import { CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Card } from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,

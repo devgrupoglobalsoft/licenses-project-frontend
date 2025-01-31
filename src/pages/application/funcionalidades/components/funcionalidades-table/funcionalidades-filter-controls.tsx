@@ -19,8 +19,6 @@ import { BaseFilterControlsProps } from '@/components/shared/data-table-filter-c
 export function FuncionalidadesFilterControls({
   table,
   columns,
-  onApplyFilters,
-  onClearFilters,
 }: BaseFilterControlsProps<FuncionalidadeDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const [initialParamApplied, setInitialParamApplied] = useState(false)

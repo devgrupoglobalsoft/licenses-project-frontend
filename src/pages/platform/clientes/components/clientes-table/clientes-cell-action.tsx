@@ -3,7 +3,6 @@ import ClienteUpdateForm from '@/pages/platform/clientes/components/cliente-form
 import { useDeleteCliente } from '@/pages/platform/clientes/queries/clientes-mutations'
 import { ClienteDTO } from '@/types/dtos'
 import { Edit, Trash } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
@@ -19,8 +18,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [selectedCliente, setSelectedCliente] = useState<ClienteDTO | null>(
     null
   )
-  const navigate = useNavigate()
-
   const deleteClienteMutation = useDeleteCliente()
 
   const handleDeleteConfirm = async () => {

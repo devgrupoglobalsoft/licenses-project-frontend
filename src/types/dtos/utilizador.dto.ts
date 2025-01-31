@@ -57,5 +57,4 @@ export const toUpdateUtilizadorDTO = (
   isActive: user.isActive ?? false,
   perfilId: perfilId ?? '',
   roleId: user.roleId,
-  phoneNumber: '',
 })
