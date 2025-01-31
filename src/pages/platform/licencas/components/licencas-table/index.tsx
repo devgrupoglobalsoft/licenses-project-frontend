@@ -51,7 +51,7 @@ export function LicencasTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/licencas'
+          baseRoute='/administracao/licencas'
         />
       )}
     </>

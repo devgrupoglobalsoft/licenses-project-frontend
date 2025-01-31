@@ -58,7 +58,7 @@ export default function AplicacoesTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/aplicacoes'
+          baseRoute='/administracao/aplicacoes'
         />
       )}
     </>

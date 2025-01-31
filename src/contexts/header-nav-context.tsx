@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useMenuItems } from '@/hooks/use-menu-items'
 
 type HeaderNavContextType = {
   currentMenu: string
@@ -18,32 +19,23 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [currentMenu, setCurrentMenu] = useState('dashboard')
   const location = useLocation()
+  const menuItems = useMenuItems()
 
   useEffect(() => {
-    // Function to determine the current menu based on path
     const determineCurrentMenu = (pathname: string) => {
-      // Check if the current path matches any administration submenu paths
-      const isAdministratorPath = [
-        '/areas',
-        '/aplicacoes',
-        '/modulos',
-        '/funcionalidades',
-        '/clientes',
-        '/licencas',
-        '/utilizadores',
-      ].some((path) => pathname.startsWith(path))
+      // Find matching menu item from sidebar items
+      const matchingItem = menuItems.find((item) => {
+        if (pathname === item.href) return true
+        if (pathname.startsWith(item.href + '/')) return true
+        return false
+      })
 
-      if (isAdministratorPath || pathname === '/administracao') {
-        return 'administracao'
-      }
-
-      // Default to dashboard for other paths
-      return 'dashboard'
+      return matchingItem?.title || 'dashboard'
     }
 
     const newMenu = determineCurrentMenu(location.pathname)
     setCurrentMenu(newMenu)
-  }, [location.pathname])
+  }, [location.pathname, menuItems])
 
   return (
     <HeaderNavContext.Provider value={{ currentMenu, setCurrentMenu }}>

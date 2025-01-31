@@ -30,11 +30,6 @@ export default function DashboardNav({
   const { setCurrentMenu, currentMenu } = useHeaderNav()
   const location = useLocation()
 
-  const menuItems = {
-    dashboard: ['/about'],
-    administracao: ['/areas', '/aplicacoes'],
-  }
-
   const handleMenuClick = (title: string) => {
     // Only update the current menu if it's different
     if (title.toLowerCase() !== currentMenu) {
@@ -44,20 +39,13 @@ export default function DashboardNav({
   }
 
   const isItemActive = (itemTitle: string, itemHref: string) => {
-    // Get the menu paths for this item
-    const currentPaths =
-      menuItems[itemTitle.toLowerCase() as keyof typeof menuItems] || []
-
     // Check if current path exactly matches the item's href
     const isExactMatch = location.pathname === itemHref
 
     // Check if current path starts with item's href (for nested routes)
     const isNestedMatch = location.pathname.startsWith(itemHref + '/')
 
-    // Check if current path is in the menu paths for this item
-    const isInMenuPaths = currentPaths.includes(location.pathname)
-
-    return isExactMatch || isNestedMatch || isInMenuPaths
+    return isExactMatch || isNestedMatch
   }
 
   if (!items?.length) {

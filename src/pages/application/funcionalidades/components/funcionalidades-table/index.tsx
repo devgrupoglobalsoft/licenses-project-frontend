@@ -58,7 +58,7 @@ export default function FuncionalidadesTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/funcionalidades'
+          baseRoute='/administracao/funcionalidades'
         />
       )}
     </>

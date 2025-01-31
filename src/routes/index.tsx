@@ -1,6 +1,8 @@
 import { Suspense, lazy } from 'react'
 import { HeaderNavProvider } from '@/contexts/header-nav-context'
-import AdministracaoPage from '@/pages/administracao'
+import AdminDashboard from '@/pages/administracao/admin'
+import AdministracaoRouter from '@/pages/administracao/administracao-router'
+import AdministratorDashboard from '@/pages/administracao/administrator'
 import AplicacoesPage from '@/pages/application/aplicacoes'
 import AreasPage from '@/pages/application/areas'
 import FuncionalidadesPage from '@/pages/application/funcionalidades'
@@ -11,6 +13,8 @@ import LicencasPage from '@/pages/platform/licencas'
 import UtilizadoresPage from '@/pages/platform/utilizadores'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProtectedRoute from '@/components/auth/protected-route'
+import RoleProtectedRoute from '@/components/auth/role-protected-route'
+import RoleRouter from '@/components/auth/role-router'
 
 const DashboardLayout = lazy(
   () => import('@/components/layout/dashboard-layout')
@@ -38,41 +42,99 @@ export default function AppRouter() {
       ),
       children: [
         {
-          element: <DashboardPage />,
           index: true,
+          element: (
+            <RoleRouter
+              routes={{
+                administrator: <DashboardPage />,
+                admin: <Navigate to='/administracao' replace />,
+              }}
+            />
+          ),
+        },
+        {
+          path: 'dashboard',
+          element: <DashboardPage />,
         },
         {
           path: 'administracao',
-          element: <AdministracaoPage />,
-        },
-
-        {
-          path: 'areas',
-          element: <AreasPage />,
-        },
-        {
-          path: 'aplicacoes',
-          element: <AplicacoesPage />,
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator', 'admin']}>
+              <AdministracaoRouter />
+            </RoleProtectedRoute>
+          ),
         },
         {
-          path: 'modulos',
-          element: <ModulosPage />,
+          path: 'administracao/areas',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <AreasPage />
+            </RoleProtectedRoute>
+          ),
         },
         {
-          path: 'funcionalidades',
-          element: <FuncionalidadesPage />,
+          path: 'administracao/aplicacoes',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <AplicacoesPage />
+            </RoleProtectedRoute>
+          ),
         },
         {
-          path: 'clientes',
-          element: <ClientesPage />,
+          path: 'administracao/modulos',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <ModulosPage />
+            </RoleProtectedRoute>
+          ),
         },
         {
-          path: 'licencas',
-          element: <LicencasPage />,
+          path: 'administracao/funcionalidades',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <FuncionalidadesPage />
+            </RoleProtectedRoute>
+          ),
         },
         {
-          path: 'utilizadores',
-          element: <UtilizadoresPage />,
+          path: 'administracao/clientes',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <ClientesPage />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: 'administracao/licencas',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <LicencasPage />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: 'administracao/utilizadores',
+          element: (
+            <RoleProtectedRoute allowedRoles={['administrator']}>
+              <UtilizadoresPage />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: 'administracao/administrator',
+          element: <AdministratorDashboard />,
+        },
+        {
+          path: 'administracao/admin',
+          element: <AdminDashboard />,
+        },
+        {
+          path: 'administracao/licencas/admin',
+          element: (
+            <RoleProtectedRoute allowedRoles={['admin']}>
+              <div>Licenças Admin</div>
+            </RoleProtectedRoute>
+          ),
         },
       ],
     },

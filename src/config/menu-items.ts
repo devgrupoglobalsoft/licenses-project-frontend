@@ -17,12 +17,6 @@ export const roleMenuItems = {
   ],
   admin: [
     {
-      title: 'dashboard',
-      href: '/',
-      icon: 'dashboard' as keyof typeof Icons,
-      label: 'Dashboard',
-    },
-    {
       title: 'administracao',
       href: '/administracao',
       icon: 'user' as keyof typeof Icons,
@@ -41,24 +35,24 @@ export const roleHeaderMenus = {
         items: [
           {
             label: 'Áreas',
-            href: '/areas',
+            href: '/administracao/areas',
             description: 'Faca a gestão das áreas da sua empresa',
           },
           {
             label: 'Aplicações',
-            href: '/aplicacoes',
+            href: '/administracao/aplicacoes',
             description: 'Faça a gestão das aplicações da sua empresa',
             icon: 'application' as keyof typeof Icons,
           },
           {
             label: 'Modulos',
-            href: '/modulos',
+            href: '/administracao/modulos',
             description: 'Faça a gestão dos modulos da sua empresa',
             icon: 'application' as keyof typeof Icons,
           },
           {
             label: 'Funcionalidades',
-            href: '/funcionalidades',
+            href: '/administracao/funcionalidades',
             description: 'Faça a gestão das funcionalidades da sua empresa',
             icon: 'application' as keyof typeof Icons,
           },
@@ -70,12 +64,12 @@ export const roleHeaderMenus = {
         items: [
           {
             label: 'Clientes',
-            href: '/clientes',
+            href: '/administracao/clientes',
             description: 'Faca a gestão dos clientes da sua empresa',
           },
           {
             label: 'Licenças',
-            href: '/licencas',
+            href: '/administracao/licencas',
             description: 'Faça a gestão das licenças da sua empresa',
             icon: 'application' as keyof typeof Icons,
           },
@@ -83,7 +77,7 @@ export const roleHeaderMenus = {
       },
       {
         label: 'Utilizadores',
-        href: '/utilizadores',
+        href: '/administracao/utilizadores',
         description: 'Faça a gestão dos utilizadores da sua empresa',
       },
     ],
@@ -96,7 +90,7 @@ export const roleHeaderMenus = {
         items: [
           {
             label: 'Licenças',
-            href: '/licencas/admin',
+            href: '/administracao/licencas/admin',
             description: 'Faca a gestão da sua licença',
           },
         ],

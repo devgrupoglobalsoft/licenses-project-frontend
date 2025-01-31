@@ -1,4 +1,11 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useHeaderNav } from '@/contexts/header-nav-context'
+import { MenuItem } from '@/types/navigation/menu.types'
+import { Link, useLocation } from 'react-router-dom'
+import { Logo } from '@/assets/logo-letters'
+import { useAuthStore } from '@/stores/auth-store'
+import { cn } from '@/lib/utils'
+import { useHeaderMenu } from '@/hooks/use-header-menu'
+import { Icons } from '@/components/ui/icons'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -6,54 +13,46 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
   NavigationMenuLink,
-  navigationMenuTriggerStyle
-} from '@/components/ui/navigation-menu';
-import { ModeToggle } from '@/components/shared/theme-toggle';
-import UserNav from '@/components/shared/user-nav';
-import { useHeaderNav } from '@/contexts/header-nav-context';
-import { useHeaderMenu } from '@/hooks/use-header-menu';
-import { cn } from '@/lib/utils';
-import { Logo } from '@/assets/logo-letters';
-import { MenuItem } from '@/types/navigation/menu.types';
-import { ListItem } from '@/components/ui/navigation-menu-item';
-import { Icons } from '@/components/ui/icons';
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu'
+import { ListItem } from '@/components/ui/navigation-menu-item'
+import { ModeToggle } from '@/components/shared/theme-toggle'
+import UserNav from '@/components/shared/user-nav'
 
 export function HeaderNav() {
-  const location = useLocation();
-  const { currentMenu } = useHeaderNav();
-  const menuItems = useHeaderMenu(currentMenu) as MenuItem[];
+  const location = useLocation()
+  const { currentMenu } = useHeaderNav()
+  const menuItems = useHeaderMenu(currentMenu) as MenuItem[]
+  const roleId = useAuthStore((state) => state.roleId)
+  const role = roleId?.toLowerCase()
 
   const isItemActive = (href: string, items?: MenuItem[]) => {
-    // For menu items with subitems (like Plataforma)
+    // For menu items with subitems
     if (items) {
       return items.some(
         (subItem) =>
           location.pathname === subItem.href ||
           location.pathname.startsWith(subItem.href + '/')
-      );
+      )
     }
 
-    // Check for exact match
-    if (location.pathname === href) return true;
-
-    // Check for nested routes
-    if (href !== '/' && location.pathname.startsWith(href + '/')) return true;
-
-    // For administration menu, check if current path is in its submenu paths
-    if (href === '/administracao') {
-      return ['/areas', '/aplicacoes'].some((path) =>
-        location.pathname.startsWith(path)
-      );
+    // For administration menu, check role-specific paths
+    if (href.includes('administracao')) {
+      return location.pathname.startsWith(`/administracao/${role}`)
     }
 
-    return false;
-  };
+    // Default checks
+    if (location.pathname === href) return true
+    if (href !== '/' && location.pathname.startsWith(href + '/')) return true
+
+    return false
+  }
 
   return (
-    <div className="border-b bg-background">
-      <div className="flex h-16 items-center px-4">
-        <div className="mr-6 flex items-center space-x-2">
-          <Logo width={95} className="text-primary" disableLink />
+    <div className='border-b bg-background'>
+      <div className='flex h-16 items-center px-4'>
+        <div className='mr-6 flex items-center space-x-2'>
+          <Logo width={95} className='text-primary' disableLink />
         </div>
         <NavigationMenu>
           <NavigationMenuList>
@@ -62,7 +61,7 @@ export function HeaderNav() {
                 {item.items ? (
                   <>
                     <NavigationMenuTrigger
-                      triggerMode="click"
+                      triggerMode='click'
                       className={cn(
                         isItemActive(item.href, item.items) &&
                           'bg-accent text-accent-foreground'
@@ -71,7 +70,7 @@ export function HeaderNav() {
                       {item.label}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
-                      <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                      <ul className='grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
                         {item.items.map((subItem, subIndex) => (
                           <ListItem
                             key={subIndex}
@@ -83,7 +82,7 @@ export function HeaderNav() {
                                 'bg-accent text-accent-foreground'
                             )}
                           >
-                            <div className="flex items-center">
+                            <div className='flex items-center'>
                               {subItem.description}
                             </div>
                           </ListItem>
@@ -109,7 +108,7 @@ export function HeaderNav() {
             ))}
           </NavigationMenuList>
         </NavigationMenu>
-        <div className="ml-auto flex items-center space-x-4">
+        <div className='ml-auto flex items-center space-x-4'>
           {/* {isMinimized && (
             <Button
               variant="outline"
@@ -126,5 +125,5 @@ export function HeaderNav() {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -51,7 +51,7 @@ export default function ClientesTable({
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/clientes'
+          baseRoute='/administracao/clientes'
         />
       )}
     </>

@@ -65,8 +65,8 @@ export default function FuncionalidadesPage() {
       <PageHead title='Funcionalidades | GSLP' />
       <Breadcrumbs
         items={[
-          { title: 'Início', link: '/' },
-          { title: 'Funcionalidades', link: '/funcionalidades' },
+          { title: 'Administração', link: '/administracao' },
+          { title: 'Funcionalidades', link: '/administracao/funcionalidades' },
         ]}
       />
       <FuncionalidadesTable
