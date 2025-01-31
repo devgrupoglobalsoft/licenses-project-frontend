@@ -12,7 +12,7 @@ import {
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-export class FuncionalidadeError extends BaseApiError {
+class FuncionalidadeError extends BaseApiError {
   name: string = 'FuncionalidadeError'
 }
 

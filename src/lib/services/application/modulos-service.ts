@@ -8,7 +8,7 @@ import { ModuloDTO, CreateModuloDTO, UpdateModuloDTO } from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-export class ModuloError extends BaseApiError {
+class ModuloError extends BaseApiError {
   name: string = 'ModuloError'
 }
 

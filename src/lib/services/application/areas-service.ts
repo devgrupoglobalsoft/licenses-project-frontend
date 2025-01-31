@@ -8,7 +8,7 @@ import { AreaDTO, CreateAreaDTO, UpdateAreaDTO } from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-export class AreaError extends BaseApiError {
+class AreaError extends BaseApiError {
   name: string = 'AreaError'
 }
 

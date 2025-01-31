@@ -22,7 +22,7 @@ interface LicenseCountByArea {
   expired: number
 }
 
-export const licenseStatusConfig = {
+const licenseStatusConfig = {
   active: {
     label: 'Ativas',
     color: '#4ade80',

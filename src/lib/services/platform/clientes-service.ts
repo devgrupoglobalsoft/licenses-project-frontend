@@ -8,7 +8,7 @@ import { ClienteDTO, CreateClienteDTO, UpdateClienteDTO } from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-export class ClienteError extends BaseApiError {
+class ClienteError extends BaseApiError {
   name: string = 'ClienteError'
 }
 

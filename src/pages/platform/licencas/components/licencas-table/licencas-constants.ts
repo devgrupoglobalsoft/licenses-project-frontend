@@ -1,38 +1,35 @@
-import { DataTableFilterField } from '@/components/shared/data-table-types';
-import { LicencaDTO } from '@/types/dtos';
+import { LicencaDTO } from '@/types/dtos'
+import { DataTableFilterField } from '@/components/shared/data-table-types'
 
 export const filterFields: DataTableFilterField<LicencaDTO>[] = [
   {
     label: 'Nome',
     value: 'nome',
-    order: 1
+    order: 1,
   },
   {
     label: 'Cliente',
     value: 'clienteId',
-    order: 2
+    order: 2,
   },
   {
     label: 'Aplicação',
     value: 'aplicacaoId',
-    order: 3
+    order: 3,
   },
   {
     label: 'Estado',
     value: 'ativo',
-    order: 4
+    order: 4,
   },
   {
     label: 'Data Início',
     value: 'dataInicio',
-    order: 5
+    order: 5,
   },
   {
     label: 'Data Fim',
     value: 'dataFim',
-    order: 6
-  }
-];
-
-// Add a constant to identify date fields
-export const dateFields = ['dataInicio', 'dataFim'];
+    order: 6,
+  },
+]

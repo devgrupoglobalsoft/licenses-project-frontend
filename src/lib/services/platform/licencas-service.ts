@@ -13,7 +13,7 @@ import {
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-export class LicencaError extends BaseApiError {
+class LicencaError extends BaseApiError {
   name: string = 'LicencaError'
 }
 

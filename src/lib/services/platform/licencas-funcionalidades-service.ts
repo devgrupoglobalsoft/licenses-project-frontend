@@ -4,7 +4,7 @@ import { ResponseApi } from '@/types/responses'
 import { ResponseModuloFuncionalidadeLicenca } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-export class LicencaFuncionalidadeError extends BaseApiError {
+class LicencaFuncionalidadeError extends BaseApiError {
   name: string = 'LicencaFuncionalidadeError'
 }
 
