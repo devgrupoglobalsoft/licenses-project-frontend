@@ -16,6 +16,7 @@ const DashboardLayout = lazy(
   () => import('@/components/layout/dashboard-layout')
 )
 const SignInPage = lazy(() => import('@/pages/auth/signin'))
+const ResetPasswordPage = lazy(() => import('@/pages/auth/reset-password'))
 const DashboardPage = lazy(() => import('@/pages/dashboard'))
 
 // ----------------------------------------------------------------------
@@ -82,6 +83,10 @@ export default function AppRouter() {
       path: '/login',
       element: <SignInPage />,
       index: true,
+    },
+    {
+      path: '/resetpassword',
+      element: <ResetPasswordPage />,
     },
     {
       path: '/404',
