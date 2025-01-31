@@ -52,6 +52,7 @@ export function EnhancedModal({
   const [position, setPosition] = React.useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = React.useState(false)
   const dragStartRef = React.useRef({ x: 0, y: 0, offsetX: 0, offsetY: 0 })
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   React.useEffect(() => {
     if (!isOpen) {
@@ -103,27 +104,35 @@ export function EnhancedModal({
   const content = (
     <DialogContent
       className={cn(
-        'max-h-[calc(100vh-40px)] fixed left-[50%] top-[50%]',
+        'max-h-[calc(100vh-40px)] overflow-hidden',
+        !isMobile && 'fixed left-[50%] top-[50%]',
         sizeClasses[size],
         heightClasses[size],
-        isDraggable && !isDragging && 'cursor-move',
-        isDragging && 'cursor-grabbing',
+        !isMobile && isDraggable && !isDragging && 'cursor-move',
+        !isMobile && isDragging && 'cursor-grabbing',
+        'flex flex-col',
         className
       )}
       style={{
-        transform: `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px))`,
+        transform: !isMobile
+          ? `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px))`
+          : undefined,
         transition: 'none',
+        height: isMobile ? '100%' : undefined,
       }}
     >
       <DialogHeader
-        className={cn('px-6 pt-6', isDraggable && 'cursor-move')}
+        className={cn(
+          'px-6 pt-6 flex-shrink-0',
+          !isMobile && isDraggable && 'cursor-move'
+        )}
         onMouseDown={handleMouseDown}
       >
         {title && <DialogTitle>{title}</DialogTitle>}
         {description && <DialogDescription>{description}</DialogDescription>}
       </DialogHeader>
-      <div className='flex h-full flex-col'>
-        <div className='flex-1 overflow-y-auto px-6 py-4'>{children}</div>
+      <div className='flex-1 overflow-hidden'>
+        <div className='h-full overflow-y-auto px-6 py-4'>{children}</div>
       </div>
     </DialogContent>
   )
