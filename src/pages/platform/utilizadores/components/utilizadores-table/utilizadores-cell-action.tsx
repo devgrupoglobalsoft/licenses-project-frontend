@@ -55,7 +55,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               firstName: selectedUtilizador.firstName,
               lastName: selectedUtilizador.lastName,
               roleId: selectedUtilizador.roleId || '',
-              isActive: selectedUtilizador.isActive || true,
+              isActive: Boolean(selectedUtilizador.isActive),
               perfilId: selectedUtilizador.perfisUtilizador?.[0] || '',
             }}
           />
