@@ -85,13 +85,23 @@ export const roleHeaderMenus = {
   admin: {
     administracao: [
       {
-        label: 'Licença',
+        label: 'Configuração',
         href: '#',
         items: [
           {
             label: 'Licenças',
             href: '/administracao/licencas/admin',
             description: 'Faca a gestão da sua licença',
+          },
+          {
+            label: 'Perfis',
+            href: '/administracao/perfis/admin',
+            description: 'Faca a gestão da sua configuração',
+          },
+          {
+            label: 'Utilizadores',
+            href: '/administracao/utilizadores/admin',
+            description: 'Faca a gestão dos utilizadores da sua empresa',
           },
         ],
       },

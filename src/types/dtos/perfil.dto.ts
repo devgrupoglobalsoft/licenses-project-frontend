@@ -1,28 +1,32 @@
 export interface CreatePerfilDTO {
-  nome: string;
-  ativo: boolean;
-  clienteId?: string;
-  licencaId?: string;
+  nome: string
+  ativo: boolean
+  clienteId?: string
+  licencaId?: string
 }
 
 export interface UpdatePerfilDTO extends CreatePerfilDTO {
-  id: string;
+  id: string
 }
 
 export interface PerfilDTO {
-  id?: string;
-  nome: string;
-  ativo: boolean;
-  clienteId?: string;
-  licencaId?: string;
+  id?: string
+  nome: string
+  ativo: boolean
+  clienteId?: string
+  licencaId?: string
+  cliente?: {
+    id: string
+    nome: string
+  }
 }
 
 export interface PerfilFuncionalidadeDTO {
-  perfilId?: string;
-  funcionalidadeId?: string;
-  authVer: boolean;
-  authAdd: boolean;
-  authChg: boolean;
-  authDel: boolean;
-  authPrt: boolean;
+  perfilId?: string
+  funcionalidadeId?: string
+  authVer: boolean
+  authAdd: boolean
+  authChg: boolean
+  authDel: boolean
+  authPrt: boolean
 }
