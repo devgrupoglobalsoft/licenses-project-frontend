@@ -55,6 +55,18 @@ const LicencaCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     },
   })
 
+  const handleStartDateChange = (date: Date | undefined) => {
+    form.setValue('dataInicio', date || new Date())
+
+    if (date) {
+      const endDate = new Date(date)
+      endDate.setFullYear(endDate.getFullYear() + 1)
+      form.setValue('dataFim', endDate)
+    } else {
+      form.setValue('dataFim', new Date())
+    }
+  }
+
   const onSubmit = async (data: LicencaFormSchemaType) => {
     try {
       const response = await createLicenca.mutateAsync(data)
@@ -138,6 +150,7 @@ const LicencaCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                         {...field}
                         className='w-full'
                         placeholder='Selecione a data de início'
+                        onChange={handleStartDateChange}
                       />
                     </FormControl>
                     <FormMessage />
