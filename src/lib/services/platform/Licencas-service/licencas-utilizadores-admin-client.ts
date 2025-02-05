@@ -15,7 +15,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
   }
 
   // Copy methods from original file lines 129-255
-  public async getUtilizadoresAdmin(
+  public async getUtilizadores(
     clienteId: string
   ): Promise<ResponseApi<GSResponse<UtilizadorDTO[]>>> {
     return this.withRetry(async () => {
@@ -40,7 +40,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
     })
   }
 
-  public async createUserAdmin(
+  public async createUser(
     data: CreateUtilizadorDTO
   ): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
     return this.withRetry(async () => {
@@ -91,7 +91,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
     })
   }
 
-  public async updateUserAdmin(
+  public async updateUser(
     id: string,
     data: UpdateUtilizadorDTO
   ): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
@@ -118,9 +118,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
     })
   }
 
-  public async deleteUserAdmin(
-    id: string
-  ): Promise<ResponseApi<GSGenericResponse>> {
+  public async deleteUser(id: string): Promise<ResponseApi<GSGenericResponse>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
@@ -143,7 +141,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
     })
   }
 
-  public async getUtilizadoresAdminPaginated(
+  public async getUtilizadoresPaginated(
     clienteId: string,
     params: PaginatedRequest
   ): Promise<ResponseApi<PaginatedResponse<UtilizadorDTO>>> {

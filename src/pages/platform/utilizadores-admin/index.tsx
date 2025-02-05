@@ -4,11 +4,13 @@ import {
   useGetUtilizadoresPaginated,
   usePrefetchAdjacentUtilizadores,
 } from '@/pages/platform/utilizadores-admin/queries/utilizadores-admin-queries'
+import { useAuthStore } from '@/stores/auth-store'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import { DataTableSkeleton } from '@/components/shared/data-table-skeleton'
 import PageHead from '@/components/shared/page-head'
 
 export default function UtilizadoresAdminPage() {
+  const { clientId } = useAuthStore()
   const searchParams = new URLSearchParams(window.location.search)
   const utilizadorIdParam = searchParams.get('utilizadorId')
 
@@ -19,13 +21,14 @@ export default function UtilizadoresAdminPage() {
   )
 
   const { data, isLoading } = useGetUtilizadoresPaginated(
+    clientId,
     page,
     pageSize,
     filters,
     null
   )
   const { prefetchPreviousPage, prefetchNextPage } =
-    usePrefetchAdjacentUtilizadores(page, pageSize, filters)
+    usePrefetchAdjacentUtilizadores(clientId, page, pageSize, filters)
 
   const handleFiltersChange = (
     newFilters: Array<{ id: string; value: string }>
