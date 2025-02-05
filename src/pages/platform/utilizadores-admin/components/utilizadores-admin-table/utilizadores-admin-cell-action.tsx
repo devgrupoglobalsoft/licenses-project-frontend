@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { UtilizadorUpdateForm } from '@/pages/platform/utilizadores/components/utilizador-forms/utilizador-update-form'
+// import { UtilizadorAdminUpdateForm } from '@/pages/platform/utilizadores-admin/components/utilizador-admin-forms/utilizador-admin-update-form'
 import { useDeleteUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Edit, Trash } from 'lucide-react'
@@ -38,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      <EnhancedModal
+      {/* <EnhancedModal
         title='Atualizar Utilizador'
         description='Atualize os dados do utilizador'
         isOpen={isUpdateModalOpen}
@@ -46,7 +46,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         size='xl'
       >
         {selectedUtilizador && (
-          <UtilizadorUpdateForm
+          <UtilizadorAdminUpdateForm
             modalClose={() => setIsUpdateModalOpen(false)}
             utilizadorId={selectedUtilizador.id || ''}
             initialData={{
@@ -60,7 +60,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             }}
           />
         )}
-      </EnhancedModal>
+      </EnhancedModal> */}
 
       <AlertModal
         isOpen={open}

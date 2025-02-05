@@ -11,12 +11,9 @@ import {
 } from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
+import { UtilizadorError } from './utilizador-error'
 
-class UtilizadorError extends BaseApiError {
-  name: string = 'UtilizadorError'
-}
-
-class UtilizadoresClient extends BaseApiClient {
+export class UtilizadoresClient extends BaseApiClient {
   public async getUtilizadoresPaginated(
     params: PaginatedRequest
   ): Promise<ResponseApi<PaginatedResponse<UtilizadorDTO>>> {
@@ -251,7 +248,3 @@ class UtilizadoresClient extends BaseApiClient {
     })
   }
 }
-
-const UtilizadoresService = (idFuncionalidade: string) =>
-  new UtilizadoresClient(idFuncionalidade)
-export default UtilizadoresService

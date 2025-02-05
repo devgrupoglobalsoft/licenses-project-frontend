@@ -4,21 +4,22 @@ import {
   PaginatedRequest,
   PaginatedResponse,
 } from '@/types/api/responses'
-import { ModuloDTO, CreateModuloDTO, UpdateModuloDTO } from '@/types/dtos'
+import {
+  AplicacaoDTO,
+  CreateAplicacaoDTO,
+  UpdateAplicacaoDTO,
+} from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
+import { AplicacaoError } from './aplicacao-error'
 
-class ModuloError extends BaseApiError {
-  name: string = 'ModuloError'
-}
-
-class ModulosClient extends BaseApiClient {
-  public async getModulosPaginated(
+export class AplicacoesClient extends BaseApiClient {
+  public async getAplicacoesPaginated(
     params: PaginatedRequest
-  ): Promise<ResponseApi<PaginatedResponse<ModuloDTO>>> {
+  ): Promise<ResponseApi<PaginatedResponse<AplicacaoDTO>>> {
     const cacheKey = this.getCacheKey(
       'POST',
-      '/api/modulos/modulos-paginated',
+      '/api/aplicacoes/aplicacoes-paginated',
       params
     )
     return this.withCache(cacheKey, () =>
@@ -26,18 +27,18 @@ class ModulosClient extends BaseApiClient {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
-            PaginatedResponse<ModuloDTO>
-          >('/api/modulos/modulos-paginated', params)
+            PaginatedResponse<AplicacaoDTO>
+          >('/api/aplicacoes/aplicacoes-paginated', params)
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
-            throw new ModuloError('Formato de resposta inválido')
+            throw new AplicacaoError('Formato de resposta inválido')
           }
 
           return response
         } catch (error) {
-          throw new ModuloError(
-            'Falha ao obter módulos paginados',
+          throw new AplicacaoError(
+            'Falha ao obter aplicacoes paginadas',
             undefined,
             error
           )
@@ -46,52 +47,49 @@ class ModulosClient extends BaseApiClient {
     )
   }
 
-  public async getModulos(
-    aplicacaoId?: string
-  ): Promise<ResponseApi<GSResponse<ModuloDTO[]>>> {
-    const endpoint = aplicacaoId
-      ? `/api/modulos?aplicacaoId=${aplicacaoId}`
-      : '/api/modulos'
-
-    const cacheKey = this.getCacheKey('GET', endpoint)
-
+  public async getAplicacoes(): Promise<
+    ResponseApi<GSResponse<AplicacaoDTO[]>>
+  > {
+    const cacheKey = this.getCacheKey('GET', '/api/aplicacoes')
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
-            await this.httpClient.getRequest<GSResponse<ModuloDTO[]>>(endpoint)
+            await this.httpClient.getRequest<GSResponse<AplicacaoDTO[]>>(
+              '/api/aplicacoes'
+            )
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
-            throw new ModuloError('Formato de resposta inválido')
+            throw new AplicacaoError('Formato de resposta inválido')
           }
 
           return response
         } catch (error) {
-          throw new ModuloError('Falha ao obter módulos', undefined, error)
+          throw new AplicacaoError(
+            'Falha ao obter aplicacoes',
+            undefined,
+            error
+          )
         }
       })
     )
   }
 
-  public async createModulo(
-    data: CreateModuloDTO
+  public async createAplicacao(
+    data: CreateAplicacaoDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.postRequest<
-          CreateModuloDTO,
+          CreateAplicacaoDTO,
           GSResponse<string>
-        >('/api/modulos', data)
-
-        if (!response.info) {
-          console.error('Formato de resposta inválido:', response)
-          throw new ModuloError('Formato de resposta inválido')
-        }
+        >('/api/aplicacoes', data)
 
         return response
       } catch (error) {
         if (error instanceof BaseApiError && error.data) {
+          // If it's a validation error, return it as a response
           return {
             info: error.data as GSResponse<string>,
             status: error.statusCode || 400,
@@ -103,51 +101,51 @@ class ModulosClient extends BaseApiClient {
     })
   }
 
-  public async updateModulo(
+  public async updateAplicacao(
     id: string,
-    data: UpdateModuloDTO
+    data: UpdateAplicacaoDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.putRequest<
-          UpdateModuloDTO,
+          UpdateAplicacaoDTO,
           GSResponse<string>
-        >(`/api/modulos/${id}`, data)
+        >(`/api/aplicacoes/${id}`, data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new ModuloError('Formato de resposta inválido')
+          throw new AplicacaoError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new ModuloError('Falha ao atualizar módulo', undefined, error)
+        throw new AplicacaoError(
+          'Falha ao atualizar aplicacao',
+          undefined,
+          error
+        )
       }
     })
   }
 
-  public async deleteModulo(
+  public async deleteAplicacao(
     id: string
   ): Promise<ResponseApi<GSGenericResponse>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
-          `/api/modulos/${id}`
+          `/api/aplicacoes/${id}`
         )
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new ModuloError('Formato de resposta inválido')
+          throw new AplicacaoError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new ModuloError('Falha ao deletar módulo', undefined, error)
+        throw new AplicacaoError('Falha ao deletar aplicacao', undefined, error)
       }
     })
   }
 }
-
-const ModulosService = (idFuncionalidade: string) =>
-  new ModulosClient(idFuncionalidade)
-export default ModulosService

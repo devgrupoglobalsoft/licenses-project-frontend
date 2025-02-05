@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import FuncionalidadesService from '@/lib/services/application/funcionalidade-service'
+import FuncionalidadesService from '@/lib/services/application/funcionalidades-service'
 
 export const useGetFuncionalidadesPaginated = (
   pageNumber: number,

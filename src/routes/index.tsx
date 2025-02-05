@@ -12,6 +12,7 @@ import ClientesPage from '@/pages/platform/clientes'
 import LicencasPage from '@/pages/platform/licencas'
 import PerfisAdminPage from '@/pages/platform/perfis-admin'
 import UtilizadoresPage from '@/pages/platform/utilizadores'
+import UtilizadoresAdminPage from '@/pages/platform/utilizadores-admin'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProtectedRoute from '@/components/auth/protected-route'
 import RoleProtectedRoute from '@/components/auth/role-protected-route'
@@ -142,6 +143,14 @@ export default function AppRouter() {
           element: (
             <RoleProtectedRoute allowedRoles={['admin']}>
               <PerfisAdminPage />
+            </RoleProtectedRoute>
+          ),
+        },
+        {
+          path: 'administracao/utilizadores/admin',
+          element: (
+            <RoleProtectedRoute allowedRoles={['admin']}>
+              <UtilizadoresAdminPage />
             </RoleProtectedRoute>
           ),
         },

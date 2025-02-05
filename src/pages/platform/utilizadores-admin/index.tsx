@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import UtilizadoresTable from '@/pages/platform/utilizadores/components/utilizadores-table'
+import UtilizadoresAdminTable from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table'
 import {
   useGetUtilizadoresPaginated,
   usePrefetchAdjacentUtilizadores,
-} from '@/pages/platform/utilizadores/queries/utilizadores-queries'
+} from '@/pages/platform/utilizadores-admin/queries/utilizadores-admin-queries'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import { DataTableSkeleton } from '@/components/shared/data-table-skeleton'
 import PageHead from '@/components/shared/page-head'
 
-export default function UtilizadoresPage() {
+export default function UtilizadoresAdminPage() {
   const searchParams = new URLSearchParams(window.location.search)
   const utilizadorIdParam = searchParams.get('utilizadorId')
 
@@ -70,7 +70,7 @@ export default function UtilizadoresPage() {
           { title: 'Utilizadores', link: '/administracao/utilizadores' },
         ]}
       />
-      <UtilizadoresTable
+      <UtilizadoresAdminTable
         utilizadores={utilizadores}
         page={page}
         totalUtilizadores={totalUtilizadores}

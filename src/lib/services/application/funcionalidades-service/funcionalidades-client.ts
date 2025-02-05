@@ -4,21 +4,22 @@ import {
   PaginatedRequest,
   PaginatedResponse,
 } from '@/types/api/responses'
-import { ClienteDTO, CreateClienteDTO, UpdateClienteDTO } from '@/types/dtos'
+import {
+  FuncionalidadeDTO,
+  CreateFuncionalidadeDTO,
+  UpdateFuncionalidadeDTO,
+} from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
+import { FuncionalidadeError } from './funcionalidade-error'
 
-class ClienteError extends BaseApiError {
-  name: string = 'ClienteError'
-}
-
-class ClientesClient extends BaseApiClient {
-  public async getClientesPaginated(
+export class FuncionalidadesClient extends BaseApiClient {
+  public async getFuncionalidadesPaginated(
     params: PaginatedRequest
-  ): Promise<ResponseApi<PaginatedResponse<ClienteDTO>>> {
+  ): Promise<ResponseApi<PaginatedResponse<FuncionalidadeDTO>>> {
     const cacheKey = this.getCacheKey(
       'POST',
-      '/api/clientes/clientes-paginated',
+      '/api/funcionalidades/funcionalidades-paginated',
       params
     )
     return this.withCache(cacheKey, () =>
@@ -26,18 +27,18 @@ class ClientesClient extends BaseApiClient {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
-            PaginatedResponse<ClienteDTO>
-          >('/api/clientes/clientes-paginated', params)
+            PaginatedResponse<FuncionalidadeDTO>
+          >('/api/funcionalidades/funcionalidades-paginated', params)
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
-            throw new ClienteError('Formato de resposta inválido')
+            throw new FuncionalidadeError('Formato de resposta inválido')
           }
 
           return response
         } catch (error) {
-          throw new ClienteError(
-            'Falha ao obter clientes paginados',
+          throw new FuncionalidadeError(
+            'Falha ao obter funcionalidades paginadas',
             undefined,
             error
           )
@@ -46,42 +47,52 @@ class ClientesClient extends BaseApiClient {
     )
   }
 
-  public async getClientes(): Promise<ResponseApi<GSResponse<ClienteDTO[]>>> {
-    const cacheKey = this.getCacheKey('GET', '/api/clientes')
+  public async getFuncionalidades(
+    moduloId?: string
+  ): Promise<ResponseApi<GSResponse<FuncionalidadeDTO[]>>> {
+    const endpoint = moduloId
+      ? `/api/funcionalidades?moduloId=${moduloId}`
+      : '/api/funcionalidades'
+
+    const cacheKey = this.getCacheKey('GET', endpoint)
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
-            await this.httpClient.getRequest<GSResponse<ClienteDTO[]>>(
-              '/api/clientes'
+            await this.httpClient.getRequest<GSResponse<FuncionalidadeDTO[]>>(
+              endpoint
             )
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
-            throw new ClienteError('Formato de resposta inválido')
+            throw new FuncionalidadeError('Formato de resposta inválido')
           }
 
           return response
         } catch (error) {
-          throw new ClienteError('Falha ao obter clientes', undefined, error)
+          throw new FuncionalidadeError(
+            'Falha ao obter funcionalidades',
+            undefined,
+            error
+          )
         }
       })
     )
   }
 
-  public async createCliente(
-    data: CreateClienteDTO
+  public async createFuncionalidade(
+    data: CreateFuncionalidadeDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.postRequest<
-          CreateClienteDTO,
+          CreateFuncionalidadeDTO,
           GSResponse<string>
-        >('/api/clientes', data)
+        >('/api/funcionalidades', data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new ClienteError('Formato de resposta inválido')
+          throw new FuncionalidadeError('Formato de resposta inválido')
         }
 
         return response
@@ -98,51 +109,55 @@ class ClientesClient extends BaseApiClient {
     })
   }
 
-  public async updateCliente(
+  public async updateFuncionalidade(
     id: string,
-    data: UpdateClienteDTO
+    data: UpdateFuncionalidadeDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.putRequest<
-          UpdateClienteDTO,
+          UpdateFuncionalidadeDTO,
           GSResponse<string>
-        >(`/api/clientes/${id}`, data)
+        >(`/api/funcionalidades/${id}`, data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new ClienteError('Formato de resposta inválido')
+          throw new FuncionalidadeError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new ClienteError('Falha ao atualizar cliente', undefined, error)
+        throw new FuncionalidadeError(
+          'Falha ao atualizar funcionalidade',
+          undefined,
+          error
+        )
       }
     })
   }
 
-  public async deleteCliente(
+  public async deleteFuncionalidade(
     id: string
   ): Promise<ResponseApi<GSGenericResponse>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
-          `/api/clientes/${id}`
+          `/api/funcionalidades/${id}`
         )
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new ClienteError('Formato de resposta inválido')
+          throw new FuncionalidadeError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new ClienteError('Falha ao deletar cliente', undefined, error)
+        throw new FuncionalidadeError(
+          'Falha ao deletar funcionalidade',
+          undefined,
+          error
+        )
       }
     })
   }
 }
-
-const ClientesService = (idFuncionalidade: string) =>
-  new ClientesClient(idFuncionalidade)
-export default ClientesService

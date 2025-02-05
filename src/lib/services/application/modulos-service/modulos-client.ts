@@ -4,25 +4,18 @@ import {
   PaginatedRequest,
   PaginatedResponse,
 } from '@/types/api/responses'
-import {
-  FuncionalidadeDTO,
-  CreateFuncionalidadeDTO,
-  UpdateFuncionalidadeDTO,
-} from '@/types/dtos'
+import { ModuloDTO, CreateModuloDTO, UpdateModuloDTO } from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
+import { ModuloError } from './modulo-error'
 
-class FuncionalidadeError extends BaseApiError {
-  name: string = 'FuncionalidadeError'
-}
-
-class FuncionalidadesClient extends BaseApiClient {
-  public async getFuncionalidadesPaginated(
+export class ModulosClient extends BaseApiClient {
+  public async getModulosPaginated(
     params: PaginatedRequest
-  ): Promise<ResponseApi<PaginatedResponse<FuncionalidadeDTO>>> {
+  ): Promise<ResponseApi<PaginatedResponse<ModuloDTO>>> {
     const cacheKey = this.getCacheKey(
       'POST',
-      '/api/funcionalidades/funcionalidades-paginated',
+      '/api/modulos/modulos-paginated',
       params
     )
     return this.withCache(cacheKey, () =>
@@ -30,18 +23,18 @@ class FuncionalidadesClient extends BaseApiClient {
         try {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
-            PaginatedResponse<FuncionalidadeDTO>
-          >('/api/funcionalidades/funcionalidades-paginated', params)
+            PaginatedResponse<ModuloDTO>
+          >('/api/modulos/modulos-paginated', params)
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
-            throw new FuncionalidadeError('Formato de resposta inválido')
+            throw new ModuloError('Formato de resposta inválido')
           }
 
           return response
         } catch (error) {
-          throw new FuncionalidadeError(
-            'Falha ao obter funcionalidades paginadas',
+          throw new ModuloError(
+            'Falha ao obter módulos paginados',
             undefined,
             error
           )
@@ -50,52 +43,47 @@ class FuncionalidadesClient extends BaseApiClient {
     )
   }
 
-  public async getFuncionalidades(
-    moduloId?: string
-  ): Promise<ResponseApi<GSResponse<FuncionalidadeDTO[]>>> {
-    const endpoint = moduloId
-      ? `/api/funcionalidades?moduloId=${moduloId}`
-      : '/api/funcionalidades'
+  public async getModulos(
+    aplicacaoId?: string
+  ): Promise<ResponseApi<GSResponse<ModuloDTO[]>>> {
+    const endpoint = aplicacaoId
+      ? `/api/modulos?aplicacaoId=${aplicacaoId}`
+      : '/api/modulos'
 
     const cacheKey = this.getCacheKey('GET', endpoint)
+
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
           const response =
-            await this.httpClient.getRequest<GSResponse<FuncionalidadeDTO[]>>(
-              endpoint
-            )
+            await this.httpClient.getRequest<GSResponse<ModuloDTO[]>>(endpoint)
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
-            throw new FuncionalidadeError('Formato de resposta inválido')
+            throw new ModuloError('Formato de resposta inválido')
           }
 
           return response
         } catch (error) {
-          throw new FuncionalidadeError(
-            'Falha ao obter funcionalidades',
-            undefined,
-            error
-          )
+          throw new ModuloError('Falha ao obter módulos', undefined, error)
         }
       })
     )
   }
 
-  public async createFuncionalidade(
-    data: CreateFuncionalidadeDTO
+  public async createModulo(
+    data: CreateModuloDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.postRequest<
-          CreateFuncionalidadeDTO,
+          CreateModuloDTO,
           GSResponse<string>
-        >('/api/funcionalidades', data)
+        >('/api/modulos', data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new FuncionalidadeError('Formato de resposta inválido')
+          throw new ModuloError('Formato de resposta inválido')
         }
 
         return response
@@ -112,59 +100,47 @@ class FuncionalidadesClient extends BaseApiClient {
     })
   }
 
-  public async updateFuncionalidade(
+  public async updateModulo(
     id: string,
-    data: UpdateFuncionalidadeDTO
+    data: UpdateModuloDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.putRequest<
-          UpdateFuncionalidadeDTO,
+          UpdateModuloDTO,
           GSResponse<string>
-        >(`/api/funcionalidades/${id}`, data)
+        >(`/api/modulos/${id}`, data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new FuncionalidadeError('Formato de resposta inválido')
+          throw new ModuloError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new FuncionalidadeError(
-          'Falha ao atualizar funcionalidade',
-          undefined,
-          error
-        )
+        throw new ModuloError('Falha ao atualizar módulo', undefined, error)
       }
     })
   }
 
-  public async deleteFuncionalidade(
+  public async deleteModulo(
     id: string
   ): Promise<ResponseApi<GSGenericResponse>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.deleteRequest<GSGenericResponse>(
-          `/api/funcionalidades/${id}`
+          `/api/modulos/${id}`
         )
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
-          throw new FuncionalidadeError('Formato de resposta inválido')
+          throw new ModuloError('Formato de resposta inválido')
         }
 
         return response
       } catch (error) {
-        throw new FuncionalidadeError(
-          'Falha ao deletar funcionalidade',
-          undefined,
-          error
-        )
+        throw new ModuloError('Falha ao deletar módulo', undefined, error)
       }
     })
   }
 }
-
-const FuncionalidadesService = (idFuncionalidade: string) =>
-  new FuncionalidadesClient(idFuncionalidade)
-export default FuncionalidadesService
