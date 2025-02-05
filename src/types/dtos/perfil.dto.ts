@@ -6,7 +6,7 @@ export interface CreatePerfilDTO {
 }
 
 export interface UpdatePerfilDTO extends CreatePerfilDTO {
-  id: string
+  id?: string
 }
 
 export interface PerfilDTO {

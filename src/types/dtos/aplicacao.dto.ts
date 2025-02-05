@@ -7,7 +7,7 @@ export interface CreateAplicacaoDTO {
 }
 
 export interface UpdateAplicacaoDTO extends Omit<CreateAplicacaoDTO, 'id'> {
-  id: string
+  id?: string
 }
 
 export interface AplicacaoDTO {

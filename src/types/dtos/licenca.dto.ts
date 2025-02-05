@@ -8,7 +8,7 @@ export interface CreateLicencaDTO {
 }
 
 export interface UpdateLicencaDTO extends CreateLicencaDTO {
-  id: string
+  id?: string
   ativo: boolean
 }
 

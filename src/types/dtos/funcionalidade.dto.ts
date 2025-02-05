@@ -6,7 +6,7 @@ export interface CreateFuncionalidadeDTO {
 }
 
 export interface UpdateFuncionalidadeDTO extends CreateFuncionalidadeDTO {
-  id: string
+  id?: string
 }
 
 export interface FuncionalidadeDTO {

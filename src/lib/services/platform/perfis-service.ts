@@ -8,12 +8,10 @@ import {
   CreatePerfilDTO,
   PerfilDTO,
   PerfilFuncionalidadeDTO,
-  PerfilModuloDTO,
   UpdatePerfilDTO,
 } from '@/types/dtos'
 import {
   ResponseApi,
-  ResponseModuloFuncionalidadeLicenca,
   ResponsePerfilModulosFuncionalidades,
 } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
@@ -138,12 +136,12 @@ class PerfilAdminService extends BaseApiClient implements IPerfilAdminService {
 
   public async updatePerfil(
     id: string,
-    data: CreatePerfilDTO
+    data: UpdatePerfilDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.putRequest<
-          CreatePerfilDTO,
+          UpdatePerfilDTO,
           GSResponse<string>
         >(`/api/perfis/admin/${id}`, data)
 

@@ -8,7 +8,7 @@ export interface CreateModuloDTO {
 }
 
 export interface UpdateModuloDTO extends CreateModuloDTO {
-  id: string
+  id?: string
 }
 
 export interface ModuloDTO {

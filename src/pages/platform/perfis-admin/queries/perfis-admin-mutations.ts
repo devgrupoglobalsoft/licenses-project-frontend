@@ -40,7 +40,7 @@ export const useUpdatePerfil = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: CreatePerfilDTO }) =>
+    mutationFn: ({ id, data }: { id: string; data: UpdatePerfilDTO }) =>
       PerfisService('perfis-admin').admin.updatePerfil(id, { ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })

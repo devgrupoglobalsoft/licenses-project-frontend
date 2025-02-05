@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { filterFields } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-constants'
-import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { PerfilDTO } from '@/types/dtos'
 import { useSearchParams } from 'react-router-dom'
 import { getColumnHeader } from '@/utils/table-utils'
@@ -20,7 +19,6 @@ export function PerfisFilterControls({
   table,
   columns,
 }: BaseFilterControlsProps<PerfilDTO>) {
-  const { data: perfis } = useGetPerfis()
   const [searchParams] = useSearchParams()
   const perfilIdParam = searchParams.get('perfilId')
 
