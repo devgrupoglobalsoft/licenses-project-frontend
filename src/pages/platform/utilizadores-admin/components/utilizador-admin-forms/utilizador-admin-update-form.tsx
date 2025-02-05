@@ -210,7 +210,9 @@ export function UtilizadorAdminUpdateForm({
                     <FormLabel>Estado</FormLabel>
                     <FormControl>
                       <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
-                        <FormLabel className='text-base'>Ativo</FormLabel>
+                        <span className='text-sm text-muted-foreground'>
+                          Ativo
+                        </span>
                         <Switch
                           checked={field.value}
                           onCheckedChange={field.onChange}
