@@ -23,10 +23,18 @@ export interface PerfilDTO {
 
 export interface PerfilFuncionalidadeDTO {
   perfilId?: string
+  funcionalidadeNome?: string
   funcionalidadeId?: string
   authVer: boolean
   authAdd: boolean
   authChg: boolean
   authDel: boolean
   authPrt: boolean
+}
+
+export interface PerfilModuloDTO {
+  moduloId: string
+  moduloNome: string
+  funcionalidades: PerfilFuncionalidadeDTO[]
+  estado: number
 }

@@ -28,7 +28,7 @@ type PerfilUpdateFormProps = {
   initialData: PerfilDTO
 }
 
-export default function PerfilUpdateForm({
+export default function PerfilAdminUpdateForm({
   modalClose,
   perfilId,
   initialData,

@@ -67,7 +67,9 @@ export const useUpdatePerfilFuncionalidades = () => {
         data
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['perfil-funcionalidades'] })
+      queryClient.invalidateQueries({
+        queryKey: ['perfis-admin-modulos-funcionalidades'],
+      })
     },
   })
 }

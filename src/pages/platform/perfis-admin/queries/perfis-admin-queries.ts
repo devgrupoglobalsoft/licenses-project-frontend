@@ -84,3 +84,17 @@ export const useGetPerfilById = (id: string) => {
     enabled: !!id,
   })
 }
+
+export const useGetPerfisModulosFuncionalidades = (id: string) => {
+  return useQuery({
+    queryKey: ['perfis-admin-modulos-funcionalidades', id],
+    queryFn: async () => {
+      const response =
+        await PerfisService(
+          'perfis-admin'
+        ).admin.getPerfisModulosFuncionalidades(id)
+      return response.info.data
+    },
+    enabled: !!id,
+  })
+}

@@ -11,31 +11,31 @@ import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { useCreatePerfil } from '../../queries/perfis-admin-mutations'
 
-const perfilFormSchema = z.object({
+const perfilAdminFormSchema = z.object({
   nome: z
     .string({ required_error: 'O Nome é obrigatório' })
     .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
   ativo: z.boolean(),
 })
 
-type PerfilFormSchemaType = z.infer<typeof perfilFormSchema>
+type PerfilAdminFormSchemaType = z.infer<typeof perfilAdminFormSchema>
 
-interface PerfilCreateFormProps {
+interface PerfilAdminCreateFormProps {
   modalClose: () => void
 }
 
-const AplicacaoCreateForm = ({ modalClose }: PerfilCreateFormProps) => {
+const PerfilAdminCreateForm = ({ modalClose }: PerfilAdminCreateFormProps) => {
   const createPerfilMutation = useCreatePerfil()
 
-  const form = useForm<PerfilFormSchemaType>({
-    resolver: zodResolver(perfilFormSchema),
+  const form = useForm<PerfilAdminFormSchemaType>({
+    resolver: zodResolver(perfilAdminFormSchema),
     defaultValues: {
       nome: '',
       ativo: true,
     },
   })
 
-  const onSubmit = async (values: PerfilFormSchemaType) => {
+  const onSubmit = async (values: PerfilAdminFormSchemaType) => {
     try {
       const response = await createPerfilMutation.mutateAsync({
         nome: values.nome,
@@ -115,4 +115,4 @@ const AplicacaoCreateForm = ({ modalClose }: PerfilCreateFormProps) => {
   )
 }
 
-export default AplicacaoCreateForm
+export default PerfilAdminCreateForm

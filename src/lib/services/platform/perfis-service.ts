@@ -8,9 +8,14 @@ import {
   CreatePerfilDTO,
   PerfilDTO,
   PerfilFuncionalidadeDTO,
+  PerfilModuloDTO,
   UpdatePerfilDTO,
 } from '@/types/dtos'
-import { ResponseApi } from '@/types/responses'
+import {
+  ResponseApi,
+  ResponseModuloFuncionalidadeLicenca,
+  ResponsePerfilModulosFuncionalidades,
+} from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
 interface IPerfilAdminService {
@@ -37,8 +42,8 @@ interface IPerfilAdminService {
 
 interface IPerfilClientService {
   // Add client-specific methods here
-  // getPerfis(): Promise<ResponseApi<GSResponse<PerfilDTO[]>>>
-  // getPerfilById(id: string): Promise<ResponseApi<GSResponse<PerfilDTO>>>
+  getPerfis(): Promise<ResponseApi<GSResponse<PerfilDTO[]>>>
+  getPerfilById(id: string): Promise<ResponseApi<GSResponse<PerfilDTO>>>
 }
 
 class PerfilError extends BaseApiError {
@@ -198,6 +203,33 @@ class PerfilAdminService extends BaseApiClient implements IPerfilAdminService {
             undefined,
             error
           )
+        }
+      })
+    )
+  }
+
+  public async getPerfisModulosFuncionalidades(
+    id: string
+  ): Promise<ResponseApi<GSResponse<ResponsePerfilModulosFuncionalidades>>> {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      `/api/perfis/${id}/funcionalidades/tree`
+    )
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<ResponsePerfilModulosFuncionalidades>
+          >(`/api/perfis/${id}/funcionalidades/tree`)
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new PerfilError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new PerfilError('Falha ao obter perfis', undefined, error)
         }
       })
     )

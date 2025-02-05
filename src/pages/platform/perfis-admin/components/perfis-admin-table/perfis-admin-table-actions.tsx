@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
-import PerfilCreateForm from '../perfis-admin-forms/perfil-admin-create-form'
+import PerfilAdminCreateForm from '../perfis-admin-forms/perfil-admin-create-form'
 
 export default function PerfisTableActions() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -24,7 +24,9 @@ export default function PerfisTableActions() {
           onClose={() => setIsCreateModalOpen(false)}
           size='md'
         >
-          <PerfilCreateForm modalClose={() => setIsCreateModalOpen(false)} />
+          <PerfilAdminCreateForm
+            modalClose={() => setIsCreateModalOpen(false)}
+          />
         </EnhancedModal>
       </div>
     </div>

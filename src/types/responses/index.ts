@@ -2,6 +2,7 @@ import {
   FuncionalidadeDTO,
   FuncionalidadePerfilDTO,
   ModuloPerfilDTO,
+  PerfilModuloDTO,
 } from '@/types/dtos'
 
 export interface ResponseApi<T> {
@@ -106,4 +107,8 @@ export interface ResponseUser {
   roleId: string
   clienteId: string
   perfisUtilizador?: string[]
+}
+
+export interface ResponsePerfilModulosFuncionalidades {
+  modulos: PerfilModuloDTO[]
 }

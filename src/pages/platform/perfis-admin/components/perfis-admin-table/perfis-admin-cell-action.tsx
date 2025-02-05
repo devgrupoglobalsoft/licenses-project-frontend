@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { PerfilDTO } from '@/types/dtos'
-import { Edit, Trash } from 'lucide-react'
+import { Edit, ListTree, Trash } from 'lucide-react'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import { AlertModal } from '@/components/shared/alert-modal'
 import { useDeletePerfil } from '../../queries/perfis-admin-mutations'
-import PerfilUpdateForm from '../perfis-admin-forms/perfil-admin-update-form'
+import PerfilAdminModulosForm from '../perfis-admin-forms/perfil-admin-modulo-form'
+import PerfilAdminUpdateForm from '../perfis-admin-forms/perfil-admin-update-form'
 
 interface CellActionProps {
   data: PerfilDTO
@@ -16,6 +17,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false)
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const [selectedPerfil, setSelectedPerfil] = useState<PerfilDTO | null>(null)
+  const [isPerfilModulosModalOpen, setIsPerfilModulosModalOpen] =
+    useState(false)
 
   const deletePerfilMutation = useDeletePerfil()
 
@@ -45,7 +48,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         size='md'
       >
         {selectedPerfil && (
-          <PerfilUpdateForm
+          <PerfilAdminUpdateForm
             modalClose={() => setIsUpdateModalOpen(false)}
             perfilId={selectedPerfil.id || ''}
             initialData={{
@@ -54,6 +57,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             }}
           />
         )}
+      </EnhancedModal>
+
+      <EnhancedModal
+        title='Módulos e Funcionalidades'
+        description='Selecione os módulos e funcionalidades para este perfil'
+        isOpen={isPerfilModulosModalOpen}
+        onClose={() => setIsPerfilModulosModalOpen(false)}
+        size='xl'
+      >
+        <PerfilAdminModulosForm
+          perfilId={data.id || ''}
+          licencaId={data.licencaId || ''}
+          modalClose={() => setIsPerfilModulosModalOpen(false)}
+        />
       </EnhancedModal>
 
       <AlertModal
@@ -79,6 +96,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         >
           <Trash color='hsl(var(--destructive))' className='h-4 w-4' />
           <span className='sr-only'>Apagar</span>
+        </Button>
+        <Button
+          onClick={() => setIsPerfilModulosModalOpen(true)}
+          variant='ghost'
+          className='h-8 w-8 p-0'
+        >
+          <ListTree color='hsl(var(--primary))' className='h-4 w-4' />
+          <span className='sr-only'>Módulos e Funcionalidades</span>
         </Button>
       </div>
     </>
