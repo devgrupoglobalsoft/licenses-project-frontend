@@ -4,7 +4,7 @@ export interface CreateUtilizadorDTO {
   firstName: string
   lastName: string
   password: string
-  perfilId: string
+  perfilId?: string
   roleId: string
 }
 

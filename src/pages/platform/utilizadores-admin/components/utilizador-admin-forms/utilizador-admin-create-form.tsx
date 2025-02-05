@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { useCreateUser } from '@/pages/platform/utilizadores-admin/queries/utilizadores-admin-mutations'
 import { Eye, EyeOff } from 'lucide-react'
+import { useAuthStore } from '@/stores/auth-store'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleColors, roleLabelMap } from '@/constants/roles'
+import { roleColors, roleLabelMapAdmin } from '@/constants/roles'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -43,13 +44,24 @@ const utilizadorAdminFormSchema = z
     confirmPassword: z.string({
       required_error: 'A Confirmação de Password é obrigatória',
     }),
-    clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
-    perfilId: z.string({ required_error: 'O Perfil é obrigatório' }),
+    perfilId: z.string().optional(),
     roleId: z.string({ required_error: 'O Role é obrigatório' }),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'As passwords não coincidem',
-    path: ['confirmPassword'],
+  .superRefine((data, ctx) => {
+    if (data.roleId.toLowerCase() === 'client' && !data.perfilId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Perfil é obrigatório para utilizadores com role Client',
+        path: ['perfilId'],
+      })
+    }
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'As passwords não coincidem',
+        path: ['confirmPassword'],
+      })
+    }
   })
 
 type UtilizadorAdminFormSchemaType = z.infer<typeof utilizadorAdminFormSchema>
@@ -61,10 +73,12 @@ interface UtilizadorAdminCreateFormProps {
 export function UtilizadorAdminCreateForm({
   modalClose,
 }: UtilizadorAdminCreateFormProps) {
-  const { data: clientesData } = useGetClientesSelect()
+  const { clientId } = useAuthStore()
+  const { data: perfisData } = useGetPerfis()
   const createUtilizador = useCreateUser()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showPerfilField, setShowPerfilField] = useState(false)
 
   const form = useForm<UtilizadorAdminFormSchemaType>({
     resolver: zodResolver(utilizadorAdminFormSchema),
@@ -73,19 +87,41 @@ export function UtilizadorAdminCreateForm({
       lastName: '',
       email: '',
       password: '',
-
       confirmPassword: '',
-      clienteId: undefined,
       perfilId: '',
       roleId: '',
     },
   })
 
+  // Watch for role changes to show/hide perfil field
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'roleId') {
+        setShowPerfilField((value.roleId?.toLowerCase() ?? '') === 'client')
+
+        // Clear perfil when switching to admin role
+        if ((value.roleId?.toLowerCase() ?? '') !== 'client') {
+          form.setValue('perfilId', '')
+        }
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [form])
+
   const onSubmit = async (data: UtilizadorAdminFormSchemaType) => {
     try {
       const { confirmPassword, ...submitData } = data
 
-      const response = await createUtilizador.mutateAsync(submitData)
+      // Only include perfilId if role is client
+      if (submitData.roleId.toLowerCase() !== 'client') {
+        delete submitData.perfilId
+      }
+
+      const response = await createUtilizador.mutateAsync({
+        ...submitData,
+        clienteId: clientId,
+      })
 
       if (response.info.succeeded) {
         toast.success('Utilizador criado com sucesso!')
@@ -235,33 +271,6 @@ export function UtilizadorAdminCreateForm({
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField
               control={form.control}
-              name='clienteId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cliente</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue placeholder='Selecione um cliente' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {clientesData?.map((cliente) => (
-                          <SelectItem key={cliente.id} value={cliente.id}>
-                            <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
-                              <span className='truncate'>{cliente.nome}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name='roleId'
               render={({ field }) => (
                 <FormItem>
@@ -272,19 +281,21 @@ export function UtilizadorAdminCreateForm({
                         <SelectValue placeholder='Selecione uma role' />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(roleLabelMap).map(([role, label]) => (
-                          <SelectItem key={role} value={role}>
-                            <div className='flex items-center gap-2'>
-                              <div
-                                className={`h-4 w-4 rounded-full ${
-                                  roleColors[role as keyof typeof roleColors]
-                                    .indicator
-                                }`}
-                              />
-                              <span>{label}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
+                        {Object.entries(roleLabelMapAdmin).map(
+                          ([role, label]) => (
+                            <SelectItem key={role} value={role}>
+                              <div className='flex items-center gap-2'>
+                                <div
+                                  className={`h-4 w-4 rounded-full ${
+                                    roleColors[role as keyof typeof roleColors]
+                                      .indicator
+                                  }`}
+                                />
+                                <span>{label}</span>
+                              </div>
+                            </SelectItem>
+                          )
+                        )}
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -292,6 +303,38 @@ export function UtilizadorAdminCreateForm({
                 </FormItem>
               )}
             />
+
+            {showPerfilField && (
+              <FormField
+                control={form.control}
+                name='perfilId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Perfil</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                          <SelectValue placeholder='Selecione um perfil' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {perfisData?.map((perfil) => (
+                            <SelectItem key={perfil.id} value={perfil.id || ''}>
+                              <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
+                                <span className='truncate'>{perfil.nome}</span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
         </div>
 
