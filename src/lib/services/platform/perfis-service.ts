@@ -16,39 +16,15 @@ import {
 } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
-interface IPerfilAdminService {
-  getPerfisPaginated(
-    params: PaginatedRequest
-  ): Promise<ResponseApi<PaginatedResponse<PerfilDTO>>>
-  getPerfis(): Promise<ResponseApi<GSResponse<PerfilDTO[]>>>
-  createPerfil(data: CreatePerfilDTO): Promise<ResponseApi<GSResponse<string>>>
-  updatePerfil(
-    id: string,
-    data: UpdatePerfilDTO
-  ): Promise<ResponseApi<GSResponse<string>>>
-  deletePerfil(id: string): Promise<ResponseApi<GSGenericResponse>>
-  getPerfilById(id: string): Promise<ResponseApi<GSResponse<PerfilDTO>>>
-  updatePerfilFuncionalidades(
-    perfilId: string,
-    data: PerfilFuncionalidadeDTO[]
-  ): Promise<ResponseApi<GSResponse<string>>>
-  addUtilizadorPerfil(
-    perfilId: string,
-    utilizadorId: string
-  ): Promise<ResponseApi<GSResponse<string>>>
-}
-
-interface IPerfilClientService {
-  // Add client-specific methods here
-  getPerfis(): Promise<ResponseApi<GSResponse<PerfilDTO[]>>>
-  getPerfilById(id: string): Promise<ResponseApi<GSResponse<PerfilDTO>>>
-}
-
 class PerfilError extends BaseApiError {
   name: string = 'PerfilError'
 }
 
-class PerfilAdminService extends BaseApiClient implements IPerfilAdminService {
+class PerfilAdminClient extends BaseApiClient {
+  constructor(idFuncionalidade: string) {
+    super(idFuncionalidade)
+  }
+
   public async getPerfisPaginated(
     params: PaginatedRequest
   ): Promise<ResponseApi<PaginatedResponse<PerfilDTO>>> {
@@ -287,10 +263,14 @@ class PerfilAdminService extends BaseApiClient implements IPerfilAdminService {
   }
 }
 
-class PerfilClientService
-  extends BaseApiClient
-  implements IPerfilClientService
-{
+class PerfisClient extends BaseApiClient {
+  public Admin: PerfilAdminClient
+
+  constructor(idFuncionalidade: string) {
+    super(idFuncionalidade)
+    this.Admin = new PerfilAdminClient(idFuncionalidade)
+  }
+
   public async getPerfis(): Promise<ResponseApi<GSResponse<PerfilDTO[]>>> {
     const cacheKey = this.getCacheKey('GET', '/api/perfis')
     return this.withCache(cacheKey, () =>
@@ -343,9 +323,7 @@ class PerfilClientService
   }
 }
 
-const PerfisService = (idFuncionalidade: string) => ({
-  admin: new PerfilAdminService(idFuncionalidade),
-  client: new PerfilClientService(idFuncionalidade),
-})
+const PerfisService = (idFuncionalidade: string) =>
+  new PerfisClient(idFuncionalidade)
 
 export default PerfisService

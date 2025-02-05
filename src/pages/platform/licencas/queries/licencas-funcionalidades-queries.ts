@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
-import LicencasFuncionalidadesService from '@/lib/services/platform/licencas-funcionalidades-service'
+import LicencasService from '@/lib/services/platform/licencas-service'
 
 export const useGetModulosFuncionalidadesLicenca = (licencaId: string) => {
   return useQuery({
     queryKey: ['modulos-funcionalidades-licenca', licencaId],
     queryFn: async () => {
       const response =
-        await LicencasFuncionalidadesService(
+        await LicencasService(
           'licencas'
-        ).getModulosFuncionalidadesLicenca(licencaId)
+        ).LicencasFuncionalidades.getModulosFuncionalidadesLicenca(licencaId)
       return response.info.data
     },
     enabled: !!licencaId,
@@ -22,9 +22,9 @@ export const useGetModulosFuncionalidadesLicencaByApiKey = () => {
     queryKey: ['modulos-funcionalidades-licenca-by-api-key'],
     queryFn: async () => {
       const response =
-        await LicencasFuncionalidadesService(
+        await LicencasService(
           'licencas'
-        ).getModulosFuncionalidadesLicencaByApiKey()
+        ).LicencasFuncionalidades.getModulosFuncionalidadesLicencaByApiKey()
       return response.info.data
     },
     staleTime: 5 * 60 * 1000, // 5 minutes

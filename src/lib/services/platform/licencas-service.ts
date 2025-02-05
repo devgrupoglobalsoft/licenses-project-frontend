@@ -9,15 +9,123 @@ import {
   CreateLicencaDTO,
   LicencaDTO,
   UpdateLicencaDTO,
+  ModuloFuncionalidadeDTO,
 } from '@/types/dtos'
-import { ResponseApi } from '@/types/responses'
+import {
+  ResponseApi,
+  ResponseModuloFuncionalidadeLicenca,
+} from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 
 class LicencaError extends BaseApiError {
   name: string = 'LicencaError'
 }
 
+class LicencasFuncionalidadesClient extends BaseApiClient {
+  constructor(idFuncionalidade: string) {
+    super(idFuncionalidade)
+  }
+
+  public async updateLicencaModulosFuncionalidades(
+    licencaId: string,
+    data: ModuloFuncionalidadeDTO[]
+  ): Promise<ResponseApi<GSResponse<string>>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.putRequest<
+          ModuloFuncionalidadeDTO[],
+          GSResponse<string>
+        >(`/api/licencas/${licencaId}/modulos/funcionalidades`, data)
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new LicencaError(
+          'Falha ao atualizar funcionalidades da licença',
+          undefined,
+          error
+        )
+      }
+    })
+  }
+
+  public async getModulosFuncionalidadesLicenca(
+    licencaId: string
+  ): Promise<ResponseApi<GSResponse<ResponseModuloFuncionalidadeLicenca>>> {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      `/api/licencas/${licencaId}/modulos/funcionalidades`
+    )
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<ResponseModuloFuncionalidadeLicenca>
+          >(`/api/licencas/${licencaId}/modulos/funcionalidades`)
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new LicencaError(
+            'Falha ao obter módulos e funcionalidades da licença',
+            undefined,
+            error
+          )
+        }
+      })
+    )
+  }
+
+  public async getModulosFuncionalidadesLicencaByApiKey(): Promise<
+    ResponseApi<GSResponse<ResponseModuloFuncionalidadeLicenca>>
+  > {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      '/api/licencas/by-api-key/modulos/funcionalidades'
+    )
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<ResponseModuloFuncionalidadeLicenca>
+          >('/api/licencas/by-api-key/modulos/funcionalidades')
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new LicencaError(
+            'Falha ao obter módulos e funcionalidades da licença por API key',
+            undefined,
+            error
+          )
+        }
+      })
+    )
+  }
+}
+
 class LicencasClient extends BaseApiClient {
+  public LicencasFuncionalidades: LicencasFuncionalidadesClient
+
+  constructor(idFuncionalidade: string) {
+    super(idFuncionalidade)
+    this.LicencasFuncionalidades = new LicencasFuncionalidadesClient(
+      idFuncionalidade
+    )
+  }
+
   public async getLicencasPaginated(
     params: PaginatedRequest
   ): Promise<ResponseApi<PaginatedResponse<LicencaDTO>>> {

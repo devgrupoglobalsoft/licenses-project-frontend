@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ModuloFuncionalidadeDTO } from '@/types/dtos'
-import LicencasFuncionalidadesService from '@/lib/services/platform/licencas-funcionalidades-service'
+import LicencasService from '@/lib/services/platform/licencas-service'
 
 export const useUpdateLicencaModulosFuncionalidades = () => {
   const queryClient = useQueryClient()
@@ -13,9 +13,12 @@ export const useUpdateLicencaModulosFuncionalidades = () => {
       licencaId: string
       data: ModuloFuncionalidadeDTO[]
     }) =>
-      LicencasFuncionalidadesService(
+      LicencasService(
         'licencas'
-      ).updateLicencaModulosFuncionalidades(licencaId, data),
+      ).LicencasFuncionalidades.updateLicencaModulosFuncionalidades(
+        licencaId,
+        data
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['licenca-funcionalidades'] })
       queryClient.invalidateQueries({

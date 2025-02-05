@@ -11,7 +11,7 @@ export const useDeletePerfil = () => {
 
   return useMutation({
     mutationFn: (id: string) =>
-      PerfisService('perfis-admin').admin.deletePerfil(id),
+      PerfisService('perfis-admin').Admin.deletePerfil(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
@@ -26,7 +26,7 @@ export const useCreatePerfil = () => {
 
   return useMutation({
     mutationFn: (data: CreatePerfilDTO) =>
-      PerfisService('perfis-admin').admin.createPerfil(data),
+      PerfisService('perfis-admin').Admin.createPerfil(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
@@ -41,7 +41,7 @@ export const useUpdatePerfil = () => {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdatePerfilDTO }) =>
-      PerfisService('perfis-admin').admin.updatePerfil(id, { ...data }),
+      PerfisService('perfis-admin').Admin.updatePerfil(id, { ...data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
@@ -62,7 +62,7 @@ export const useUpdatePerfilFuncionalidades = () => {
       perfilId: string
       data: PerfilFuncionalidadeDTO[]
     }) =>
-      PerfisService('perfis-admin').admin.updatePerfilFuncionalidades(
+      PerfisService('perfis-admin').Admin.updatePerfilFuncionalidades(
         perfilId,
         data
       ),
@@ -85,7 +85,7 @@ export const useAddUtilizadorPerfil = () => {
       perfilId: string
       utilizadorId: string
     }) =>
-      PerfisService('perfis-admin').admin.addUtilizadorPerfil(
+      PerfisService('perfis-admin').Admin.addUtilizadorPerfil(
         perfilId,
         utilizadorId
       ),

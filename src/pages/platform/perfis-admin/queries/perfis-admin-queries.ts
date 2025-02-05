@@ -17,7 +17,7 @@ export const useGetPerfisPaginated = (
     ],
 
     queryFn: () =>
-      PerfisService('perfis-admin').admin.getPerfisPaginated({
+      PerfisService('perfis-admin').Admin.getPerfisPaginated({
         pageNumber: pageNumber,
         pageSize: pageLimit,
         filters: (filters as unknown as Record<string, string>) ?? undefined,
@@ -42,7 +42,7 @@ export const usePrefetchAdjacentPerfis = (
       await queryClient.prefetchQuery({
         queryKey: ['perfis-admin-paginated', page - 1, pageSize, filters, null],
         queryFn: () =>
-          PerfisService('perfis-admin').admin.getPerfisPaginated({
+          PerfisService('perfis-admin').Admin.getPerfisPaginated({
             pageNumber: page - 1,
 
             pageSize: pageSize,
@@ -58,7 +58,7 @@ export const usePrefetchAdjacentPerfis = (
     await queryClient.prefetchQuery({
       queryKey: ['perfis-admin-paginated', page + 1, pageSize, filters, null],
       queryFn: () =>
-        PerfisService('perfis-admin').admin.getPerfisPaginated({
+        PerfisService('perfis-admin').Admin.getPerfisPaginated({
           pageNumber: page + 1,
           pageSize: pageSize,
           filters: (filters as unknown as Record<string, string>) ?? undefined,
@@ -73,14 +73,14 @@ export const usePrefetchAdjacentPerfis = (
 export const useGetPerfis = () => {
   return useQuery({
     queryKey: ['perfis-admin'],
-    queryFn: () => PerfisService('perfis-admin').admin.getPerfis(),
+    queryFn: () => PerfisService('perfis-admin').Admin.getPerfis(),
   })
 }
 
 export const useGetPerfilById = (id: string) => {
   return useQuery({
     queryKey: ['perfil-admin', id],
-    queryFn: () => PerfisService('perfis-admin').admin.getPerfilById(id),
+    queryFn: () => PerfisService('perfis-admin').Admin.getPerfilById(id),
     enabled: !!id,
   })
 }
@@ -92,7 +92,7 @@ export const useGetPerfisModulosFuncionalidades = (id: string) => {
       const response =
         await PerfisService(
           'perfis-admin'
-        ).admin.getPerfisModulosFuncionalidades(id)
+        ).Admin.getPerfisModulosFuncionalidades(id)
       return response.info.data
     },
     enabled: !!id,
