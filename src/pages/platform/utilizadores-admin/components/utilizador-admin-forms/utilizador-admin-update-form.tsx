@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { useUpdateUser } from '@/pages/platform/utilizadores-admin/queries/utilizadores-admin-mutations'
+import { useAuthStore } from '@/stores/auth-store'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { roleColors, roleLabelMap } from '@/constants/roles'
@@ -34,10 +35,9 @@ const utilizadorAdminFormSchema = z.object({
     .string()
     .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
   email: z.string().email({ message: 'Email inválido' }),
-  clienteId: z.string().min(1, { message: 'Cliente é obrigatório' }),
   roleId: z.string().min(1, { message: 'Role é obrigatória' }),
   isActive: z.boolean().default(true),
-  perfilId: z.string().optional(),
+  perfilId: z.string().min(1, { message: 'Perfil é obrigatório' }),
 })
 
 type UtilizadorAdminFormSchemaType = z.infer<typeof utilizadorAdminFormSchema>
@@ -49,7 +49,6 @@ interface UtilizadorAdminUpdateFormProps {
     firstName: string
     lastName: string
     email: string
-    clienteId: string
     roleId: string
     isActive: boolean
     perfilId?: string
@@ -61,7 +60,8 @@ export function UtilizadorAdminUpdateForm({
   utilizadorId,
   initialData,
 }: UtilizadorAdminUpdateFormProps) {
-  const { data: clientesData } = useGetClientesSelect()
+  const { clientId } = useAuthStore()
+  const { data: perfisData } = useGetPerfis()
   const updateUtilizador = useUpdateUser()
 
   const form = useForm<UtilizadorAdminFormSchemaType>({
@@ -70,8 +70,6 @@ export function UtilizadorAdminUpdateForm({
       firstName: initialData.firstName,
       lastName: initialData.lastName,
       email: initialData.email,
-      clienteId: initialData.clienteId,
-
       roleId: initialData.roleId,
       isActive: initialData.isActive,
       perfilId: initialData.perfilId || '',
@@ -83,13 +81,8 @@ export function UtilizadorAdminUpdateForm({
       const response = await updateUtilizador.mutateAsync({
         id: utilizadorId,
         data: {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          clienteId: data.clienteId,
-          roleId: data.roleId,
-          isActive: data.isActive,
-          perfilId: data.perfilId || '',
+          ...data,
+          clienteId: clientId,
         },
       })
 
@@ -174,20 +167,20 @@ export function UtilizadorAdminUpdateForm({
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField
               control={form.control}
-              name='clienteId'
+              name='perfilId'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cliente</FormLabel>
+                  <FormLabel>Perfil</FormLabel>
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue placeholder='Selecione um cliente' />
+                        <SelectValue placeholder='Selecione um perfil' />
                       </SelectTrigger>
                       <SelectContent>
-                        {clientesData?.map((cliente) => (
-                          <SelectItem key={cliente.id} value={cliente.id}>
+                        {perfisData?.map((perfil) => (
+                          <SelectItem key={perfil.id} value={perfil.id || ''}>
                             <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
-                              <span className='truncate'>{cliente.nome}</span>
+                              <span className='truncate'>{perfil.nome}</span>
                             </div>
                           </SelectItem>
                         ))}

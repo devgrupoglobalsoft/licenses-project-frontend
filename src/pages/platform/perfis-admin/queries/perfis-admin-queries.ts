@@ -73,7 +73,10 @@ export const usePrefetchAdjacentPerfis = (
 export const useGetPerfis = () => {
   return useQuery({
     queryKey: ['perfis-admin'],
-    queryFn: () => PerfisService('perfis-admin').Admin.getPerfis(),
+    queryFn: async () => {
+      const response = await PerfisService('perfis-admin').Admin.getPerfis()
+      return response.info.data
+    },
   })
 }
 
