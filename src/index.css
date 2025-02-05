@@ -127,3 +127,20 @@
     @apply bg-transparent text-foreground;
   }
 }
+
+/* Add after your existing .ant-tree styles */
+.ant-tree:focus {
+  outline: none !important;
+}
+
+.ant-tree-list:focus {
+  outline: none !important;
+}
+
+.ant-tree-list-holder-inner:focus {
+  outline: none !important;
+}
+
+.ant-tree .ant-tree-node-content-wrapper:focus {
+  outline: none !important;
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useGetModulosFuncionalidadesLicenca } from '@/pages/platform/licencas/queries/licencas-funcionalidades-queries'
 import { PerfilFuncionalidadeDTO } from '@/types/dtos/perfil.dto'
 import { Tree } from 'antd'
@@ -6,6 +6,9 @@ import type { TreeDataNode, TreeProps } from 'antd'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
+import { LoadingSpinner } from '@/components/shared/loading-spinner'
+import { usePerfilAdminPermissions } from '../../hooks/use-perfil-admin-permissions'
+import { usePerfilAdminTreeData } from '../../hooks/use-perfil-admin-tree-data'
 import { useUpdatePerfilFuncionalidades } from '../../queries/perfis-admin-mutations'
 import { useGetPerfisModulosFuncionalidades } from '../../queries/perfis-admin-queries'
 
@@ -33,109 +36,53 @@ export default function PerfilAdminModulosForm({
   licencaId,
   modalClose,
 }: PerfilAdminModulosFormProps) {
-  const [treeData, setTreeData] = useState<ExtendedTreeDataNode[]>([])
+  const [autoExpandParent, setAutoExpandParent] = useState(true)
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([])
   const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([])
-  const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true)
 
-  const { data: licencaModulosFuncionalidades } =
+  // Queries
+  const { data: licencaData, isLoading: isLoadingLicenca } =
     useGetModulosFuncionalidadesLicenca(licencaId)
-  const { data: savedModulosFuncionalidades } =
+  const { data: savedData, isLoading: isLoadingSaved } =
     useGetPerfisModulosFuncionalidades(perfilId)
-  const updatePerfilModulosFuncionalidades = useUpdatePerfilFuncionalidades()
+  const updateMutation = useUpdatePerfilFuncionalidades()
 
+  // Process data
+  const treeData = usePerfilAdminTreeData(licencaData)
+  const { checkedKeys: initialCheckedKeys, expandedKeys: initialExpandedKeys } =
+    usePerfilAdminPermissions(savedData)
+
+  // Set initial state when data is loaded
   useEffect(() => {
-    console.log(licencaModulosFuncionalidades)
-    if (licencaModulosFuncionalidades?.modulos) {
-      const transformedData = licencaModulosFuncionalidades.modulos.map(
-        (modulo) => ({
-          title: modulo.nome,
-          key: modulo.id,
-          type: 'modulo',
-          children: licencaModulosFuncionalidades.funcionalidades
-            .filter((func) => func.moduloId === modulo.id)
-            .map((func) => ({
-              title: func.nome,
-              key: func.id,
-              type: 'funcionalidade',
-              children: [
-                {
-                  title: 'Ver',
-                  key: `${func.id}-ver`,
-                  type: 'permission',
-                },
-                {
-                  title: 'Adicionar',
-                  key: `${func.id}-add`,
-                  type: 'permission',
-                },
-                {
-                  title: 'Alterar',
-                  key: `${func.id}-chg`,
-                  type: 'permission',
-                },
-                {
-                  title: 'Apagar',
-                  key: `${func.id}-del`,
-                  type: 'permission',
-                },
-                {
-                  title: 'Imprimir',
-                  key: `${func.id}-prt`,
-                  type: 'permission',
-                },
-              ],
-            })),
-        })
-      )
-      setTreeData(transformedData as ExtendedTreeDataNode[])
+    if (initialCheckedKeys.length > 0) {
+      setCheckedKeys(initialCheckedKeys)
     }
-  }, [licencaModulosFuncionalidades])
-
-  useEffect(() => {
-    console.log(savedModulosFuncionalidades)
-    if (savedModulosFuncionalidades?.modulos) {
-      const checkedKeys: string[] = []
-
-      savedModulosFuncionalidades.modulos.forEach((modulo) => {
-        modulo.funcionalidades.forEach((func) => {
-          if (func.authVer) checkedKeys.push(`${func.funcionalidadeId}-ver`)
-          if (func.authAdd) checkedKeys.push(`${func.funcionalidadeId}-add`)
-          if (func.authChg) checkedKeys.push(`${func.funcionalidadeId}-chg`)
-          if (func.authDel) checkedKeys.push(`${func.funcionalidadeId}-del`)
-          if (func.authPrt) checkedKeys.push(`${func.funcionalidadeId}-prt`)
-        })
-      })
-
-      setCheckedKeys(checkedKeys)
-
-      // Set expanded keys to show all modules initially
-      const expandedModulos = savedModulosFuncionalidades.modulos.map(
-        (modulo) => modulo.moduloId
-      )
-      setExpandedKeys(expandedModulos)
+    if (initialExpandedKeys.length > 0) {
+      setExpandedKeys(initialExpandedKeys)
     }
-  }, [savedModulosFuncionalidades])
+  }, [initialCheckedKeys, initialExpandedKeys])
 
-  const onExpand: TreeProps['onExpand'] = (expandedKeysValue) => {
-    setExpandedKeys(expandedKeysValue)
+  const onExpand = useCallback((keys: React.Key[]) => {
+    setExpandedKeys(keys)
     setAutoExpandParent(false)
-  }
+  }, [])
 
-  const onCheck: TreeProps['onCheck'] = (checkedKeysValue) => {
-    setCheckedKeys(checkedKeysValue as React.Key[])
-  }
+  const onCheck = useCallback(
+    (
+      keys: React.Key[] | { checked: React.Key[]; halfChecked: React.Key[] }
+    ) => {
+      setCheckedKeys(Array.isArray(keys) ? keys : keys.checked)
+    },
+    []
+  )
 
-  const handleSave = async () => {
-    try {
-      // Create a map to store permissions by funcionalidadeId
+  const processPermissions = useCallback(
+    (checkedKeys: React.Key[], treeData: ExtendedTreeDataNode[]) => {
       const permissionsByFunc = new Map<string, PerfilFuncionalidadeDTO>()
 
-      // Process each checked key
       checkedKeys.forEach((key) => {
         const keyStr = key.toString()
 
-        // Find the corresponding funcionalidade in the tree data
         for (const modulo of treeData) {
           const funcionalidade = modulo.children?.find((func) =>
             func.children?.some((perm) => perm.key === keyStr)
@@ -143,46 +90,38 @@ export default function PerfilAdminModulosForm({
 
           if (funcionalidade) {
             const funcId = funcionalidade.key as string
-
-            // Get or create permission object for this funcionalidade
-            let funcPermissions = permissionsByFunc.get(funcId)
-            if (!funcPermissions) {
-              funcPermissions = {
-                perfilId,
-                funcionalidadeId: funcId,
-                authVer: false,
-                authAdd: false,
-                authChg: false,
-                authDel: false,
-                authPrt: false,
-              }
-              permissionsByFunc.set(funcId, funcPermissions)
+            let permissions = permissionsByFunc.get(funcId) ?? {
+              perfilId,
+              funcionalidadeId: funcId,
+              authVer: false,
+              authAdd: false,
+              authChg: false,
+              authDel: false,
+              authPrt: false,
             }
 
-            // Find which permission was checked
-            const permission = funcionalidade.children?.find(
-              (perm) => perm.key === keyStr
-            )
-            if (permission) {
-              const permKey = permission.key as string
-              if (permKey.endsWith('-ver')) funcPermissions.authVer = true
-              if (permKey.endsWith('-add')) funcPermissions.authAdd = true
-              if (permKey.endsWith('-chg')) funcPermissions.authChg = true
-              if (permKey.endsWith('-del')) funcPermissions.authDel = true
-              if (permKey.endsWith('-prt')) funcPermissions.authPrt = true
-            }
+            const permKey = keyStr
+            if (permKey.endsWith('-ver')) permissions.authVer = true
+            if (permKey.endsWith('-add')) permissions.authAdd = true
+            if (permKey.endsWith('-chg')) permissions.authChg = true
+            if (permKey.endsWith('-del')) permissions.authDel = true
+            if (permKey.endsWith('-prt')) permissions.authPrt = true
 
-            break // Found the funcionalidade, no need to continue searching
+            permissionsByFunc.set(funcId, permissions)
+            break
           }
         }
       })
 
-      // Convert map values to array
-      const updateData = Array.from(permissionsByFunc.values())
+      return Array.from(permissionsByFunc.values())
+    },
+    [perfilId]
+  )
 
-      console.log('Update data:', updateData)
-
-      const response = await updatePerfilModulosFuncionalidades.mutateAsync({
+  const handleSave = async () => {
+    try {
+      const updateData = processPermissions(checkedKeys, treeData)
+      const response = await updateMutation.mutateAsync({
         perfilId,
         data: updateData,
       })
@@ -196,6 +135,17 @@ export default function PerfilAdminModulosForm({
     } catch (error) {
       toast.error(handleApiError(error, 'Erro ao guardar configuração'))
     }
+  }
+
+  const isLoading = isLoadingLicenca || isLoadingSaved
+  const isSaving = updateMutation.isPending
+
+  if (isLoading) {
+    return (
+      <div className='flex items-center justify-center p-8'>
+        <LoadingSpinner />
+      </div>
+    )
   }
 
   return (
@@ -220,10 +170,12 @@ export default function PerfilAdminModulosForm({
       </div>
 
       <div className='flex justify-end space-x-2'>
-        <Button variant='outline' onClick={modalClose}>
+        <Button variant='outline' onClick={modalClose} disabled={isSaving}>
           Cancelar
         </Button>
-        <Button onClick={handleSave}>Guardar</Button>
+        <Button onClick={handleSave} disabled={isSaving}>
+          {isSaving ? 'A guardar...' : 'Guardar'}
+        </Button>
       </div>
     </div>
   )
