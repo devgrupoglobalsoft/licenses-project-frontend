@@ -179,8 +179,8 @@ export function UtilizadorAdminUpdateForm({
             />
           </div>
 
-          <div className='grid grid-cols-12 gap-4 md:gap-8'>
-            <div className='col-span-8'>
+          <div className='grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8'>
+            <div className='col-span-1 md:col-span-8'>
               <FormField
                 control={form.control}
                 name='email'
@@ -201,7 +201,7 @@ export function UtilizadorAdminUpdateForm({
               />
             </div>
 
-            <div className='col-span-4'>
+            <div className='col-span-1 md:col-span-4'>
               <FormField
                 control={form.control}
                 name='isActive'
@@ -209,7 +209,7 @@ export function UtilizadorAdminUpdateForm({
                   <FormItem>
                     <FormLabel>Estado</FormLabel>
                     <FormControl>
-                      <div className='flex items-center justify-between rounded-lg border px-4 py-[0.85rem] shadow-inner drop-shadow-xl'>
+                      <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
                         <FormLabel className='text-base'>Ativo</FormLabel>
                         <Switch
                           checked={field.value}
