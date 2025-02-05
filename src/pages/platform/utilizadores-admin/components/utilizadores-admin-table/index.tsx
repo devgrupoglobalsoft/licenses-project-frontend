@@ -1,7 +1,7 @@
+import { columns } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-columns'
+import { filterFields } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-constants'
+import { UtilizadoresAdminFilterControls } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-filter-controls'
 import UtilizadoresAdminTableActions from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-table-action'
-import { columns } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-columns'
-import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
-import { UtilizadoresFilterControls } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-filter-controls'
 import { UtilizadorDTO } from '@/types/dtos'
 import DataTable from '@/components/shared/data-table'
 
@@ -47,7 +47,7 @@ export default function UtilizadoresAdminTable({
           data={utilizadores}
           pageCount={pageCount}
           filterFields={filterFields}
-          FilterControls={UtilizadoresFilterControls}
+          FilterControls={UtilizadoresAdminFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}

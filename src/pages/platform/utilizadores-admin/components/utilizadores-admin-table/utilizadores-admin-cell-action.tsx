@@ -1,6 +1,6 @@
 import { useState } from 'react'
-// import { UtilizadorAdminUpdateForm } from '@/pages/platform/utilizadores-admin/components/utilizador-admin-forms/utilizador-admin-update-form'
-import { useDeleteUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
+import { UtilizadorAdminUpdateForm } from '@/pages/platform/utilizadores-admin/components/utilizador-admin-forms/utilizador-admin-update-form'
+import { useDeleteUser } from '@/pages/platform/utilizadores-admin/queries/utilizadores-admin-mutations'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Edit, Trash } from 'lucide-react'
 import { toast } from '@/utils/toast-utils'
@@ -18,7 +18,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [selectedUtilizador, setSelectedUtilizador] =
     useState<UtilizadorDTO | null>(null)
 
-  const deleteUtilizadorMutation = useDeleteUtilizador()
+  const deleteUtilizadorMutation = useDeleteUser()
 
   const handleDeleteConfirm = async () => {
     try {
@@ -38,7 +38,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <EnhancedModal
+      <EnhancedModal
         title='Atualizar Utilizador'
         description='Atualize os dados do utilizador'
         isOpen={isUpdateModalOpen}
@@ -60,7 +60,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             }}
           />
         )}
-      </EnhancedModal> */}
+      </EnhancedModal>
 
       <AlertModal
         isOpen={open}

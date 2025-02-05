@@ -1,5 +1,5 @@
 import { useState } from 'react'
-// import { UtilizadorCreateForm } from '@/pages/platform/utilizadores-admin/components/utilizador-admin-forms/utilizador-admin-create-form'
+import { UtilizadorAdminCreateForm } from '@/pages/platform/utilizadores-admin/components/utilizador-admin-forms/utilizador-admin-create-form'
 import { Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
@@ -17,17 +17,17 @@ export default function UtilizadoresAdminTableActions() {
           <Plus className='mr-2 h-4 w-4' /> Adicionar
         </Button>
 
-        {/* <EnhancedModal
+        <EnhancedModal
           title='Criar Novo Utilizador'
           description='Crie um novo utilizador'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
           size='xl'
         >
-          <UtilizadorCreateForm
+          <UtilizadorAdminCreateForm
             modalClose={() => setIsCreateModalOpen(false)}
           />
-        </EnhancedModal> */}
+        </EnhancedModal>
       </div>
     </div>
   )
