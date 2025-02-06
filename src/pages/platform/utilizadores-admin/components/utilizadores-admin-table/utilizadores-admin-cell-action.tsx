@@ -50,7 +50,6 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             modalClose={() => setIsUpdateModalOpen(false)}
             utilizadorId={selectedUtilizador.id || ''}
             initialData={{
-              clienteId: selectedUtilizador.clienteId || '',
               email: selectedUtilizador.email,
               firstName: selectedUtilizador.firstName,
               lastName: selectedUtilizador.lastName,
