@@ -56,7 +56,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     },
   },
   {
-    accessorKey: 'cliente.nome',
+    accessorKey: 'clienteId',
     header: 'Cliente',
     cell: ({ row }) => (
       <div

@@ -81,11 +81,11 @@ export function UtilizadoresFilterControls({
       )
     }
 
-    if (column.accessorKey === 'cliente.nome') {
+    if (column.accessorKey === 'clienteId') {
       return (
         <Select
-          value={filterValues['cliente.nome'] || 'all'}
-          onValueChange={(value) => handleFilterChange('cliente.nome', value)}
+          value={filterValues['clienteId'] || 'all'}
+          onValueChange={(value) => handleFilterChange('clienteId', value)}
         >
           <SelectTrigger className={commonInputStyles}>
             <SelectValue placeholder='Selecione um cliente' />
@@ -93,7 +93,7 @@ export function UtilizadoresFilterControls({
           <SelectContent>
             <SelectItem value='all'>Todos</SelectItem>
             {clientes?.map((cliente) => (
-              <SelectItem key={cliente.id} value={cliente.nome}>
+              <SelectItem key={cliente.id} value={cliente.id}>
                 {cliente.nome}
               </SelectItem>
             ))}
