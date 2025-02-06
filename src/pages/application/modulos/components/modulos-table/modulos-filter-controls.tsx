@@ -107,13 +107,43 @@ export function ModulosFilterControls({
           }
         >
           <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder='Selecione uma aplicação' />
+            <SelectValue placeholder='Selecione uma aplicação'>
+              {currentValue !== '' &&
+              currentValue !== 'all' &&
+              aplicacoesData ? (
+                <div className='flex items-center gap-2'>
+                  {aplicacoesData.find((a) => a.id === currentValue)?.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: aplicacoesData.find(
+                          (a) => a.id === currentValue
+                        )?.area?.color,
+                      }}
+                    />
+                  )}
+                  {aplicacoesData.find((a) => a.id === currentValue)?.nome}
+                </div>
+              ) : (
+                'Todas'
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='all'>Todas</SelectItem>
             {aplicacoesData?.map((aplicacao) => (
               <SelectItem key={aplicacao.id} value={aplicacao.id || ''}>
-                {aplicacao.nome}
+                <div className='flex items-center gap-2'>
+                  {aplicacao.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: aplicacao.area.color,
+                      }}
+                    />
+                  )}
+                  {aplicacao.nome}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>
