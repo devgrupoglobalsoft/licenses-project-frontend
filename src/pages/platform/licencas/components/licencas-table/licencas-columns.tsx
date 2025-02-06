@@ -46,17 +46,42 @@ export const columns: ColumnDef<LicencaDTO>[] = [
       </div>
     ),
   },
+  // {
+  //   accessorKey: 'aplicacaoId',
+  //   header: 'Aplicação',
+  //   cell: ({ row }) => (
+  //     <div
+  //       className='max-w-[200px] truncate'
+  //       title={row.original.aplicacao?.nome}
+  //     >
+  //       {row.original.aplicacao?.nome}
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: 'aplicacaoId',
     header: 'Aplicação',
-    cell: ({ row }) => (
-      <div
-        className='max-w-[200px] truncate'
-        title={row.original.aplicacao?.nome}
-      >
-        {row.original.aplicacao?.nome}
-      </div>
-    ),
+    cell: ({ row }) => {
+      const area = row.original.aplicacao?.area
+      const appName = row.original.aplicacao?.nome || '-'
+
+      if (!area) {
+        return <div>{appName}</div>
+      }
+
+      return (
+        <div
+          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+          style={{
+            backgroundColor: `${area.color}20`,
+            color: area.color,
+            border: `1px solid ${area.color}`,
+          }}
+        >
+          {appName}
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'numeroUtilizadores',
