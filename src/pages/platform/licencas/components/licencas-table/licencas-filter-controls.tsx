@@ -106,19 +106,53 @@ export function LicencasFilterControls({
     }
 
     if (column.accessorKey === 'aplicacaoId') {
+      const currentValue = filterValues[column.accessorKey] ?? ''
       return (
         <Select
-          value={filterValues['aplicacaoId'] || 'all'}
-          onValueChange={(value) => handleFilterChange('aplicacaoId', value)}
+          value={currentValue === '' ? 'all' : currentValue}
+          onValueChange={(value) =>
+            handleFilterChange(
+              column.accessorKey!.toString(),
+              value === 'all' ? '' : value
+            )
+          }
         >
           <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder='Selecione uma aplicação' />
+            <SelectValue placeholder='Selecione uma aplicação'>
+              {currentValue !== '' && currentValue !== 'all' && aplicacoes ? (
+                <div className='flex items-center gap-2'>
+                  {aplicacoes.find((a) => a.id === currentValue)?.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: aplicacoes.find(
+                          (a) => a.id === currentValue
+                        )?.area?.color,
+                      }}
+                    />
+                  )}
+                  {aplicacoes.find((a) => a.id === currentValue)?.nome}
+                </div>
+              ) : (
+                'Todas'
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='all'>Todas</SelectItem>
             {aplicacoes?.map((aplicacao) => (
               <SelectItem key={aplicacao.id} value={aplicacao.id}>
-                {aplicacao.nome}
+                <div className='flex items-center gap-2'>
+                  {aplicacao.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: aplicacao.area.color,
+                      }}
+                    />
+                  )}
+                  {aplicacao.nome}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>
