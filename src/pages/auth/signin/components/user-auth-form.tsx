@@ -28,15 +28,15 @@ export default function UserAuthForm() {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
-  // const defaultValues = {
-  //   email: 'administrator@globalsoft.pt',
-  //   password: 'Password123!'
-  // };
-
   const defaultValues = {
-    email: 'jorge.ferreirinha@gmail.com',
-    password: 'Jorge@1992',
+    email: 'administrator@globalsoft.pt',
+    password: 'Password123!',
   }
+
+  // const defaultValues = {
+  //   email: 'admin@globalsoft.pt',
+  //   password: 'Password123!',
+  // }
 
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
