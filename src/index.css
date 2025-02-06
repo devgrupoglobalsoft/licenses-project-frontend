@@ -144,3 +144,24 @@
 .ant-tree .ant-tree-node-content-wrapper:focus {
   outline: none !important;
 }
+
+/* Add these styles to remove focus outline from Tree component */
+.ant-tree .ant-tree-treenode {
+  @apply outline-none;
+}
+
+.ant-tree .ant-tree-treenode:focus-within {
+  @apply outline-none;
+}
+
+.ant-tree .ant-tree-treenode .ant-tree-node-content-wrapper:focus-visible {
+  @apply outline-none;
+}
+
+.ant-tree-checkbox:focus-visible {
+  @apply outline-none;
+}
+
+.ant-tree-checkbox-input:focus + .ant-tree-checkbox-inner {
+  @apply outline-none;
+}
