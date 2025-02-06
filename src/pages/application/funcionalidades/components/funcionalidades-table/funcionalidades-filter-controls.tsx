@@ -52,9 +52,13 @@ export function FuncionalidadesFilterControls({
     setFilterValues((prev) => ({
       ...prev,
       [columnId]: newValue,
+      ...(columnId === 'aplicacaoId' && { moduloId: '' }),
     }))
 
     table.getColumn(columnId)?.setFilterValue(newValue)
+    if (columnId === 'aplicacaoId') {
+      table.getColumn('moduloId')?.setFilterValue('')
+    }
 
     if (initialParamApplied) {
       const newUrl = new URL(window.location.href)
@@ -106,13 +110,43 @@ export function FuncionalidadesFilterControls({
           }
         >
           <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder='Selecione uma aplicação' />
+            <SelectValue placeholder='Selecione uma aplicação'>
+              {currentValue !== '' &&
+              currentValue !== 'all' &&
+              aplicacoesData ? (
+                <div className='flex items-center gap-2'>
+                  {aplicacoesData.find((a) => a.id === currentValue)?.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: aplicacoesData.find(
+                          (a) => a.id === currentValue
+                        )?.area?.color,
+                      }}
+                    />
+                  )}
+                  {aplicacoesData.find((a) => a.id === currentValue)?.nome}
+                </div>
+              ) : (
+                'Todas'
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value='all'>Todas as Aplicações</SelectItem>
+            <SelectItem value='all'>Todas</SelectItem>
             {aplicacoesData?.map((aplicacao) => (
               <SelectItem key={aplicacao.id} value={aplicacao.id || ''}>
-                {aplicacao.nome}
+                <div className='flex items-center gap-2'>
+                  {aplicacao.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: aplicacao.area.color,
+                      }}
+                    />
+                  )}
+                  {aplicacao.nome}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>
@@ -122,6 +156,15 @@ export function FuncionalidadesFilterControls({
 
     if (column.accessorKey === 'moduloId') {
       const currentValue = filterValues[column.accessorKey] ?? ''
+      const selectedAplicacaoId = filterValues['aplicacaoId'] ?? ''
+
+      const filteredModulos = selectedAplicacaoId
+        ? modulosData?.filter(
+            (modulo) =>
+              modulo.aplicacao && modulo.aplicacao.id === selectedAplicacaoId
+          )
+        : modulosData
+
       return (
         <Select
           value={currentValue === '' ? 'all' : currentValue}
@@ -133,13 +176,42 @@ export function FuncionalidadesFilterControls({
           }
         >
           <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder='Selecione um módulo' />
+            <SelectValue placeholder='Selecione um módulo'>
+              {currentValue !== '' && currentValue !== 'all' && modulosData ? (
+                <div className='flex items-center gap-2'>
+                  {modulosData.find((m) => m.id === currentValue)?.aplicacao
+                    ?.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: modulosData.find(
+                          (m) => m.id === currentValue
+                        )?.aplicacao?.area?.color,
+                      }}
+                    />
+                  )}
+                  {modulosData.find((m) => m.id === currentValue)?.nome}
+                </div>
+              ) : (
+                'Todos'
+              )}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value='all'>Todos</SelectItem>
-            {modulosData?.map((modulo) => (
+            {filteredModulos?.map((modulo) => (
               <SelectItem key={modulo.id} value={modulo.id || ''}>
-                {modulo.nome}
+                <div className='flex items-center gap-2'>
+                  {modulo.aplicacao?.area && (
+                    <div
+                      className='h-4 w-4 rounded-full'
+                      style={{
+                        backgroundColor: modulo.aplicacao.area.color,
+                      }}
+                    />
+                  )}
+                  {modulo.nome}
+                </div>
               </SelectItem>
             ))}
           </SelectContent>

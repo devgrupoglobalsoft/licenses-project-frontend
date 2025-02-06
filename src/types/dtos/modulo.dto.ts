@@ -19,6 +19,7 @@ export interface ModuloDTO {
   aplicacaoId?: string
   funcionalidades?: FuncionalidadeDTO[]
   aplicacao?: {
+    id: string
     nome: string
     area?: {
       nome: string
