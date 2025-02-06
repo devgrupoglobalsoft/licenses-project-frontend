@@ -143,7 +143,27 @@ const ModuloUpdateForm = ({
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue placeholder='Selecione uma aplicação' />
+                        <SelectValue placeholder='Selecione uma aplicação'>
+                          {field.value && aplicacoesData && (
+                            <div className='flex items-center gap-2'>
+                              {aplicacoesData.find((a) => a.id === field.value)
+                                ?.area && (
+                                <div
+                                  className='h-4 w-4 rounded-full'
+                                  style={{
+                                    backgroundColor: aplicacoesData.find(
+                                      (a) => a.id === field.value
+                                    )?.area?.color,
+                                  }}
+                                />
+                              )}
+                              {
+                                aplicacoesData.find((a) => a.id === field.value)
+                                  ?.nome
+                              }
+                            </div>
+                          )}
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         {aplicacoesData?.map((aplicacao) => (
@@ -151,7 +171,17 @@ const ModuloUpdateForm = ({
                             key={aplicacao.id || ''}
                             value={aplicacao.id || ''}
                           >
-                            {aplicacao.nome}
+                            <div className='flex items-center gap-2'>
+                              {aplicacao.area && (
+                                <div
+                                  className='h-4 w-4 rounded-full'
+                                  style={{
+                                    backgroundColor: aplicacao.area.color,
+                                  }}
+                                />
+                              )}
+                              {aplicacao.nome}
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
