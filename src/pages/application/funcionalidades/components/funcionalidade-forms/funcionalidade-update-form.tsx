@@ -139,16 +139,49 @@ const FuncionalidadeUpdateForm = ({
                         onValueChange={(value) => {
                           field.onChange(value)
                           setSelectedAplicacaoId(value)
+                          form.setValue('moduloId', '') // Reset module selection
                         }}
                         value={selectedAplicacaoId}
                       >
                         <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                          <SelectValue placeholder='Selecione uma aplicação para filtrar' />
+                          <SelectValue placeholder='Selecione uma aplicação para filtrar'>
+                            {selectedAplicacaoId && aplicacoesData && (
+                              <div className='flex items-center gap-2'>
+                                {aplicacoesData.find(
+                                  (a) => a.id === selectedAplicacaoId
+                                )?.area && (
+                                  <div
+                                    className='h-4 w-4 rounded-full'
+                                    style={{
+                                      backgroundColor: aplicacoesData.find(
+                                        (a) => a.id === selectedAplicacaoId
+                                      )?.area?.color,
+                                    }}
+                                  />
+                                )}
+                                {
+                                  aplicacoesData.find(
+                                    (a) => a.id === selectedAplicacaoId
+                                  )?.nome
+                                }
+                              </div>
+                            )}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           {aplicacoesData?.map((aplicacao) => (
                             <SelectItem key={aplicacao.id} value={aplicacao.id}>
-                              {aplicacao.nome}
+                              <div className='flex items-center gap-2'>
+                                {aplicacao.area && (
+                                  <div
+                                    className='h-4 w-4 rounded-full'
+                                    style={{
+                                      backgroundColor: aplicacao.area.color,
+                                    }}
+                                  />
+                                )}
+                                {aplicacao.nome}
+                              </div>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -171,12 +204,43 @@ const FuncionalidadeUpdateForm = ({
                         value={field.value}
                       >
                         <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                          <SelectValue placeholder='Selecione um módulo' />
+                          <SelectValue placeholder='Selecione um módulo'>
+                            {field.value && modulosData && (
+                              <div className='flex items-center gap-2'>
+                                {modulosData.find((m) => m.id === field.value)
+                                  ?.aplicacao?.area && (
+                                  <div
+                                    className='h-4 w-4 rounded-full'
+                                    style={{
+                                      backgroundColor: modulosData.find(
+                                        (m) => m.id === field.value
+                                      )?.aplicacao?.area?.color,
+                                    }}
+                                  />
+                                )}
+                                {
+                                  modulosData.find((m) => m.id === field.value)
+                                    ?.nome
+                                }
+                              </div>
+                            )}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           {filteredModulos?.map((modulo) => (
                             <SelectItem key={modulo.id} value={modulo.id}>
-                              {modulo.nome}
+                              <div className='flex items-center gap-2'>
+                                {modulo.aplicacao?.area && (
+                                  <div
+                                    className='h-4 w-4 rounded-full'
+                                    style={{
+                                      backgroundColor:
+                                        modulo.aplicacao.area.color,
+                                    }}
+                                  />
+                                )}
+                                {modulo.nome}
+                              </div>
                             </SelectItem>
                           ))}
                         </SelectContent>
