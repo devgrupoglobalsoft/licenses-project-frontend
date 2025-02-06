@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useGetAplicacoesSelect } from '@/pages/application/aplicacoes/queries/aplicacoes-queries'
 import { useUpdateFuncionalidade } from '@/pages/application/funcionalidades/queries/funcionalidades-mutations'
 import { useGetModulosSelect } from '@/pages/application/modulos/queries/modulos-queries'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
@@ -34,6 +36,7 @@ const funcionalidadeFormSchema = z.object({
     .min(1, { message: 'A Descrição deve ter pelo menos 1 caráter' }),
   ativo: z.boolean(),
   moduloId: z.string({ required_error: 'O Módulo é obrigatório' }),
+  aplicacaoFilter: z.string().optional(),
 })
 
 type FuncionalidadeFormSchemaType = z.infer<typeof funcionalidadeFormSchema>
@@ -54,8 +57,29 @@ const FuncionalidadeUpdateForm = ({
   funcionalidadeId,
   initialData,
 }: FuncionalidadeUpdateFormProps) => {
+  const [selectedAplicacaoId, setSelectedAplicacaoId] = useState<string>('')
+  const { data: aplicacoesData } = useGetAplicacoesSelect()
   const { data: modulosData } = useGetModulosSelect()
   const updateFuncionalidadeMutation = useUpdateFuncionalidade()
+
+  // Filter modules based on selected application
+  const filteredModulos = selectedAplicacaoId
+    ? modulosData?.filter(
+        (modulo) => modulo.aplicacaoId === selectedAplicacaoId
+      )
+    : modulosData
+
+  // Find the initial application ID from the module
+  useEffect(() => {
+    if (modulosData && initialData.moduloId) {
+      const currentModulo = modulosData.find(
+        (modulo) => modulo.id === initialData.moduloId
+      )
+      if (currentModulo?.aplicacaoId) {
+        setSelectedAplicacaoId(currentModulo.aplicacaoId)
+      }
+    }
+  }, [modulosData, initialData.moduloId])
 
   const form = useForm<FuncionalidadeFormSchemaType>({
     resolver: zodResolver(funcionalidadeFormSchema),
@@ -64,6 +88,7 @@ const FuncionalidadeUpdateForm = ({
       descricao: initialData.descricao || '',
       ativo: initialData.ativo,
       moduloId: initialData.moduloId,
+      aplicacaoFilter: selectedAplicacaoId,
     },
   })
 
@@ -102,6 +127,67 @@ const FuncionalidadeUpdateForm = ({
           autoComplete='off'
         >
           <div className='grid grid-cols-1 gap-x-8 gap-y-4'>
+            <div className='grid grid-cols-2 gap-x-8'>
+              <FormField
+                control={form.control}
+                name='aplicacaoFilter'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Filtrar por Aplicação</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value)
+                          setSelectedAplicacaoId(value)
+                        }}
+                        value={selectedAplicacaoId}
+                      >
+                        <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                          <SelectValue placeholder='Selecione uma aplicação para filtrar' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {aplicacoesData?.map((aplicacao) => (
+                            <SelectItem key={aplicacao.id} value={aplicacao.id}>
+                              {aplicacao.nome}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='moduloId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Módulo</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                          <SelectValue placeholder='Selecione um módulo' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {filteredModulos?.map((modulo) => (
+                            <SelectItem key={modulo.id} value={modulo.id}>
+                              {modulo.nome}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <FormField
               control={form.control}
               name='nome'
@@ -132,31 +218,6 @@ const FuncionalidadeUpdateForm = ({
                       {...field}
                       className='shadow-inner drop-shadow-xl'
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='moduloId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Módulo</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue placeholder='Selecione um módulo' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {modulosData?.map((modulo) => (
-                          <SelectItem key={modulo.id} value={modulo.id}>
-                            {modulo.nome}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
