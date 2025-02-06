@@ -141,7 +141,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             variant='ghost'
             className='h-8 w-8 p-0'
           >
-            <Lock color='hsl(var(--destructive))' className='h-4 w-4' />
+            <Unlock color='hsl(var(--emerald))' className='h-4 w-4' />
             <span className='sr-only'>Ver Detalhes do Bloqueio</span>
           </Button>
         ) : (
@@ -150,7 +150,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
             variant='ghost'
             className='h-8 w-8 p-0'
           >
-            <Unlock color='hsl(var(--emerald))' className='h-4 w-4' />
+            <Lock color='hsl(var(--destructive))' className='h-4 w-4' />
             <span className='sr-only'>Bloquear</span>
           </Button>
         )}
