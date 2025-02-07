@@ -72,7 +72,7 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
         autoComplete='off'
       >
         <div className='grid grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-12'>
-          <div className='col-span-1 md:col-span-8'>
+          <div className='col-span-full md:col-span-8'>
             <FormField
               control={form.control}
               name='nome'
@@ -92,7 +92,7 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             />
           </div>
 
-          <div className='col-span-1 md:col-span-4'>
+          <div className='col-span-full md:col-span-4'>
             <FormField
               control={form.control}
               name='sigla'
@@ -112,9 +112,9 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             />
           </div>
 
-          <div className='col-span-1 md:col-span-12'>
-            <div className='grid grid-cols-12 gap-x-8'>
-              <div className='col-span-4'>
+          <div className='col-span-full md:col-span-12'>
+            <div className='grid grid-cols-1 md:grid-cols-12 gap-x-8 gap-y-4'>
+              <div className='col-span-full md:col-span-4'>
                 <FormField
                   control={form.control}
                   name='nif'
@@ -134,7 +134,7 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 />
               </div>
 
-              <div className='col-span-8'>
+              <div className='col-span-full md:col-span-8'>
                 <FormField
                   control={form.control}
                   name='dadosUrl'
@@ -156,8 +156,8 @@ const ClienteCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             </div>
           </div>
 
-          <div className='col-span-1 md:col-span-12'>
-            <div className='grid grid-cols-2 gap-x-8'>
+          <div className='col-span-full md:col-span-12'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4'>
               <FormField
                 control={form.control}
                 name='ativo'
