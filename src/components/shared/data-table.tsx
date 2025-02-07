@@ -36,7 +36,10 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DataTableFilterModal } from '@/components/shared/data-table-filter-modal'
-import { DataTableFilterField } from '@/components/shared/data-table-types'
+import {
+  DataTableFilterField,
+  DataTableColumnDef,
+} from '@/components/shared/data-table-types'
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
@@ -161,10 +164,28 @@ export default function DataTable<TData, TValue>({
       }
     },
     onColumnFiltersChange: setPendingColumnFilters,
-    onSortingChange: (updatedSorting) => {
-      setSorting(updatedSorting as SortingState)
-      if (onSortingChange) {
-        onSortingChange(updatedSorting as Array<{ id: string; desc: boolean }>)
+    onSortingChange: (updater) => {
+      const newSorting =
+        typeof updater === 'function' ? updater(sorting) : updater
+      setSorting(newSorting)
+
+      if (onSortingChange && newSorting.length > 0) {
+        const column = columns.find(
+          (col) =>
+            col.id === newSorting[0].id ||
+            ('accessorKey' in col && col.accessorKey === newSorting[0].id)
+        ) as DataTableColumnDef<TData>
+
+        if (column?.sortKey) {
+          onSortingChange([
+            {
+              id: column.sortKey,
+              desc: newSorting[0].desc,
+            },
+          ])
+        }
+      } else if (onSortingChange) {
+        onSortingChange([])
       }
     },
     getCoreRowModel: getCoreRowModel(),

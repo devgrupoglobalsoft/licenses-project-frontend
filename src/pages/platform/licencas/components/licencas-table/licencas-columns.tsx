@@ -1,11 +1,11 @@
 import { format } from 'date-fns'
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/platform/licencas/components/licencas-table/licencas-cell-action'
 import { LicencaDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<LicencaDTO>[] = [
+export const columns: DataTableColumnDef<LicencaDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -28,6 +28,7 @@ export const columns: ColumnDef<LicencaDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
     cell: ({ row }) => (
       <div className='max-w-[200px] truncate' title={row.original.nome}>
         {row.original.nome}
@@ -37,6 +38,7 @@ export const columns: ColumnDef<LicencaDTO>[] = [
   {
     accessorKey: 'clienteId',
     header: 'Cliente',
+    sortKey: 'cliente.nome',
     cell: ({ row }) => (
       <div
         className='max-w-[200px] truncate'
@@ -46,21 +48,10 @@ export const columns: ColumnDef<LicencaDTO>[] = [
       </div>
     ),
   },
-  // {
-  //   accessorKey: 'aplicacaoId',
-  //   header: 'Aplicação',
-  //   cell: ({ row }) => (
-  //     <div
-  //       className='max-w-[200px] truncate'
-  //       title={row.original.aplicacao?.nome}
-  //     >
-  //       {row.original.aplicacao?.nome}
-  //     </div>
-  //   ),
-  // },
   {
     accessorKey: 'aplicacaoId',
     header: 'Aplicação',
+    sortKey: 'aplicacao.nome',
     cell: ({ row }) => {
       const area = row.original.aplicacao?.area
       const appName = row.original.aplicacao?.nome || '-'
@@ -86,10 +77,12 @@ export const columns: ColumnDef<LicencaDTO>[] = [
   {
     accessorKey: 'numeroUtilizadores',
     header: 'Nº Utilizadores',
+    sortKey: 'numeroUtilizadores',
   },
   {
     accessorKey: 'dataInicio',
     header: 'Data Início',
+    sortKey: 'dataInicio',
     cell: ({ row }) => {
       const date = row.original.dataInicio
       return date ? format(new Date(date), 'dd/MM/yyyy') : '-'
@@ -98,6 +91,7 @@ export const columns: ColumnDef<LicencaDTO>[] = [
   {
     accessorKey: 'dataFim',
     header: 'Data Fim',
+    sortKey: 'dataFim',
     cell: ({ row }) => {
       const date = row.original.dataFim
       return date ? format(new Date(date), 'dd/MM/yyyy') : '-'
@@ -106,6 +100,7 @@ export const columns: ColumnDef<LicencaDTO>[] = [
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
+    sortKey: 'ativo',
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -124,5 +119,6 @@ export const columns: ColumnDef<LicencaDTO>[] = [
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]

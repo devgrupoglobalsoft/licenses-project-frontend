@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/platform/clientes/components/clientes-table/clientes-cell-action'
 import { ClienteDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<ClienteDTO>[] = [
+export const columns: DataTableColumnDef<ClienteDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -27,16 +27,20 @@ export const columns: ColumnDef<ClienteDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
     enableSorting: true,
   },
   {
     accessorKey: 'sigla',
     header: 'Sigla',
+    sortKey: 'sigla',
     enableSorting: true,
   },
   {
     accessorKey: 'nif',
     header: 'NIF',
+    sortKey: 'nif',
+    enableSorting: true,
   },
   {
     accessorKey: 'ativo',
