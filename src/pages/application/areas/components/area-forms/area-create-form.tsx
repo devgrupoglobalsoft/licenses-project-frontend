@@ -114,12 +114,21 @@ export default function AreaCreateForm({ modalClose }: AreaCreateFormProps) {
             />
           </div>
 
-          <div className='flex items-center justify-end space-x-2'>
-            <Button type='button' variant='outline' onClick={modalClose}>
+          <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
+            <Button
+              type='button'
+              variant='outline'
+              onClick={modalClose}
+              className='w-full md:w-auto'
+            >
               Cancelar
             </Button>
-            <Button type='submit' disabled={createAreaMutation.isPending}>
-              {createAreaMutation.isPending ? 'Criando...' : 'Criar'}
+            <Button
+              type='submit'
+              disabled={createAreaMutation.isPending}
+              className='w-full md:w-auto'
+            >
+              {createAreaMutation.isPending ? 'A criar...' : 'Criar'}
             </Button>
           </div>
         </form>

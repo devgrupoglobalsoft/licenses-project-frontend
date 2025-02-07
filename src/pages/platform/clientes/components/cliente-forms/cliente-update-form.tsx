@@ -182,16 +182,20 @@ const ClienteUpdateForm = ({
                 control={form.control}
                 name='ativo'
                 render={({ field }) => (
-                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                    <div className='space-y-0.5'>
-                      <FormLabel className='text-base'>Ativo</FormLabel>
-                    </div>
+                  <FormItem>
+                    <FormLabel>Estado</FormLabel>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                        <span className='text-sm text-muted-foreground'>
+                          Ativo
+                        </span>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </div>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -200,18 +204,20 @@ const ClienteUpdateForm = ({
                 control={form.control}
                 name='dadosExternos'
                 render={({ field }) => (
-                  <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                    <div className='space-y-0.5'>
-                      <FormLabel className='text-base'>
-                        Dados Externos
-                      </FormLabel>
-                    </div>
+                  <FormItem>
+                    <FormLabel>Dados Externos</FormLabel>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
+                      <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                        <span className='text-sm text-muted-foreground'>
+                          Ativo
+                        </span>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </div>
                     </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
@@ -219,17 +225,21 @@ const ClienteUpdateForm = ({
           </div>
         </div>
 
-        <div className='flex justify-end space-x-4 pt-4'>
+        <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
           <Button
             type='button'
             variant='outline'
             onClick={modalClose}
-            className='w-24'
+            className='w-full md:w-auto'
           >
             Cancelar
           </Button>
-          <Button type='submit' className='w-24'>
-            Atualizar
+          <Button
+            type='submit'
+            disabled={updateCliente.isPending}
+            className='w-full md:w-auto'
+          >
+            {updateCliente.isPending ? 'A atualizar...' : 'Atualizar'}
           </Button>
         </div>
       </form>

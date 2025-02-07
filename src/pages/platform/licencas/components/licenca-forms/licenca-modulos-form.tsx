@@ -125,11 +125,25 @@ export default function LicencaModulosForm({
         )}
       </div>
 
-      <div className='flex justify-end space-x-2'>
-        <Button variant='outline' onClick={modalClose}>
+      <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
+        <Button
+          type='button'
+          variant='outline'
+          onClick={modalClose}
+          className='w-full md:w-auto'
+        >
           Cancelar
         </Button>
-        <Button onClick={handleSave}>Guardar</Button>
+        <Button
+          type='submit'
+          disabled={updateLicencaModulosFuncionalidades.isPending}
+          onClick={handleSave}
+          className='w-full md:w-auto'
+        >
+          {updateLicencaModulosFuncionalidades.isPending
+            ? 'A guardar...'
+            : 'Guardar'}
+        </Button>
       </div>
     </div>
   )

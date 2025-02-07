@@ -133,12 +133,21 @@ export default function AreaUpdateForm({
             />
           </div>
 
-          <div className='flex items-center justify-end space-x-2'>
-            <Button type='button' variant='outline' onClick={modalClose}>
+          <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
+            <Button
+              type='button'
+              variant='outline'
+              onClick={modalClose}
+              className='w-full md:w-auto'
+            >
               Cancelar
             </Button>
-            <Button type='submit' disabled={updateAreaMutation.isPending}>
-              {updateAreaMutation.isPending ? 'Atualizando...' : 'Atualizar'}
+            <Button
+              type='submit'
+              disabled={updateAreaMutation.isPending}
+              className='w-full md:w-auto'
+            >
+              {updateAreaMutation.isPending ? 'A atualizar...' : 'Atualizar'}
             </Button>
           </div>
         </form>

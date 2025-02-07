@@ -294,19 +294,20 @@ export function UtilizadorCreateForm({
           </div>
         </div>
 
-        <div className='flex flex-col-reverse md:flex-row justify-end gap-4 md:gap-8 pt-4'>
+        <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
           <Button
             type='button'
             variant='outline'
             onClick={modalClose}
-            className='w-full md:w-24'
+            className='w-full md:w-auto'
           >
             Cancelar
           </Button>
+
           <Button
             type='submit'
-            className='w-full md:w-24'
             disabled={createUtilizador.isPending}
+            className='w-full md:w-auto'
           >
             {createUtilizador.isPending ? 'A criar...' : 'Criar'}
           </Button>

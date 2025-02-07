@@ -292,7 +292,7 @@ const LicencaCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             disabled={createLicenca.isPending}
             className='w-full md:w-auto'
           >
-            Criar
+            {createLicenca.isPending ? 'A criar...' : 'Criar'}
           </Button>
         </div>
       </form>

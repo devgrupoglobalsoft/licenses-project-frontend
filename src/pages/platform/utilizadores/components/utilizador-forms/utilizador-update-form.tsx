@@ -236,35 +236,39 @@ export function UtilizadorUpdateForm({
               control={form.control}
               name='isActive'
               render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Ativo</FormLabel>
-                  </div>
+                <FormItem>
+                  <FormLabel>Estado</FormLabel>
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                      <span className='text-sm text-muted-foreground'>
+                        Ativo
+                      </span>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        <div className='flex flex-col-reverse md:flex-row justify-end gap-4 md:gap-8 pt-4'>
+        <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
           <Button
             type='button'
             variant='outline'
             onClick={modalClose}
-            className='w-full md:w-24'
+            className='w-full md:w-auto'
           >
             Cancelar
           </Button>
           <Button
             type='submit'
-            className='w-full md:w-24'
             disabled={updateUtilizador.isPending}
+            className='w-full md:w-auto'
           >
             {updateUtilizador.isPending ? 'A atualizar...' : 'Atualizar'}
           </Button>

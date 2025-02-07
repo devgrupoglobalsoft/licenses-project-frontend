@@ -261,35 +261,36 @@ const FuncionalidadeCreateForm = ({
             control={form.control}
             name='ativo'
             render={({ field }) => (
-              <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                <div className='space-y-0.5'>
-                  <FormLabel className='text-base'>Ativo</FormLabel>
-                </div>
+              <FormItem>
+                <FormLabel>Estado</FormLabel>
                 <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                    <span className='text-sm text-muted-foreground'>Ativo</span>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </div>
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
         </div>
 
-        <div className='flex justify-end space-x-4'>
+        <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
           <Button
             type='button'
             variant='outline'
             onClick={modalClose}
-            className='w-24'
+            className='w-full md:w-auto'
           >
             Cancelar
           </Button>
           <Button
             type='submit'
-            variant='emerald'
-            className='w-24'
             disabled={createFuncionalidade.isPending}
+            className='w-full md:w-auto'
           >
             {createFuncionalidade.isPending ? 'A criar...' : 'Criar'}
           </Button>

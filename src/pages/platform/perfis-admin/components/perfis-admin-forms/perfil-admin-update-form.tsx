@@ -80,26 +80,37 @@ export default function PerfilAdminUpdateForm({
           control={form.control}
           name='ativo'
           render={({ field }) => (
-            <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-              <div className='space-y-0.5'>
-                <FormLabel>Ativo</FormLabel>
-              </div>
+            <FormItem>
+              <FormLabel>Estado</FormLabel>
               <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+                <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                  <span className='text-sm text-muted-foreground'>Ativo</span>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </div>
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className='flex justify-end space-x-2 pt-4'>
-          <Button type='button' variant='outline' onClick={modalClose}>
+        <div className='flex flex-col justify-end space-y-2 pt-4 md:flex-row md:space-x-4 md:space-y-0'>
+          <Button
+            type='button'
+            variant='outline'
+            onClick={modalClose}
+            className='w-full md:w-auto'
+          >
             Cancelar
           </Button>
-          <Button type='submit' disabled={updatePerfilMutation.isPending}>
-            Atualizar
+          <Button
+            type='submit'
+            disabled={updatePerfilMutation.isPending}
+            className='w-full md:w-auto'
+          >
+            {updatePerfilMutation.isPending ? 'A atualizar...' : 'Atualizar'}
           </Button>
         </div>
       </form>

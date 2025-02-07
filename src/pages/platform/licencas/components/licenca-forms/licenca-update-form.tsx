@@ -295,16 +295,20 @@ const LicencaUpdateForm = ({
               control={form.control}
               name='ativo'
               render={({ field }) => (
-                <FormItem className='flex flex-row items-center justify-between rounded-lg border p-4'>
-                  <div className='space-y-0.5'>
-                    <FormLabel className='text-base'>Ativo</FormLabel>
-                  </div>
+                <FormItem>
+                  <FormLabel>Estado</FormLabel>
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                      <span className='text-sm text-muted-foreground'>
+                        Ativo
+                      </span>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -325,7 +329,7 @@ const LicencaUpdateForm = ({
             disabled={updateLicenca.isPending}
             className='w-full md:w-auto'
           >
-            Atualizar
+            {updateLicenca.isPending ? 'A atualizar...' : 'Atualizar'}
           </Button>
         </div>
       </form>
