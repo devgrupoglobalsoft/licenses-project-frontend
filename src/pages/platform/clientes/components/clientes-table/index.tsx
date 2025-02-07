@@ -12,6 +12,7 @@ type TClientesTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export default function ClientesTable({
@@ -19,6 +20,7 @@ export default function ClientesTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TClientesTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const clienteIdParam = searchParams.get('clienteId')
@@ -38,6 +40,14 @@ export default function ClientesTable({
     }
   }
 
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
+    }
+  }
+
   return (
     <>
       <ClientesTableActions />
@@ -50,8 +60,10 @@ export default function ClientesTable({
           FilterControls={ClientesFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/clientes'
+          enableSorting={true}
         />
       )}
     </>

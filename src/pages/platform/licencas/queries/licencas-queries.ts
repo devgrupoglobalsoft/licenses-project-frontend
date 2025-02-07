@@ -1,12 +1,13 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import LicencasService from '@/lib/services/platform/licencas-service';
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import LicencasService from '@/lib/services/platform/licencas-service'
 
 export const useGetLicencasPaginated = (
   pageNumber: number,
   pageLimit: number,
   filters: Array<{ id: string; value: string }> | null,
-  sorting: string[] | null
+  sorting: Array<{ id: string; desc: boolean }> | null
 ) => {
+  console.log(sorting)
   return useQuery({
     queryKey: ['licencas-paginated', pageNumber, pageLimit, filters, sorting],
     queryFn: () =>
@@ -14,20 +15,22 @@ export const useGetLicencasPaginated = (
         pageNumber: pageNumber,
         pageSize: pageLimit,
         filters: (filters as unknown as Record<string, string>) ?? undefined,
-        sorting: sorting ?? undefined
+        sorting:
+          (sorting as unknown as Array<{ id: string; desc: boolean }>) ??
+          undefined,
       }),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const usePrefetchAdjacentLicencas = (
   page: number,
   pageSize: number,
   filters: Array<{ id: string; value: string }> | null
 ) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const prefetchPreviousPage = async () => {
     if (page > 1) {
@@ -39,11 +42,11 @@ export const usePrefetchAdjacentLicencas = (
             pageSize: pageSize,
             filters:
               (filters as unknown as Record<string, string>) ?? undefined,
-            sorting: undefined
-          })
-      });
+            sorting: undefined,
+          }),
+      })
     }
-  };
+  }
 
   const prefetchNextPage = async () => {
     await queryClient.prefetchQuery({
@@ -53,13 +56,13 @@ export const usePrefetchAdjacentLicencas = (
           pageNumber: page + 1,
           pageSize: pageSize,
           filters: (filters as unknown as Record<string, string>) ?? undefined,
-          sorting: undefined
-        })
-    });
-  };
+          sorting: undefined,
+        }),
+    })
+  }
 
-  return { prefetchPreviousPage, prefetchNextPage };
-};
+  return { prefetchPreviousPage, prefetchNextPage }
+}
 
 export const useGetLicencas = () => {
   return useQuery({
@@ -67,38 +70,38 @@ export const useGetLicencas = () => {
     queryFn: () => LicencasService('licencas').getLicencas(),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const useGetLicencaById = (id: string) => {
   return useQuery({
     queryKey: ['licenca', id],
     queryFn: async () => {
-      const response = await LicencasService('licencas').getLicencaById(id);
-      return response.info.data;
+      const response = await LicencasService('licencas').getLicencaById(id)
+      return response.info.data
     },
-    enabled: !!id
-  });
-};
+    enabled: !!id,
+  })
+}
 
 export const useGetLicencasSelect = () => {
   return useQuery({
     queryKey: ['licencas-select'],
     queryFn: async () => {
-      const response = await LicencasService('licencas').getLicencas();
-      return response.info.data || [];
+      const response = await LicencasService('licencas').getLicencas()
+      return response.info.data || []
     },
-    staleTime: 30000
-  });
-};
+    staleTime: 30000,
+  })
+}
 
 export const useGetLicencasCount = () => {
   return useQuery({
     queryKey: ['licencas-count'],
     queryFn: async () => {
-      const response = await LicencasService('licencas').getLicencas();
-      return response.info?.data?.length || 0;
-    }
-  });
-};
+      const response = await LicencasService('licencas').getLicencas()
+      return response.info?.data?.length || 0
+    },
+  })
+}

@@ -3,6 +3,7 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from '@radix-ui/react-icons'
+import { ArrowUpIcon, ArrowDownIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,9 +12,11 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
+  SortingState,
 } from '@tanstack/react-table'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -53,6 +56,8 @@ type DataTableProps<TData, TValue> = {
   }>
   baseRoute?: string
   hiddenColumns?: string[]
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
+  enableSorting?: boolean
 }
 
 // Add these translations
@@ -80,6 +85,8 @@ export default function DataTable<TData, TValue>({
   FilterControls,
   baseRoute,
   hiddenColumns,
+  onSortingChange,
+  enableSorting = true,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
@@ -88,6 +95,7 @@ export default function DataTable<TData, TValue>({
   const [pendingColumnFilters, setPendingColumnFilters] =
     useState<ColumnFiltersState>(initialFilters)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const [sorting, setSorting] = useState<SortingState>([])
   const navigate = useNavigate()
 
   const handlePaginationChange = (
@@ -141,6 +149,7 @@ export default function DataTable<TData, TValue>({
         }),
         {}
       ),
+      sorting,
     },
     onPaginationChange: (updater) => {
       if (typeof updater === 'function') {
@@ -152,11 +161,19 @@ export default function DataTable<TData, TValue>({
       }
     },
     onColumnFiltersChange: setPendingColumnFilters,
+    onSortingChange: (updatedSorting) => {
+      setSorting(updatedSorting as SortingState)
+      if (onSortingChange) {
+        onSortingChange(updatedSorting as Array<{ id: string; desc: boolean }>)
+      }
+    },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableSorting,
     manualPagination: true,
     manualFiltering: true,
+    manualSorting: true,
   })
 
   const getActiveFiltersCount = () => {
@@ -203,12 +220,28 @@ export default function DataTable<TData, TValue>({
                     {headerGroup.headers.map((header) => {
                       return (
                         <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
+                          {header.isPlaceholder ? null : (
+                            <div
+                              className={cn(
+                                'flex items-center space-x-2',
+                                header.column.getCanSort()
+                                  ? 'cursor-pointer select-none'
+                                  : ''
                               )}
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              <div>
+                                {flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                              </div>
+                              {{
+                                asc: <ArrowUpIcon className='h-4 w-4' />,
+                                desc: <ArrowDownIcon className='h-4 w-4' />,
+                              }[header.column.getIsSorted() as string] ?? null}
+                            </div>
+                          )}
                         </TableHead>
                       )
                     })}

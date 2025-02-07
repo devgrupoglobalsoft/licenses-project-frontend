@@ -12,6 +12,7 @@ type TLicencasTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export function LicencasTable({
@@ -19,6 +20,7 @@ export function LicencasTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TLicencasTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const clienteIdParam = searchParams.get('clienteId')
@@ -38,6 +40,14 @@ export function LicencasTable({
     }
   }
 
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
+    }
+  }
+
   return (
     <>
       <LicencasTableActions />
@@ -50,8 +60,10 @@ export function LicencasTable({
           FilterControls={LicencasFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/licencas'
+          enableSorting={true}
         />
       )}
     </>

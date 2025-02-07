@@ -17,12 +17,15 @@ export default function LicencasPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     licencaIdParam ? [{ id: 'licencaId', value: licencaIdParam }] : []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetLicencasPaginated(
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } =
     usePrefetchAdjacentLicencas(page, pageSize, filters)
@@ -37,6 +40,12 @@ export default function LicencasPage() {
   const handlePaginationChange = (newPage: number, newPageSize: number) => {
     setPage(newPage)
     setPageSize(newPageSize)
+  }
+
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
   }
 
   useEffect(() => {
@@ -76,6 +85,7 @@ export default function LicencasPage() {
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
       />
     </div>
   )
