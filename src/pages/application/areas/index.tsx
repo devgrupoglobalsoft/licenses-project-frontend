@@ -15,12 +15,15 @@ export default function AreasPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetAreasPaginated(
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } = usePrefetchAdjacentAreas(
     page,
@@ -40,10 +43,16 @@ export default function AreasPage() {
     setPageSize(newPageSize)
   }
 
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
+  }
+
   useEffect(() => {
     prefetchPreviousPage()
     prefetchNextPage()
-  }, [page, pageSize, filters])
+  }, [page, pageSize, filters, sorting])
 
   // Get the areas from the transformed response
   const areas = data?.info?.data || []
@@ -78,6 +87,7 @@ export default function AreasPage() {
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
       />
     </div>
   )

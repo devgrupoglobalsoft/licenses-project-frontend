@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/application/areas/components/areas-table/areas-cell-action'
 import { AreaDTO } from '@/types/dtos'
 import { PREDEFINED_COLORS } from '@/lib/constants/colors'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<AreaDTO>[] = [
+export const columns: DataTableColumnDef<AreaDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -27,10 +27,14 @@ export const columns: ColumnDef<AreaDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
+    enableSorting: true,
   },
   {
     accessorKey: 'color',
     header: 'Cor',
+    enableSorting: false,
+    sortKey: 'color',
     cell: ({ row }) => {
       const color = row.original.color
       return (
@@ -61,5 +65,6 @@ export const columns: ColumnDef<AreaDTO>[] = [
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]

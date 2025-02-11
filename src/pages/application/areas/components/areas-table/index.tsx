@@ -13,6 +13,7 @@ type TAreasTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export default function AreasTable({
@@ -20,8 +21,10 @@ export default function AreasTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TAreasTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {
@@ -33,6 +36,14 @@ export default function AreasTable({
   const handlePaginationChange = (page: number, pageSize: number) => {
     if (onPaginationChange) {
       onPaginationChange(page, pageSize)
+    }
+  }
+
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
     }
   }
 
@@ -48,8 +59,10 @@ export default function AreasTable({
           FilterControls={AreasFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
+          enableSorting={true}
         />
       )}
     </>

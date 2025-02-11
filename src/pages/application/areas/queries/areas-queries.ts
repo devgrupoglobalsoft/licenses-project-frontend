@@ -1,11 +1,11 @@
-import AreasService from '@/lib/services/application/areas-service';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import AreasService from '@/lib/services/application/areas-service'
 
 export const useGetAreasPaginated = (
   pageNumber: number,
   pageLimit: number,
   filters: Array<{ id: string; value: string }> | null,
-  sorting: string[] | null
+  sorting: Array<{ id: string; desc: boolean }> | null
 ) => {
   return useQuery({
     queryKey: ['areas-paginated', pageNumber, pageLimit, filters, sorting],
@@ -14,20 +14,22 @@ export const useGetAreasPaginated = (
         pageNumber: pageNumber,
         pageSize: pageLimit,
         filters: (filters as unknown as Record<string, string>) ?? undefined,
-        sorting: sorting ?? undefined
+        sorting:
+          (sorting as unknown as Array<{ id: string; desc: boolean }>) ??
+          undefined,
       }),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const usePrefetchAdjacentAreas = (
   page: number,
   pageSize: number,
   filters: Array<{ id: string; value: string }> | null
 ) => {
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const prefetchPreviousPage = async () => {
     if (page > 1) {
@@ -39,11 +41,11 @@ export const usePrefetchAdjacentAreas = (
             pageSize: pageSize,
             filters:
               (filters as unknown as Record<string, string>) ?? undefined,
-            sorting: undefined
-          })
-      });
+            sorting: undefined,
+          }),
+      })
     }
-  };
+  }
 
   const prefetchNextPage = async () => {
     await queryClient.prefetchQuery({
@@ -53,13 +55,13 @@ export const usePrefetchAdjacentAreas = (
           pageNumber: page + 1,
           pageSize: pageSize,
           filters: (filters as unknown as Record<string, string>) ?? undefined,
-          sorting: undefined
-        })
-    });
-  };
+          sorting: undefined,
+        }),
+    })
+  }
 
-  return { prefetchPreviousPage, prefetchNextPage };
-};
+  return { prefetchPreviousPage, prefetchNextPage }
+}
 
 export const useGetAreas = () => {
   return useQuery({
@@ -67,27 +69,27 @@ export const useGetAreas = () => {
     queryFn: () => AreasService('areas').getAreas(),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,
-    gcTime: 30 * 60 * 1000
-  });
-};
+    gcTime: 30 * 60 * 1000,
+  })
+}
 
 export const useGetAreasSelect = () => {
   return useQuery({
     queryKey: ['areas-select'],
     queryFn: async () => {
-      const response = await AreasService('areas').getAreas();
-      return response.info.data || [];
+      const response = await AreasService('areas').getAreas()
+      return response.info.data || []
     },
-    staleTime: 30000
-  });
-};
+    staleTime: 30000,
+  })
+}
 
 export const useGetAreasCount = () => {
   return useQuery({
     queryKey: ['areas-count'],
     queryFn: async () => {
-      const response = await AreasService('areas').getAreas();
-      return response.info?.data?.length || 0;
-    }
-  });
-};
+      const response = await AreasService('areas').getAreas()
+      return response.info?.data?.length || 0
+    },
+  })
+}
