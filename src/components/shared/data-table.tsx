@@ -61,6 +61,8 @@ type DataTableProps<TData, TValue> = {
   hiddenColumns?: string[]
   onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
   enableSorting?: boolean
+  selectedRows?: string[]
+  onRowSelectionChange?: (selectedRows: string[]) => void
 }
 
 // Add these translations
@@ -90,6 +92,8 @@ export default function DataTable<TData, TValue>({
   hiddenColumns,
   onSortingChange,
   enableSorting = true,
+  selectedRows,
+  onRowSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
@@ -100,6 +104,9 @@ export default function DataTable<TData, TValue>({
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [sorting, setSorting] = useState<SortingState>([])
   const navigate = useNavigate()
+  const [selectedRowIds, setSelectedRowIds] = useState<string[]>(
+    selectedRows || []
+  )
 
   const handlePaginationChange = (
     newPageIndex: number,
@@ -138,6 +145,15 @@ export default function DataTable<TData, TValue>({
     setIsFilterModalOpen(false)
   }
 
+  const handleRowSelectionChange = (rowId: string, checked: boolean) => {
+    const newSelectedRows = checked
+      ? [...selectedRowIds, rowId]
+      : selectedRowIds.filter((id) => id !== rowId)
+
+    setSelectedRowIds(newSelectedRows)
+    onRowSelectionChange?.(newSelectedRows)
+  }
+
   const table = useReactTable({
     data,
     columns,
@@ -153,6 +169,25 @@ export default function DataTable<TData, TValue>({
         {}
       ),
       sorting,
+      rowSelection: selectedRowIds.reduce(
+        (acc, id) => ({
+          ...acc,
+          [id]: true,
+        }),
+        {}
+      ),
+    },
+    getRowId: (row: any) => row.id,
+    enableRowSelection: true,
+    onRowSelectionChange: (updater) => {
+      if (typeof updater === 'function') {
+        const newSelection = updater(table.getState().rowSelection)
+        const selectedIds = Object.entries(newSelection)
+          .filter(([_, selected]) => selected)
+          .map(([id]) => id)
+        setSelectedRowIds(selectedIds)
+        onRowSelectionChange?.(selectedIds)
+      }
     },
     onPaginationChange: (updater) => {
       if (typeof updater === 'function') {
