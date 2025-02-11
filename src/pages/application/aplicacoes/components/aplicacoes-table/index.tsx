@@ -13,6 +13,7 @@ type TAplicacoesTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export default function AplicacoesTable({
@@ -20,6 +21,7 @@ export default function AplicacoesTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TAplicacoesTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const areaIdParam = searchParams.get('areaId')
@@ -46,6 +48,14 @@ export default function AplicacoesTable({
     }
   }
 
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
+    }
+  }
+
   return (
     <>
       <AplicacoesTableActions currentFilters={currentFilters} />
@@ -58,10 +68,12 @@ export default function AplicacoesTable({
           FilterControls={AplicacoesFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/aplicacoes'
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
+          enableSorting={true}
         />
       )}
     </>

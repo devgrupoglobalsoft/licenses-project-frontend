@@ -17,12 +17,15 @@ export default function AplicacoesPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     areaIdParam ? [{ id: 'areaId', value: areaIdParam }] : []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetAplicacoesPaginated(
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } =
     usePrefetchAdjacentAplicacoes(page, pageSize, filters)
@@ -31,7 +34,7 @@ export default function AplicacoesPage() {
     newFilters: Array<{ id: string; value: string }>
   ) => {
     setFilters(newFilters)
-    setPage(1) // Reset to first page when filters change
+    setPage(1)
   }
 
   const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -39,10 +42,16 @@ export default function AplicacoesPage() {
     setPageSize(newPageSize)
   }
 
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
+  }
+
   useEffect(() => {
     prefetchPreviousPage()
     prefetchNextPage()
-  }, [page, pageSize, filters])
+  }, [page, pageSize, filters, sorting])
 
   const aplicacoes = data?.info?.data || []
   const totalAplicacoes = data?.info?.totalCount || 0
@@ -76,6 +85,7 @@ export default function AplicacoesPage() {
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
       />
     </div>
   )

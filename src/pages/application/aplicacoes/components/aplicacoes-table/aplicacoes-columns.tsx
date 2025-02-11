@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-cell-action'
 import { AplicacaoDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<AplicacaoDTO>[] = [
+export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -27,14 +27,20 @@ export const columns: ColumnDef<AplicacaoDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
+    enableSorting: true,
   },
   {
     accessorKey: 'descricao',
     header: 'Descrição',
+    sortKey: 'descricao',
+    enableSorting: true,
   },
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
+    sortKey: 'ativo',
+    enableSorting: true,
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -48,6 +54,8 @@ export const columns: ColumnDef<AplicacaoDTO>[] = [
   {
     accessorKey: 'areaId',
     header: 'Área',
+    sortKey: 'area.nome',
+    enableSorting: true,
     cell: ({ row }) => {
       const area = row.original.area
       if (!area) {
@@ -76,5 +84,6 @@ export const columns: ColumnDef<AplicacaoDTO>[] = [
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]
