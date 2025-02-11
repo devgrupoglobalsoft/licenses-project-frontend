@@ -14,7 +14,7 @@ import {
   useReactTable,
   SortingState,
 } from '@tanstack/react-table'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { ArrowUpDown, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -269,70 +269,86 @@ export default function DataTable<TData, TValue>({
       <div className='flex flex-col gap-4 md:flex-row'>
         <div className='flex-1'>
           <ScrollArea className='h-[calc(100vh-500px)] rounded-md border md:h-[calc(100vh-400px)]'>
-            <Table className='relative'>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
+            <div className='rounded-md border'>
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow
+                      key={headerGroup.id}
+                      className='bg-muted hover:bg-muted'
+                    >
+                      {headerGroup.headers.map((header) => (
+                        <TableHead
+                          key={header.id}
+                          className='h-12 font-semibold text-muted-foreground hover:text-foreground'
+                        >
                           {header.isPlaceholder ? null : (
                             <div
-                              className={cn(
-                                'flex items-center space-x-2',
-                                header.column.getCanSort()
-                                  ? 'cursor-pointer select-none'
-                                  : ''
-                              )}
-                              onClick={header.column.getToggleSortingHandler()}
+                              {...{
+                                className: cn(
+                                  'flex items-center gap-2',
+                                  header.column.getCanSort() &&
+                                    'cursor-pointer select-none'
+                                ),
+                                onClick:
+                                  header.column.getToggleSortingHandler(),
+                              }}
                             >
-                              <div>
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                              </div>
-                              {{
-                                asc: <ArrowUpIcon className='h-4 w-4' />,
-                                desc: <ArrowDownIcon className='h-4 w-4' />,
-                              }[header.column.getIsSorted() as string] ?? null}
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                              {header.column.getCanSort() && (
+                                <div className='w-4'>
+                                  {header.column.getIsSorted() === 'asc' && (
+                                    <ArrowUpIcon className='h-4 w-4' />
+                                  )}
+                                  {header.column.getIsSorted() === 'desc' && (
+                                    <ArrowDownIcon className='h-4 w-4' />
+                                  )}
+                                  {!header.column.getIsSorted() && (
+                                    <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                  )}
+                                </div>
+                              )}
                             </div>
                           )}
                         </TableHead>
-                      )
-                    })}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
                       ))}
                     </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className='h-24 text-center'
-                    >
-                      {ptPTTranslations.noResults}
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className='h-24 text-center'
+                      >
+                        {ptPTTranslations.noResults}
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+
             <ScrollBar orientation='horizontal' />
           </ScrollArea>
 
