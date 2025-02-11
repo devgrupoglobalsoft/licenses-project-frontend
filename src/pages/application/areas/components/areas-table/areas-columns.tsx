@@ -29,12 +29,18 @@ export const columns: DataTableColumnDef<AreaDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'color',
     header: 'Cor',
     enableSorting: false,
     sortKey: 'color',
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const color = row.original.color
       return (

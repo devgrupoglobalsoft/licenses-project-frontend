@@ -29,18 +29,27 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'descricao',
     header: 'Descrição',
     sortKey: 'descricao',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'ativo',
     header: 'Estado',
     sortKey: 'ativo',
     enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -50,15 +59,15 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
         )}
       </div>
     ),
-    meta: {
-      align: 'center',
-    },
   },
   {
     accessorKey: 'areaId',
     header: 'Área',
     sortKey: 'area.nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const area = row.original.area
       if (!area) {
@@ -81,7 +90,7 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />

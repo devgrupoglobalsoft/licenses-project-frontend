@@ -29,18 +29,27 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'descricao',
     header: 'Descrição',
     sortKey: 'descricao',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -56,6 +65,9 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Aplicação',
     sortKey: 'aplicacao.nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const area = row.original.aplicacao?.area
       const appName = row.original.aplicacao?.nome || '-'
@@ -84,6 +96,10 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Área',
     sortKey: 'aplicacao.area.nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+      hidden: false,
+    },
     cell: ({ row }) => {
       const area = row.original.aplicacao?.area
       const areaName = area?.nome || '-'
@@ -106,13 +122,10 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
       )
     },
     enableHiding: true,
-    meta: {
-      hidden: false,
-    },
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />

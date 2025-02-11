@@ -1,4 +1,3 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-cell-action'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
@@ -32,6 +31,9 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => (
       <div>
         {[row.original.firstName, row.original.lastName]
@@ -45,12 +47,18 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Email',
     sortKey: 'email',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'roleId',
     header: 'Role',
     sortKey: 'roleId',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const role = (row.original.roleId?.toLowerCase() ||
         'client') as keyof typeof roleLabelMap
@@ -67,6 +75,9 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Cliente',
     sortKey: 'cliente.nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => (
       <div
         className='truncate max-w-[200px]'
@@ -81,6 +92,9 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.isActive ? (
@@ -93,7 +107,7 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />

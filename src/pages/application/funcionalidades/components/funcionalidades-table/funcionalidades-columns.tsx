@@ -29,18 +29,27 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'descricao',
     header: 'Descrição',
     sortKey: 'descricao',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -56,6 +65,9 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Aplicação',
     sortKey: 'modulo.aplicacao.nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const area = row.original.modulo?.aplicacao?.area
       const appName = row.original.modulo?.aplicacao?.nome || '-'
@@ -83,6 +95,9 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Módulo',
     sortKey: 'modulo.nome',
     enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const area = row.original.modulo?.aplicacao?.area
       const moduleName = row.original.modulo?.nome || '-'
@@ -107,7 +122,7 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />

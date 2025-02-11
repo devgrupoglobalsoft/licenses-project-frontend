@@ -29,6 +29,10 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     accessorKey: 'nome',
     header: 'Nome',
     sortKey: 'nome',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => (
       <div className='max-w-[200px] truncate' title={row.original.nome}>
         {row.original.nome}
@@ -39,6 +43,10 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     accessorKey: 'clienteId',
     header: 'Cliente',
     sortKey: 'cliente.nome',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => (
       <div
         className='max-w-[200px] truncate'
@@ -52,6 +60,10 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     accessorKey: 'aplicacaoId',
     header: 'Aplicação',
     sortKey: 'aplicacao.nome',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const area = row.original.aplicacao?.area
       const appName = row.original.aplicacao?.nome || '-'
@@ -78,11 +90,19 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     accessorKey: 'numeroUtilizadores',
     header: 'Nº Utilizadores',
     sortKey: 'numeroUtilizadores',
+    enableSorting: true,
+    meta: {
+      align: 'center',
+    },
   },
   {
     accessorKey: 'dataInicio',
     header: 'Data Início',
     sortKey: 'dataInicio',
+    enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => {
       const date = row.original.dataInicio
       return date ? format(new Date(date), 'dd/MM/yyyy') : '-'
@@ -92,6 +112,10 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     accessorKey: 'dataFim',
     header: 'Data Fim',
     sortKey: 'dataFim',
+    enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => {
       const date = row.original.dataFim
       return date ? format(new Date(date), 'dd/MM/yyyy') : '-'
@@ -101,6 +125,10 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
+    enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -113,7 +141,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />
