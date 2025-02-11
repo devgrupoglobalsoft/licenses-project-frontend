@@ -13,6 +13,7 @@ type TModulosTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export default function ModulosTable({
@@ -20,11 +21,12 @@ export default function ModulosTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TModulosTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const aplicacaoIdParam = searchParams.get('aplicacaoId')
+  const initialActiveFiltersCount = aplicacaoIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
-
   const [currentFilters, setCurrentFilters] = useState<
     Array<{ id: string; value: string }>
   >(aplicacaoIdParam ? [{ id: 'aplicacaoId', value: aplicacaoIdParam }] : [])
@@ -44,7 +46,13 @@ export default function ModulosTable({
     }
   }
 
-  const initialActiveFiltersCount = aplicacaoIdParam ? 1 : 0
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
+    }
+  }
 
   return (
     <>
@@ -56,13 +64,14 @@ export default function ModulosTable({
           pageCount={pageCount}
           filterFields={filterFields}
           FilterControls={ModulosFilterControls}
-          hiddenColumns={['areaId']} // Pass the columns you want to hide
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/modulos'
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
+          enableSorting={true}
         />
       )}
     </>

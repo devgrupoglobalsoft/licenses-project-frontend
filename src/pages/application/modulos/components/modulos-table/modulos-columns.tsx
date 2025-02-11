@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/application/modulos/components/modulos-table/modulos-cell-action'
 import { ModuloDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<ModuloDTO>[] = [
+export const columns: DataTableColumnDef<ModuloDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -27,14 +27,20 @@ export const columns: ColumnDef<ModuloDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
+    enableSorting: true,
   },
   {
     accessorKey: 'descricao',
     header: 'Descrição',
+    sortKey: 'descricao',
+    enableSorting: true,
   },
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
+    sortKey: 'ativo',
+    enableSorting: true,
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -48,6 +54,8 @@ export const columns: ColumnDef<ModuloDTO>[] = [
   {
     accessorKey: 'aplicacaoId',
     header: 'Aplicação',
+    sortKey: 'aplicacao.nome',
+    enableSorting: true,
     cell: ({ row }) => {
       const area = row.original.aplicacao?.area
       const appName = row.original.aplicacao?.nome || '-'
@@ -74,13 +82,32 @@ export const columns: ColumnDef<ModuloDTO>[] = [
     accessorKey: 'areaId',
     accessorFn: (row) => row.aplicacao?.area?.nome,
     header: 'Área',
+    sortKey: 'aplicacao.area.nome',
+    enableSorting: true,
+    cell: ({ row }) => {
+      const area = row.original.aplicacao?.area
+      const areaName = area?.nome || '-'
+
+      if (!area) {
+        return <div>{areaName}</div>
+      }
+
+      return (
+        <div
+          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
+          style={{
+            backgroundColor: `${area.color}20`,
+            color: area.color,
+            border: `1px solid ${area.color}`,
+          }}
+        >
+          {areaName}
+        </div>
+      )
+    },
     enableHiding: true,
-    enableSorting: false,
-    size: 0,
-    minSize: 0,
-    maxSize: 0,
     meta: {
-      hidden: true,
+      hidden: false,
     },
   },
   {
@@ -91,5 +118,6 @@ export const columns: ColumnDef<ModuloDTO>[] = [
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]

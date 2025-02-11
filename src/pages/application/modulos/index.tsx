@@ -17,12 +17,15 @@ export default function ModulosPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     aplicacaoIdParam ? [{ id: 'aplicacaoId', value: aplicacaoIdParam }] : []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetModulosPaginated(
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } = usePrefetchAdjacentModulos(
     page,
@@ -34,7 +37,7 @@ export default function ModulosPage() {
     newFilters: Array<{ id: string; value: string }>
   ) => {
     setFilters(newFilters)
-    setPage(1) // Reset to first page when filters change
+    setPage(1)
   }
 
   const handlePaginationChange = (newPage: number, newPageSize: number) => {
@@ -42,10 +45,16 @@ export default function ModulosPage() {
     setPageSize(newPageSize)
   }
 
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
+  }
+
   useEffect(() => {
     prefetchPreviousPage()
     prefetchNextPage()
-  }, [page, pageSize, filters])
+  }, [page, pageSize, filters, sorting])
 
   const modulos = data?.info?.data || []
   const totalModulos = data?.info?.totalCount || 0
@@ -79,6 +88,7 @@ export default function ModulosPage() {
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
       />
     </div>
   )
