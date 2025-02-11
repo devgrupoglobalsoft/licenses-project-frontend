@@ -11,5 +11,6 @@ export type DataTableColumnDef<TData> = ColumnDef<TData, any> & {
   meta?: {
     align?: 'left' | 'center' | 'right'
     hidden?: boolean
+    width?: string
   }
 }

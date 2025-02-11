@@ -355,6 +355,10 @@ export default function DataTable<TData, TValue>({
                               (
                                 cell.column
                                   .columnDef as DataTableColumnDef<TData>
+                              ).meta?.width,
+                              (
+                                cell.column
+                                  .columnDef as DataTableColumnDef<TData>
                               ).meta?.align === 'center' && 'text-center',
                               (
                                 cell.column
