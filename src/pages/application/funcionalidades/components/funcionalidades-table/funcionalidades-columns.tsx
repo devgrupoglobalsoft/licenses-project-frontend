@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-cell-action'
 import { FuncionalidadeDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<FuncionalidadeDTO>[] = [
+export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -27,14 +27,20 @@ export const columns: ColumnDef<FuncionalidadeDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
+    enableSorting: true,
   },
   {
     accessorKey: 'descricao',
     header: 'Descrição',
+    sortKey: 'descricao',
+    enableSorting: true,
   },
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
+    sortKey: 'ativo',
+    enableSorting: true,
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -48,6 +54,8 @@ export const columns: ColumnDef<FuncionalidadeDTO>[] = [
   {
     accessorKey: 'aplicacaoId',
     header: 'Aplicação',
+    sortKey: 'modulo.aplicacao.nome',
+    enableSorting: true,
     cell: ({ row }) => {
       const area = row.original.modulo?.aplicacao?.area
       const appName = row.original.modulo?.aplicacao?.nome || '-'
@@ -73,6 +81,8 @@ export const columns: ColumnDef<FuncionalidadeDTO>[] = [
   {
     accessorKey: 'moduloId',
     header: 'Módulo',
+    sortKey: 'modulo.nome',
+    enableSorting: true,
     cell: ({ row }) => {
       const area = row.original.modulo?.aplicacao?.area
       const moduleName = row.original.modulo?.nome || '-'
@@ -103,5 +113,6 @@ export const columns: ColumnDef<FuncionalidadeDTO>[] = [
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]

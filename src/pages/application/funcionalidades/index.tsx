@@ -17,12 +17,15 @@ export default function FuncionalidadesPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     moduloIdParam ? [{ id: 'moduloId', value: moduloIdParam }] : []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetFuncionalidadesPaginated(
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } =
     usePrefetchAdjacentFuncionalidades(page, pageSize, filters)
@@ -39,10 +42,16 @@ export default function FuncionalidadesPage() {
     setPageSize(newPageSize)
   }
 
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
+  }
+
   useEffect(() => {
     prefetchPreviousPage()
     prefetchNextPage()
-  }, [page, pageSize, filters])
+  }, [page, pageSize, filters, sorting])
 
   const funcionalidades = data?.info?.data || []
   const totalFuncionalidades = data?.info?.totalCount || 0
@@ -76,6 +85,7 @@ export default function FuncionalidadesPage() {
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}
+        onSortingChange={handleSortingChange}
       />
     </div>
   )

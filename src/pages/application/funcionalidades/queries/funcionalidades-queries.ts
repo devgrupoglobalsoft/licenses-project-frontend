@@ -5,7 +5,7 @@ export const useGetFuncionalidadesPaginated = (
   pageNumber: number,
   pageLimit: number,
   filters: Array<{ id: string; value: string }> | null,
-  sorting: string[] | null
+  sorting: Array<{ id: string; desc: boolean }> | null
 ) => {
   return useQuery({
     queryKey: [
@@ -20,7 +20,9 @@ export const useGetFuncionalidadesPaginated = (
         pageNumber: pageNumber,
         pageSize: pageLimit,
         filters: (filters as unknown as Record<string, string>) ?? undefined,
-        sorting: sorting ?? undefined,
+        sorting:
+          (sorting as unknown as Array<{ id: string; desc: boolean }>) ??
+          undefined,
       }),
     placeholderData: (previousData) => previousData,
     staleTime: 5 * 60 * 1000,

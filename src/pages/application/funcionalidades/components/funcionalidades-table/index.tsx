@@ -13,6 +13,7 @@ type TFuncionalidadesTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export default function FuncionalidadesTable({
@@ -20,11 +21,12 @@ export default function FuncionalidadesTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TFuncionalidadesTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const moduloIdParam = searchParams.get('moduloId')
+  const initialActiveFiltersCount = moduloIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
-
   const [currentFilters, setCurrentFilters] = useState<
     Array<{ id: string; value: string }>
   >(moduloIdParam ? [{ id: 'moduloId', value: moduloIdParam }] : [])
@@ -44,7 +46,13 @@ export default function FuncionalidadesTable({
     }
   }
 
-  const initialActiveFiltersCount = moduloIdParam ? 1 : 0
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
+    }
+  }
 
   return (
     <>
@@ -58,10 +66,12 @@ export default function FuncionalidadesTable({
           FilterControls={FuncionalidadesFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/funcionalidades'
           selectedRows={selectedRows}
           onRowSelectionChange={setSelectedRows}
+          enableSorting={true}
         />
       )}
     </>
