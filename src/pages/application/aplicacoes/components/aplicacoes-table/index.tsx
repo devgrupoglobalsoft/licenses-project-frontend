@@ -24,6 +24,7 @@ export default function AplicacoesTable({
   const searchParams = new URLSearchParams(window.location.search)
   const areaIdParam = searchParams.get('areaId')
   const initialActiveFiltersCount = areaIdParam ? 1 : 0
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   // Get current filters from table state and URL
   const [currentFilters, setCurrentFilters] = useState<
@@ -59,6 +60,8 @@ export default function AplicacoesTable({
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/aplicacoes'
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

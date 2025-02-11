@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/platform/licencas/components/licencas-table/licencas-columns'
 import { filterFields } from '@/pages/platform/licencas/components/licencas-table/licencas-constants'
 import { LicencasFilterControls } from '@/pages/platform/licencas/components/licencas-table/licencas-filter-controls'
@@ -25,6 +26,7 @@ export function LicencasTable({
   const searchParams = new URLSearchParams(window.location.search)
   const clienteIdParam = searchParams.get('clienteId')
   const initialActiveFiltersCount = clienteIdParam ? 1 : 0
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -64,6 +66,8 @@ export function LicencasTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/licencas'
           enableSorting={true}
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

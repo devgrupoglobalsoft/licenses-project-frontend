@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-columns'
 import { filterFields } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-constants'
 import { PerfisFilterControls } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-filter-controls'
@@ -23,6 +24,7 @@ export function PerfisTable({
   const searchParams = new URLSearchParams(window.location.search)
   const perfilIdParam = searchParams.get('perfilId')
   const initialActiveFiltersCount = perfilIdParam ? 1 : 0
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -52,6 +54,8 @@ export function PerfisTable({
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/perfis/admin'
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

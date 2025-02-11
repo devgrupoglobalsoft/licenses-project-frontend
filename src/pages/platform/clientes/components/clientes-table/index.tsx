@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/platform/clientes/components/clientes-table/clientes-columns'
 import { filterFields } from '@/pages/platform/clientes/components/clientes-table/clientes-constants'
 import { ClientesFilterControls } from '@/pages/platform/clientes/components/clientes-table/clientes-filter-controls'
@@ -25,6 +26,7 @@ export default function ClientesTable({
   const searchParams = new URLSearchParams(window.location.search)
   const clienteIdParam = searchParams.get('clienteId')
   const initialActiveFiltersCount = clienteIdParam ? 1 : 0
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -64,6 +66,8 @@ export default function ClientesTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/clientes'
           enableSorting={true}
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

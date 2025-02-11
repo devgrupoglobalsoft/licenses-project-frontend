@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-columns'
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadoresFilterControls } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-filter-controls'
@@ -25,6 +26,7 @@ export default function UtilizadoresTable({
   const searchParams = new URLSearchParams(window.location.search)
   const utilizadorIdParam = searchParams.get('utilizadorId')
   const initialActiveFiltersCount = utilizadorIdParam ? 1 : 0
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -64,6 +66,8 @@ export default function UtilizadoresTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/utilizadores'
           enableSorting={true}
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

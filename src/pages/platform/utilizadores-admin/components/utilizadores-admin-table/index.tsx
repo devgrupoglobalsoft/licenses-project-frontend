@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { columns } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-columns'
 import { filterFields } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-constants'
 import { UtilizadoresAdminFilterControls } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-filter-controls'
@@ -23,6 +24,7 @@ export default function UtilizadoresAdminTable({
   const searchParams = new URLSearchParams(window.location.search)
   const utilizadorIdParam = searchParams.get('utilizadorId')
   const initialActiveFiltersCount = utilizadorIdParam ? 1 : 0
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -52,6 +54,8 @@ export default function UtilizadoresAdminTable({
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/utilizadores/admin'
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

@@ -23,6 +23,7 @@ export default function ModulosTable({
 }: TModulosTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const aplicacaoIdParam = searchParams.get('aplicacaoId')
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const [currentFilters, setCurrentFilters] = useState<
     Array<{ id: string; value: string }>
@@ -60,6 +61,8 @@ export default function ModulosTable({
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/modulos'
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>

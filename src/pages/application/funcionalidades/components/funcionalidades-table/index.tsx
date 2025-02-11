@@ -23,6 +23,7 @@ export default function FuncionalidadesTable({
 }: TFuncionalidadesTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const moduloIdParam = searchParams.get('moduloId')
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const [currentFilters, setCurrentFilters] = useState<
     Array<{ id: string; value: string }>
@@ -59,6 +60,8 @@ export default function FuncionalidadesTable({
           onPaginationChange={handlePaginationChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/funcionalidades'
+          selectedRows={selectedRows}
+          onRowSelectionChange={setSelectedRows}
         />
       )}
     </>
