@@ -38,7 +38,7 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
   },
   {
     accessorKey: 'ativo',
-    header: () => <div className='text-center'>Estado</div>,
+    header: 'Estado',
     sortKey: 'ativo',
     enableSorting: true,
     cell: ({ row }) => (
@@ -50,6 +50,9 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
         )}
       </div>
     ),
+    meta: {
+      align: 'center',
+    },
   },
   {
     accessorKey: 'areaId',

@@ -6,6 +6,10 @@ export type DataTableFilterField<TData> = {
   order?: number
 }
 
-export type DataTableColumnDef<T> = ColumnDef<T> & {
+export type DataTableColumnDef<TData> = ColumnDef<TData, any> & {
   sortKey?: string
+  meta?: {
+    align?: 'left' | 'center' | 'right'
+    hidden?: boolean
+  }
 }

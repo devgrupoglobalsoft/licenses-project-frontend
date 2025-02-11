@@ -280,13 +280,36 @@ export default function DataTable<TData, TValue>({
                       {headerGroup.headers.map((header) => (
                         <TableHead
                           key={header.id}
-                          className='h-12 font-semibold text-muted-foreground hover:text-foreground'
+                          className={cn(
+                            'h-12 font-semibold text-muted-foreground hover:text-foreground',
+                            (
+                              header.column
+                                .columnDef as DataTableColumnDef<TData>
+                            ).meta?.align === 'center' && 'text-center',
+                            (
+                              header.column
+                                .columnDef as DataTableColumnDef<TData>
+                            ).meta?.align === 'right' && 'text-right',
+                            (
+                              header.column
+                                .columnDef as DataTableColumnDef<TData>
+                            ).meta?.align === 'left' && 'text-left'
+                          )}
                         >
                           {header.isPlaceholder ? null : (
                             <div
                               {...{
                                 className: cn(
                                   'flex items-center gap-2',
+                                  (
+                                    header.column
+                                      .columnDef as DataTableColumnDef<TData>
+                                  ).meta?.align === 'center' &&
+                                    'justify-center',
+                                  (
+                                    header.column
+                                      .columnDef as DataTableColumnDef<TData>
+                                  ).meta?.align === 'right' && 'justify-end',
                                   header.column.getCanSort() &&
                                     'cursor-pointer select-none'
                                 ),
@@ -326,7 +349,23 @@ export default function DataTable<TData, TValue>({
                         data-state={row.getIsSelected() && 'selected'}
                       >
                         {row.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
+                          <TableCell
+                            key={cell.id}
+                            className={cn(
+                              (
+                                cell.column
+                                  .columnDef as DataTableColumnDef<TData>
+                              ).meta?.align === 'center' && 'text-center',
+                              (
+                                cell.column
+                                  .columnDef as DataTableColumnDef<TData>
+                              ).meta?.align === 'right' && 'text-right',
+                              (
+                                cell.column
+                                  .columnDef as DataTableColumnDef<TData>
+                              ).meta?.align === 'left' && 'text-left'
+                            )}
+                          >
                             {flexRender(
                               cell.column.columnDef.cell,
                               cell.getContext()
