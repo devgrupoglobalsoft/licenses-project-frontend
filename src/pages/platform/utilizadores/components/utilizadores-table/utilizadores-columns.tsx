@@ -10,25 +10,24 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
-      <div className='w-[32px]'>
-        <Checkbox
-          checked={table.getIsAllPageRowsSelected()}
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label='Selecionar todos'
-        />
-      </div>
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label='Selecionar todos'
+      />
     ),
     cell: ({ row }) => (
-      <div className='w-[32px]'>
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label='Selecionar linha'
-        />
-      </div>
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label='Selecionar linha'
+      />
     ),
     enableSorting: false,
     enableHiding: false,
+    meta: {
+      width: 'w-[4%]',
+    },
   },
   {
     accessorKey: 'nome',
@@ -117,5 +116,6 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]

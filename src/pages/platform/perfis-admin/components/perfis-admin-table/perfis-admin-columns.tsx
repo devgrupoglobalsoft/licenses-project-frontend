@@ -23,6 +23,9 @@ export const columns: ColumnDef<PerfilDTO>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+    meta: {
+      width: 'w-[4%]',
+    },
   },
   {
     accessorKey: 'nome',
@@ -35,7 +38,11 @@ export const columns: ColumnDef<PerfilDTO>[] = [
   },
   {
     accessorKey: 'ativo',
-    header: () => <div className='text-center'>Estado</div>,
+    header: 'Estado',
+    enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.ativo ? (
@@ -48,11 +55,12 @@ export const columns: ColumnDef<PerfilDTO>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]

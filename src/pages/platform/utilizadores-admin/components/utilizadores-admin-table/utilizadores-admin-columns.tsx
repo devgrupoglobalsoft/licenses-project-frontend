@@ -25,10 +25,17 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+    meta: {
+      width: 'w-[4%]',
+    },
   },
   {
     accessorKey: 'nome',
     header: 'Nome',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => (
       <div>
         {[row.original.firstName, row.original.lastName]
@@ -40,10 +47,18 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'email',
     header: 'Email',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
   },
   {
     accessorKey: 'roleId',
     header: 'Role',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => {
       const role = (row.original.roleId?.toLowerCase() ||
         'client') as keyof typeof roleLabelMap
@@ -58,6 +73,10 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'cliente.nome',
     header: 'Cliente',
+    enableSorting: true,
+    meta: {
+      align: 'left',
+    },
     cell: ({ row }) => (
       <div
         className='truncate max-w-[200px]'
@@ -69,7 +88,11 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   },
   {
     accessorKey: 'ativo',
-    header: () => <div className='text-center'>Estado</div>,
+    header: 'Estado',
+    enableSorting: true,
+    meta: {
+      align: 'center',
+    },
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.isActive ? (
@@ -82,11 +105,12 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   },
   {
     id: 'actions',
-    header: () => <div className='text-right'></div>,
+    header: '',
     cell: ({ row }) => (
       <div className='flex items-center justify-end'>
         <CellAction data={row.original} />
       </div>
     ),
+    enableSorting: false,
   },
 ]
