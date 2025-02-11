@@ -12,6 +12,7 @@ type TUtilizadoresTableProps = {
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
+  onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
 export default function UtilizadoresTable({
@@ -19,6 +20,7 @@ export default function UtilizadoresTable({
   pageCount,
   onFiltersChange,
   onPaginationChange,
+  onSortingChange,
 }: TUtilizadoresTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const utilizadorIdParam = searchParams.get('utilizadorId')
@@ -38,6 +40,14 @@ export default function UtilizadoresTable({
     }
   }
 
+  const handleSortingChange = (
+    sorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    if (onSortingChange) {
+      onSortingChange(sorting)
+    }
+  }
+
   return (
     <>
       <UtilizadoresTableActions />
@@ -50,8 +60,10 @@ export default function UtilizadoresTable({
           FilterControls={UtilizadoresFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/utilizadores'
+          enableSorting={true}
         />
       )}
     </>

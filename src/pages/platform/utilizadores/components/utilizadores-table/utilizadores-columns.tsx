@@ -5,8 +5,9 @@ import { Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { roleVariants, roleLabelMap } from '@/constants/roles'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<UtilizadorDTO>[] = [
+export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -29,6 +30,8 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
+    enableSorting: true,
     cell: ({ row }) => (
       <div>
         {[row.original.firstName, row.original.lastName]
@@ -40,10 +43,14 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'email',
     header: 'Email',
+    sortKey: 'email',
+    enableSorting: true,
   },
   {
     accessorKey: 'roleId',
     header: 'Role',
+    sortKey: 'roleId',
+    enableSorting: true,
     cell: ({ row }) => {
       const role = (row.original.roleId?.toLowerCase() ||
         'client') as keyof typeof roleLabelMap
@@ -58,6 +65,8 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'clienteId',
     header: 'Cliente',
+    sortKey: 'cliente.nome',
+    enableSorting: true,
     cell: ({ row }) => (
       <div
         className='truncate max-w-[200px]'
@@ -70,6 +79,8 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
+    sortKey: 'ativo',
+    enableSorting: true,
     cell: ({ row }) => (
       <div className='flex items-center justify-center'>
         {row.original.isActive ? (
