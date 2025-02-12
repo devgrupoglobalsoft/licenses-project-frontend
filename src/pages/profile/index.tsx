@@ -12,7 +12,7 @@ export default function ProfilePage() {
 
   if (isProfileLoading) {
     return (
-      <div className='container max-w-6xl space-y-6 py-10'>
+      <div className='container max-w-7xl space-y-6 py-10'>
         <div className='space-y-2'>
           <Skeleton className='h-8 w-[200px]' />
           <Skeleton className='h-4 w-[300px]' />
@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
   return (
     <ScrollArea className='h-full'>
-      <div className='container max-w-6xl space-y-6 p-10'>
+      <div className='container max-w-7xl space-y-6 p-10'>
         <ProfileHeader profileData={profileData} />
 
         <Tabs defaultValue='general' className='space-y-6'>
