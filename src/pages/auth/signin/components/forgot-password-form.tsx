@@ -54,7 +54,10 @@ export default function ForgotPasswordForm({
       } else {
         toast({
           title: 'Erro',
-          description: getErrorMessage(response, 'Erro ao recuperar senha'),
+          description: getErrorMessage(
+            response,
+            'Erro ao recuperar palavra-passe'
+          ),
           variant: 'destructive',
         })
       }

@@ -45,13 +45,13 @@ export default function () {
           <div className='flex flex-col space-y-2 text-center'>
             <h1 className='text-2xl font-semibold tracking-tight'>
               {showForgotPassword
-                ? 'Recuperar senha'
+                ? 'Recuperar palavra-passe'
                 : 'Faça login para continuar'}
             </h1>
             <p className='text-sm text-muted-foreground'>
               {showForgotPassword
-                ? 'Introduza o seu email para recuperar a senha'
-                : 'Introduza o seu email e senha para continuar'}
+                ? 'Introduza o seu email para recuperar a palavra-passe'
+                : 'Introduza o seu email e palavra-passe para continuar'}
             </p>
           </div>
 
@@ -64,7 +64,7 @@ export default function () {
                 onClick={() => setShowForgotPassword(true)}
                 className='text-sm text-muted-foreground hover:text-primary underline underline-offset-4'
               >
-                Esqueceu sua senha?
+                Esqueceu a sua palavra-passe?
               </button>
             </>
           )}

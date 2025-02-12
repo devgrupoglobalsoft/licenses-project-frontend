@@ -23,12 +23,12 @@ const formSchema = z
     email: z.string().email({ message: 'Email inválido' }),
     password: z
       .string()
-      .min(8, { message: 'A senha deve ter pelo menos 8 caracteres' }),
+      .min(8, { message: 'A palavra-passe deve ter pelo menos 8 caracteres' }),
     confirmPassword: z.string(),
     token: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'As senhas não coincidem',
+    message: 'As palavras-passe não coincidem',
     path: ['confirmPassword'],
   })
 
@@ -62,14 +62,17 @@ export default function ResetPasswordForm() {
       if (response.info.succeeded) {
         toast({
           title: 'Sucesso',
-          description: 'Senha alterada com sucesso',
+          description: 'Palavra-passe alterada com sucesso',
           variant: 'success',
         })
         navigate('/login')
       } else {
         toast({
           title: 'Erro',
-          description: getErrorMessage(response, 'Erro ao alterar senha'),
+          description: getErrorMessage(
+            response,
+            'Erro ao alterar palavra-passe'
+          ),
           variant: 'destructive',
         })
       }
@@ -111,12 +114,12 @@ export default function ResetPasswordForm() {
           name='password'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nova senha</FormLabel>
+              <FormLabel>Nova palavra-passe</FormLabel>
               <FormControl>
                 <div className='relative'>
                   <Input
                     type={showPassword ? 'text' : 'password'}
-                    placeholder='Introduza a nova senha'
+                    placeholder='Introduza a nova palavra-passe'
                     disabled={loading}
                     {...field}
                   />
@@ -143,12 +146,12 @@ export default function ResetPasswordForm() {
           name='confirmPassword'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmar senha</FormLabel>
+              <FormLabel>Confirmar palavra-passe</FormLabel>
               <FormControl>
                 <div className='relative'>
                   <Input
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder='Confirme a nova senha'
+                    placeholder='Confirme a nova palavra-passe'
                     disabled={loading}
                     {...field}
                   />
@@ -171,7 +174,7 @@ export default function ResetPasswordForm() {
         />
 
         <Button disabled={loading} className='w-full' type='submit'>
-          {loading ? 'Alterando senha...' : 'Alterar senha'}
+          {loading ? 'Alterando palavra-passe...' : 'Alterar palavra-passe'}
         </Button>
       </form>
     </Form>

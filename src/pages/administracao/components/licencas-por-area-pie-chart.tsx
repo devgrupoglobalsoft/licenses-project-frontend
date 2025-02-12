@@ -33,7 +33,10 @@ export function LicencasPorAreaPieChart() {
 
   const totalLicencas = React.useMemo(() => {
     if (!licencas.length) return 0
-    return licencas.reduce((acc) => acc + 1, 0)
+    const thirtyDaysAgo = subDays(new Date(), 30)
+    return licencas.filter(
+      (lic) => lic.dataInicio && new Date(lic.dataInicio) >= thirtyDaysAgo
+    ).length
   }, [licencas])
 
   if (isLoading) {

@@ -18,6 +18,10 @@ export default function UserNav() {
   const name = useAuthStore((state) => state.name)
   const email = useAuthStore((state) => state.email)
 
+  const initials = name
+    ? `${name.split(' ')[0][0]}${name.split(' ')[1]?.[0] || ''}`
+    : ''
+
   const handleLogout = () => {
     clearAuth()
     router.push('/login')
@@ -29,12 +33,15 @@ export default function UserNav() {
         <Button variant='ghost' className='relative h-14 w-14 rounded-full'>
           <Avatar className='h-14 w-14'>
             <AvatarImage
-              src={
-                'https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'
-              }
+              src=''
               alt={name || ''}
+              className='aspect-square h-full w-full object-cover'
             />
-            <AvatarFallback>{name?.charAt(0) || 'U'}</AvatarFallback>
+            <AvatarFallback className='flex h-full w-full items-center justify-center'>
+              <div className='flex h-full w-full items-center justify-center rounded-full bg-primary text-primary-foreground text-md font-semibold'>
+                {initials}
+              </div>
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
