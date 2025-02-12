@@ -54,98 +54,106 @@ export default function PasswordForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
-        <FormField
-          control={form.control}
-          name='password'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Palavra-passe Atual</FormLabel>
-              <FormControl>
-                <div className='relative'>
-                  <Input
-                    type={showCurrentPassword ? 'text' : 'password'}
-                    {...field}
-                    className='pr-10'
-                  />
-                  <button
-                    type='button'
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    className='absolute right-3 top-1/2 -translate-y-1/2'
-                  >
-                    {showCurrentPassword ? (
-                      <EyeOff className='h-4 w-4' />
-                    ) : (
-                      <Eye className='h-4 w-4' />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Palavra-passe Atual</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type={showCurrentPassword ? 'text' : 'password'}
+                      {...field}
+                      className='pr-10'
+                    />
+                    <button
+                      type='button'
+                      onClick={() =>
+                        setShowCurrentPassword(!showCurrentPassword)
+                      }
+                      className='absolute right-3 top-1/2 -translate-y-1/2'
+                    >
+                      {showCurrentPassword ? (
+                        <EyeOff className='h-4 w-4' />
+                      ) : (
+                        <Eye className='h-4 w-4' />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        <FormField
-          control={form.control}
-          name='newPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nova Palavra-passe</FormLabel>
-              <FormControl>
-                <div className='relative'>
-                  <Input
-                    type={showNewPassword ? 'text' : 'password'}
-                    {...field}
-                    className='pr-10'
-                  />
-                  <button
-                    type='button'
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    className='absolute right-3 top-1/2 -translate-y-1/2'
-                  >
-                    {showNewPassword ? (
-                      <EyeOff className='h-4 w-4' />
-                    ) : (
-                      <Eye className='h-4 w-4' />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+          <FormField
+            control={form.control}
+            name='newPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nova Palavra-passe</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type={showNewPassword ? 'text' : 'password'}
+                      {...field}
+                      className='pr-10'
+                    />
+                    <button
+                      type='button'
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className='absolute right-3 top-1/2 -translate-y-1/2'
+                    >
+                      {showNewPassword ? (
+                        <EyeOff className='h-4 w-4' />
+                      ) : (
+                        <Eye className='h-4 w-4' />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name='confirmNewPassword'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirmar Nova Palavra-passe</FormLabel>
-              <FormControl>
-                <div className='relative'>
-                  <Input
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    {...field}
-                    className='pr-10'
-                  />
-                  <button
-                    type='button'
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className='absolute right-3 top-1/2 -translate-y-1/2'
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className='h-4 w-4' />
-                    ) : (
-                      <Eye className='h-4 w-4' />
-                    )}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name='confirmNewPassword'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirmar Nova Palavra-passe</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      {...field}
+                      className='pr-10'
+                    />
+                    <button
+                      type='button'
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className='absolute right-3 top-1/2 -translate-y-1/2'
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className='h-4 w-4' />
+                      ) : (
+                        <Eye className='h-4 w-4' />
+                      )}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <div className='flex justify-end'>
           <Button type='submit' disabled={changePasswordMutation.isPending}>
