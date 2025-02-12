@@ -1,4 +1,3 @@
-import LicencasCriadasTerminadasChart from '@/pages/administracao//components/licencas-criadas-terminadas-chart'
 import AreasComMaisLicencas from '@/pages/administracao/components/areas-com-mais-licencas-chart'
 import LicencasAExpirarChart from '@/pages/administracao/components/licencas-a-expirar-chart'
 import { LicencasPorAreaPieChart } from '@/pages/administracao/components/licencas-por-area-pie-chart'
@@ -29,7 +28,7 @@ export default function AdministratorDashboard() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value='overview' className='space-y-4'>
-            <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-6'>
+            <div className='grid grid-cols-2 gap-4 lg:grid-cols-6'>
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
