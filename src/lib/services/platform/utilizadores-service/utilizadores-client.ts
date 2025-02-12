@@ -273,4 +273,86 @@ export class UtilizadoresClient extends BaseApiClient {
       }
     })
   }
+
+  public async changePassword(data: {
+    password: string
+    newPassword: string
+    confirmNewPassword: string
+  }): Promise<ResponseApi<GSResponse<string>>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.putRequest<
+          typeof data,
+          GSResponse<string>
+        >('/api/identity/change-password', data)
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new UtilizadorError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        if (error instanceof BaseApiError && error.data) {
+          return {
+            info: error.data as GSResponse<string>,
+            status: error.statusCode || 400,
+            statusText: error.message,
+          }
+        }
+        throw error
+      }
+    })
+  }
+
+  public async getProfile(): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
+    const cacheKey = this.getCacheKey('GET', '/api/identity/profile')
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<UtilizadorDTO>
+          >('/api/identity/profile')
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new UtilizadorError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new UtilizadorError(
+            'Falha ao obter perfil do utilizador',
+            undefined,
+            error
+          )
+        }
+      })
+    )
+  }
+
+  public async updateProfile(data: {
+    firstName: string
+    lastName: string
+    phoneNumber?: string
+    email: string
+  }): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.putRequest<
+          typeof data,
+          GSResponse<UtilizadorDTO>
+        >('/api/identity/profile', data)
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new UtilizadorError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new UtilizadorError('Falha ao atualizar perfil', undefined, error)
+      }
+    })
+  }
 }

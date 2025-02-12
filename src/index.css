@@ -165,3 +165,25 @@
 .ant-tree-checkbox-input:focus + .ant-tree-checkbox-inner {
   @apply outline-none;
 }
+
+.react-tel-input {
+  width: 100% !important;
+}
+
+.react-tel-input .form-control {
+  width: 100% !important;
+  height: 50px !important;
+  padding-left: 48px !important;
+}
+
+.react-tel-input .flag-dropdown {
+  background-color: transparent;
+  border: 1px solid hsl(var(--input));
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+}
+
+.react-tel-input .selected-flag {
+  height: 48px;
+  border-radius: 6px 0 0 6px;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -8,7 +8,12 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png'
 import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, useMapEvents, Marker } from 'react-leaflet'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 import { useAuthStore } from '@/stores/auth-store'
+import { cn } from '@/lib/utils'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -24,6 +29,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  useChangePassword,
+  useUpdateProfile,
+} from '../utilizadores/queries/utilizadores-mutations'
+import { useGetProfile } from '../utilizadores/queries/utilizadores-queries'
 
 const profileFormSchema = z.object({
   firstName: z
@@ -34,9 +44,6 @@ const profileFormSchema = z.object({
     .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
   email: z.string().email({ message: 'Email inválido' }),
   phoneNumber: z.string().optional(),
-  jobTitle: z.string().optional(),
-  department: z.string().optional(),
-  location: z.string().optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -45,13 +52,45 @@ const passwordFormSchema = z
   .object({
     currentPassword: z
       .string()
-      .min(1, { message: 'Password atual é obrigatória' }),
+      .min(6, { message: 'A password deve ter pelo menos 6 caracteres' })
+      .regex(/[A-Z]/, {
+        message: 'A password deve conter pelo menos uma letra maiúscula',
+      })
+      .regex(/[a-z]/, {
+        message: 'A password deve conter pelo menos uma letra minúscula',
+      })
+      .regex(/[0-9]/, {
+        message: 'A password deve conter pelo menos um dígito numérico',
+      })
+      .regex(/[\W_]/, {
+        message:
+          'A password deve conter pelo menos um caráter não alfanumérico',
+      })
+      .regex(/^[^\s]+$/, {
+        message: 'A password não deve conter espaços',
+      }),
     newPassword: z
       .string()
-      .min(8, { message: 'A nova password deve ter pelo menos 8 caracteres' }),
+      .min(6, { message: 'A password deve ter pelo menos 6 caracteres' })
+      .regex(/[A-Z]/, {
+        message: 'A password deve conter pelo menos uma letra maiúscula',
+      })
+      .regex(/[a-z]/, {
+        message: 'A password deve conter pelo menos uma letra minúscula',
+      })
+      .regex(/[0-9]/, {
+        message: 'A password deve conter pelo menos um dígito numérico',
+      })
+      .regex(/[\W_]/, {
+        message:
+          'A password deve conter pelo menos um caráter não alfanumérico',
+      })
+      .regex(/^[^\s]+$/, {
+        message: 'A password não deve conter espaços',
+      }),
     confirmPassword: z
       .string()
-      .min(1, { message: 'Confirmação de password é obrigatória' }),
+      .min(6, { message: 'A password deve ter pelo menos 6 caracteres' }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: 'As passwords não coincidem',
@@ -110,21 +149,18 @@ function LocationPicker({
 
 export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false)
-  const { name, email } = useAuthStore()
-
-  const initialData = {
-    firstName: name?.split(' ')[0] || '',
-    lastName: name?.split(' ')[1] || '',
-    email: email || '',
-    phoneNumber: '+351 912 345 678',
-    jobTitle: 'Software Engineer',
-    department: 'Engineering',
-    location: 'Lisboa, Portugal',
-  }
+  const { data: profileData, isLoading: isProfileLoading } = useGetProfile()
+  const changePassword = useChangePassword()
+  const updateProfile = useUpdateProfile()
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+    },
   })
 
   const passwordForm = useForm<PasswordFormValues>({
@@ -136,33 +172,62 @@ export default function ProfilePage() {
     },
   })
 
+  // Update form when profile data is loaded
+  useEffect(() => {
+    if (profileData?.info?.data) {
+      const { firstName, lastName, email, phoneNumber } = profileData.info.data
+      form.reset({
+        firstName,
+        lastName,
+        email,
+        phoneNumber: phoneNumber || '',
+      })
+    }
+  }, [profileData, form])
+
   const onSubmit = async (data: ProfileFormValues) => {
-    setIsLoading(true)
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      toast.success('Perfil atualizado com sucesso!')
+      setIsLoading(true)
+      const response = await updateProfile.mutateAsync(data)
+
+      if (response.info.succeeded) {
+        toast.success('Perfil atualizado com sucesso!')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao atualizar perfil'))
+      }
     } catch (error) {
-      toast.error('Erro ao atualizar perfil')
+      console.error('Error submitting form:', error)
+      toast.error(handleApiError(error, 'Erro ao atualizar perfil'))
     } finally {
       setIsLoading(false)
     }
   }
 
-  const onPasswordSubmit = async (data: PasswordFormValues) => {
-    setIsLoading(true)
+  const onPasswordSubmit = async (data: z.infer<typeof passwordFormSchema>) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      toast.success('Password atualizada com sucesso!')
-      passwordForm.reset()
+      setIsLoading(true)
+      const response = await changePassword.mutateAsync({
+        password: data.currentPassword,
+        newPassword: data.newPassword,
+        confirmNewPassword: data.confirmPassword,
+      })
+
+      if (response.info.succeeded) {
+        toast.success('Password alterada com sucesso')
+        passwordForm.reset()
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao alterar password'))
+      }
     } catch (error) {
-      toast.error('Erro ao atualizar password')
+      console.error(error)
+      toast.error(handleApiError(error, 'Algo correu mal'))
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleLocationSelect = (location: string) => {
-    form.setValue('location', location)
+    // form.setValue('location', location)
     toast.success('Localização atualizada')
   }
 
@@ -170,17 +235,21 @@ export default function ProfilePage() {
     <div className='container max-w-4xl py-10'>
       <div className='mb-8 flex items-center gap-8'>
         <Avatar className='h-24 w-24'>
-          <AvatarImage
-            src='https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001882.png'
-            alt={name || ''}
-          />
-          <AvatarFallback>{name?.charAt(0) || 'U'}</AvatarFallback>
+          <AvatarImage src='' alt={profileData?.info?.data?.firstName || ''} />
+          <AvatarFallback className='bg-primary text-primary-foreground text-3xl font-semibold'>
+            {profileData?.info?.data
+              ? `${profileData.info.data.firstName.charAt(0)}${profileData.info.data.lastName.charAt(0)}`
+              : 'U'}
+          </AvatarFallback>
         </Avatar>
         <div>
-          <h1 className='text-2xl font-bold'>{name}</h1>
-          <p className='text-muted-foreground'>{initialData.jobTitle}</p>
-          <p className='text-sm text-muted-foreground'>
-            {initialData.department} • {initialData.location}
+          <h1 className='text-2xl font-bold'>
+            {profileData?.info?.data
+              ? `${profileData.info.data.firstName} ${profileData.info.data.lastName}`
+              : 'Loading...'}
+          </h1>
+          <p className='text-muted-foreground'>
+            {profileData?.info?.data?.email}
           </p>
         </div>
       </div>
@@ -199,122 +268,100 @@ export default function ProfilePage() {
               <CardTitle>Informações do Perfil</CardTitle>
             </CardHeader>
             <CardContent>
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className='space-y-6'
-                >
-                  <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                    <FormField
-                      control={form.control}
-                      name='firstName'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nome</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+              {isProfileLoading ? (
+                <div>A carregar...</div>
+              ) : (
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className='space-y-6'
+                  >
+                    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                      <FormField
+                        control={form.control}
+                        name='firstName'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Nome</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder='Introduza o nome'
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name='lastName'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Apelido</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                      <FormField
+                        control={form.control}
+                        name='lastName'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Apelido</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                    <FormField
-                      control={form.control}
-                      name='email'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input type='email' {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+                      <FormField
+                        control={form.control}
+                        name='email'
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input type='email' {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name='phoneNumber'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Telefone</FormLabel>
-                          <FormControl>
-                            <Input type='tel' {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                      <FormField
+                        control={form.control}
+                        name='phoneNumber'
+                        render={({ field: { value, onChange, ...field } }) => (
+                          <FormItem>
+                            <FormLabel>Telefone</FormLabel>
+                            <FormControl>
+                              <PhoneInput
+                                country={'pt'}
+                                value={value}
+                                onChange={(phone) => onChange(phone)}
+                                inputClass={cn(
+                                  'flex h-[50px] w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+                                  'px-4 shadow-inner'
+                                )}
+                                containerClass='w-full'
+                                buttonClass={cn(
+                                  'absolute top-0 bottom-0 left-0 border border-input rounded-l-md bg-transparent hover:bg-accent',
+                                  'flex items-center justify-center px-3'
+                                )}
+                                dropdownClass='bg-background border-input text-foreground'
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
 
-                  <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-                    <FormField
-                      control={form.control}
-                      name='jobTitle'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Cargo</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name='department'
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Departamento</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name='location'
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Localização</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className='flex justify-end'>
-                    <Button type='submit' disabled={isLoading}>
-                      {isLoading ? 'A guardar...' : 'Guardar alterações'}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
+                    <div className='flex justify-end'>
+                      <Button type='submit' disabled={isLoading}>
+                        {isLoading ? 'A guardar...' : 'Guardar alterações'}
+                      </Button>
+                    </div>
+                  </form>
+                </Form>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

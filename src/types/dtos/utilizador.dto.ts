@@ -31,6 +31,7 @@ export interface UtilizadorDTO {
   password?: string
   perfisUtilizador?: string[]
   roleId: string
+  phoneNumber?: string
 }
 
 // Helper functions

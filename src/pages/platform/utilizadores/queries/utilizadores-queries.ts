@@ -97,3 +97,10 @@ export const useGetUtilizadoresCount = () => {
     },
   })
 }
+
+export const useGetProfile = () => {
+  return useQuery({
+    queryKey: ['profile'],
+    queryFn: () => UtilizadoresService('profile').getProfile(),
+  })
+}
