@@ -247,4 +247,30 @@ export class UtilizadoresClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleUtilizadores(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          string[],
+          GSGenericResponse
+        >('/api/identity/users', ids)
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new UtilizadorError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new UtilizadorError(
+          'Falha ao apagar múltiplos utilizadores',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

@@ -52,7 +52,10 @@ export default function UtilizadoresTable({
 
   return (
     <>
-      <UtilizadoresTableActions />
+      <UtilizadoresTableActions
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+      />
       {utilizadores && (
         <DataTable
           columns={columns}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
@@ -107,6 +107,10 @@ export default function DataTable<TData, TValue>({
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>(
     selectedRows || []
   )
+
+  useEffect(() => {
+    setSelectedRowIds(selectedRows || [])
+  }, [selectedRows])
 
   const handlePaginationChange = (
     newPageIndex: number,
@@ -243,13 +247,16 @@ export default function DataTable<TData, TValue>({
     <div className='flex flex-col space-y-4'>
       <div className='flex items-center gap-2'>
         <Button
-          variant='outline'
+          variant='default'
           onClick={() => setIsFilterModalOpen(true)}
           className='w-fit'
         >
           Filtros
           {getActiveFiltersCount() > 0 && (
-            <Badge variant='secondary' className='ml-2'>
+            <Badge
+              variant='destructive'
+              className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs'
+            >
               {getActiveFiltersCount()}
             </Badge>
           )}

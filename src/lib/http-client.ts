@@ -263,6 +263,29 @@ export class HttpClient {
       else throw handleError(error)
     }
   }
+
+  public deleteRequestWithBody = async <TBody, TResponse>(
+    url: string,
+    body: TBody
+  ): Promise<ResponseApi<TResponse>> => {
+    try {
+      const response = await this.withTokenRenewal(() =>
+        axios.delete(`${apiUrl}${url}`, {
+          headers: this.getHeaders(),
+          data: body,
+        })
+      )
+
+      return {
+        info: response.data,
+        status: response.status,
+        statusText: response.statusText,
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) throw handleErrorAxios(error)
+      else throw handleError(error)
+    }
+  }
 }
 
 export const createHttpClient = (idFuncionalidade: string) =>

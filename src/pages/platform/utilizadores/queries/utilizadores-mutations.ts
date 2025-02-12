@@ -43,3 +43,17 @@ export const useUpdateUtilizador = () => {
     },
   })
 }
+
+export const useDeleteMultipleUtilizadores = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ids: string[]) =>
+      UtilizadoresService('utilizadores').deleteMultipleUtilizadores(ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
+    },
+  })
+}
