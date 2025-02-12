@@ -11,6 +11,7 @@ import NotFound from '@/pages/not-found'
 import ClientesPage from '@/pages/platform/clientes'
 import LicencasPage from '@/pages/platform/licencas'
 import PerfisAdminPage from '@/pages/platform/perfis-admin'
+import ProfilePage from '@/pages/platform/profile/page'
 import UtilizadoresPage from '@/pages/platform/utilizadores'
 import UtilizadoresAdminPage from '@/pages/platform/utilizadores-admin'
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
@@ -153,6 +154,10 @@ export default function AppRouter() {
               <UtilizadoresAdminPage />
             </RoleProtectedRoute>
           ),
+        },
+        {
+          path: 'platform/profile',
+          element: <ProfilePage />,
         },
       ],
     },
