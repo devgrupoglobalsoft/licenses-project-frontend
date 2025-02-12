@@ -2,6 +2,7 @@ import LicencasCriadasTerminadasChart from '@/pages/administracao//components/li
 import AreasComMaisLicencas from '@/pages/administracao/components/areas-com-mais-licencas-chart'
 import LicencasAExpirarChart from '@/pages/administracao/components/licencas-a-expirar-chart'
 import { LicencasPorAreaPieChart } from '@/pages/administracao/components/licencas-por-area-pie-chart'
+import LicencasUsageChart from '@/pages/administracao/components/licencas-usage-chart'
 import { useGetAdministracaoCounts } from '@/pages/administracao/queries/administracao-queries'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -86,9 +87,14 @@ export default function AdministratorDashboard() {
                 <LicencasAExpirarChart />
               </Card>
             </div>
-            <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-2 lg:grid-cols-12'>
+            {/* <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-2 lg:grid-cols-12'>
               <Card className='col-span-12'>
                 <LicencasCriadasTerminadasChart />
+              </Card>
+            </div> */}
+            <div className='grid grid-cols-1 gap-4 pb-4 md:grid-cols-2 lg:grid-cols-12'>
+              <Card className='col-span-4'>
+                <LicencasUsageChart />
               </Card>
             </div>
           </TabsContent>
