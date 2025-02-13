@@ -81,7 +81,7 @@ export default function LicencasPage() {
       <LicencasTable
         licencas={licencas}
         page={page}
-        totalLicencas={totalLicencas}
+        total={totalLicencas}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

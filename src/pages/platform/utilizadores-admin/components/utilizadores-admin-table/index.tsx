@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TUtilizadoresAdminTableProps = {
   utilizadores: UtilizadorDTO[]
   page: number
-  totalUtilizadores: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -18,6 +18,7 @@ type TUtilizadoresAdminTableProps = {
 export default function UtilizadoresAdminTable({
   utilizadores,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
 }: TUtilizadoresAdminTableProps) {
@@ -40,6 +41,10 @@ export default function UtilizadoresAdminTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <UtilizadoresAdminTableActions />
@@ -55,7 +60,8 @@ export default function UtilizadoresAdminTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/utilizadores/admin'
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
+          totalRows={total}
         />
       )}
     </>

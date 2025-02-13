@@ -71,6 +71,7 @@ type DataTableProps<TData, TValue> = {
   onRowSelectionChange?: (selectedRows: string[]) => void
   printOptions?: PrintOption[]
   onAdd?: () => void
+  totalRows?: number
 }
 
 // Add these translations
@@ -104,6 +105,7 @@ export default function DataTable<TData, TValue>({
   onRowSelectionChange,
   printOptions,
   onAdd,
+  totalRows,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
@@ -115,13 +117,6 @@ export default function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const navigate = useNavigate()
-  const [selectedRowIds, setSelectedRowIds] = useState<string[]>(
-    selectedRows || []
-  )
-
-  useEffect(() => {
-    setSelectedRowIds(selectedRows || [])
-  }, [selectedRows])
 
   useEffect(() => {
     if (hiddenColumns) {
@@ -174,15 +169,6 @@ export default function DataTable<TData, TValue>({
     setIsFilterModalOpen(false)
   }
 
-  const handleRowSelectionChange = (rowId: string, checked: boolean) => {
-    const newSelectedRows = checked
-      ? [...selectedRowIds, rowId]
-      : selectedRowIds.filter((id) => id !== rowId)
-
-    setSelectedRowIds(newSelectedRows)
-    onRowSelectionChange?.(newSelectedRows)
-  }
-
   const table = useReactTable({
     data,
     columns,
@@ -192,7 +178,7 @@ export default function DataTable<TData, TValue>({
       columnFilters: pendingColumnFilters,
       columnVisibility,
       sorting,
-      rowSelection: selectedRowIds.reduce(
+      rowSelection: selectedRows?.reduce(
         (acc, id) => ({
           ...acc,
           [id]: true,
@@ -205,11 +191,11 @@ export default function DataTable<TData, TValue>({
     enableRowSelection: true,
     onRowSelectionChange: (updater) => {
       if (typeof updater === 'function') {
-        const newSelection = updater(table.getState().rowSelection)
+        const currentSelection = table.getState().rowSelection
+        const newSelection = updater(currentSelection)
         const selectedIds = Object.entries(newSelection)
           .filter(([_, selected]) => selected)
           .map(([id]) => id)
-        setSelectedRowIds(selectedIds)
         onRowSelectionChange?.(selectedIds)
       }
     },
@@ -412,8 +398,8 @@ export default function DataTable<TData, TValue>({
           <div className='flex flex-col items-center justify-end gap-2 space-x-2 py-4 sm:flex-row'>
             <div className='flex w-full items-center justify-between'>
               <div className='flex-1 text-sm text-muted-foreground'>
-                {table.getFilteredSelectedRowModel().rows.length}{' '}
-                {ptPTTranslations.of} {table.getFilteredRowModel().rows.length}{' '}
+                {selectedRows?.length || 0} {ptPTTranslations.of}{' '}
+                {totalRows || table.getFilteredRowModel().rows.length}{' '}
                 {ptPTTranslations.rowsSelected}
               </div>
               <div className='flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8'>

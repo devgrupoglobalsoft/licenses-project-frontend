@@ -83,7 +83,7 @@ export default function AreasPage() {
       <AreasTable
         areas={areas}
         page={page}
-        totalAreas={totalAreas}
+        total={totalAreas}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

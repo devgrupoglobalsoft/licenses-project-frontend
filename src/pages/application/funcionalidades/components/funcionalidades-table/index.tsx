@@ -11,7 +11,7 @@ import DataTable from '@/components/shared/data-table'
 type TFuncionalidadesTableProps = {
   funcionalidades: FuncionalidadeDTO[]
   page: number
-  totalFuncionalidades: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -21,6 +21,7 @@ type TFuncionalidadesTableProps = {
 export default function FuncionalidadesTable({
   funcionalidades,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -55,6 +56,10 @@ export default function FuncionalidadesTable({
     if (onSortingChange) {
       onSortingChange(sorting)
     }
+  }
+
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
   }
 
   const printOptions = [
@@ -96,10 +101,11 @@ export default function FuncionalidadesTable({
             initialActiveFiltersCount={initialActiveFiltersCount}
             baseRoute='/administracao/funcionalidades'
             selectedRows={selectedRows}
-            onRowSelectionChange={setSelectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
             enableSorting={true}
             printOptions={printOptions}
             onAdd={() => setIsCreateModalOpen(true)}
+            totalRows={total}
           />
 
           <EnhancedModal

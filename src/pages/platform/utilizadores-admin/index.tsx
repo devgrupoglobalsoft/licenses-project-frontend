@@ -76,7 +76,7 @@ export default function UtilizadoresAdminPage() {
       <UtilizadoresAdminTable
         utilizadores={utilizadores}
         page={page}
-        totalUtilizadores={totalUtilizadores}
+        total={totalUtilizadores}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

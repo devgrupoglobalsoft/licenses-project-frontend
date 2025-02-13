@@ -84,7 +84,7 @@ export default function ModulosPage() {
       <ModulosTable
         modulos={modulos}
         page={page}
-        totalModulos={totalModulos}
+        total={totalModulos}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

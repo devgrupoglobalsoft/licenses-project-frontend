@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TAreasTableProps = {
   areas: AreaDTO[]
   page: number
-  totalAreas: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -19,6 +19,7 @@ type TAreasTableProps = {
 export default function AreasTable({
   areas,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -47,6 +48,10 @@ export default function AreasTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <AreaTableActions />
@@ -55,13 +60,14 @@ export default function AreasTable({
           columns={columns}
           data={areas}
           pageCount={pageCount}
+          totalRows={total}
           filterFields={filterFields}
           FilterControls={AreasFilterControls}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
           onSortingChange={handleSortingChange}
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
           enableSorting={true}
         />
       )}

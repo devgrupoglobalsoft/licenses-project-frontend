@@ -81,7 +81,7 @@ export default function FuncionalidadesPage() {
       <FuncionalidadesTable
         funcionalidades={funcionalidades}
         page={page}
-        totalFuncionalidades={totalFuncionalidades}
+        total={totalFuncionalidades}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

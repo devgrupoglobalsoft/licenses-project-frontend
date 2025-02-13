@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TModulosTableProps = {
   modulos: ModuloDTO[]
   page: number
-  totalModulos: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -19,6 +19,7 @@ type TModulosTableProps = {
 export default function ModulosTable({
   modulos,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -54,6 +55,10 @@ export default function ModulosTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <ModulosTableActions currentFilters={currentFilters} />
@@ -70,8 +75,9 @@ export default function ModulosTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/modulos'
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
           enableSorting={true}
+          totalRows={total}
         />
       )}
     </>

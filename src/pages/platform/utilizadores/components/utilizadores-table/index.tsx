@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TUtilizadoresTableProps = {
   utilizadores: UtilizadorDTO[]
   page: number
-  totalUtilizadores: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -19,6 +19,7 @@ type TUtilizadoresTableProps = {
 export default function UtilizadoresTable({
   utilizadores,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -50,6 +51,10 @@ export default function UtilizadoresTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <UtilizadoresTableActions
@@ -70,7 +75,8 @@ export default function UtilizadoresTable({
           baseRoute='/administracao/utilizadores'
           enableSorting={true}
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
+          totalRows={total}
         />
       )}
     </>

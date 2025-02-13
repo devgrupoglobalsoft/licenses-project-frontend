@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TLicencasTableProps = {
   licencas: LicencaDTO[]
   page: number
-  totalLicencas: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -19,6 +19,7 @@ type TLicencasTableProps = {
 export function LicencasTable({
   licencas,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -50,6 +51,10 @@ export function LicencasTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <LicencasTableActions />
@@ -67,7 +72,8 @@ export function LicencasTable({
           baseRoute='/administracao/licencas'
           enableSorting={true}
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
+          totalRows={total}
         />
       )}
     </>

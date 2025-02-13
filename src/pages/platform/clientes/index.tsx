@@ -81,7 +81,7 @@ export default function ClientesPage() {
       <ClientesTable
         clientes={clientes}
         page={page}
-        totalClientes={totalClientes}
+        total={totalClientes}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TClientesTableProps = {
   clientes: ClienteDTO[]
   page: number
-  totalClientes: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -19,6 +19,7 @@ type TClientesTableProps = {
 export default function ClientesTable({
   clientes,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -50,6 +51,10 @@ export default function ClientesTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <ClientesTableActions />
@@ -67,7 +72,8 @@ export default function ClientesTable({
           baseRoute='/administracao/clientes'
           enableSorting={true}
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
+          totalRows={total}
         />
       )}
     </>

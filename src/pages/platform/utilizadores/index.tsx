@@ -82,7 +82,7 @@ export default function UtilizadoresPage() {
       <UtilizadoresTable
         utilizadores={utilizadores}
         page={page}
-        totalUtilizadores={totalUtilizadores}
+        total={totalUtilizadores}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

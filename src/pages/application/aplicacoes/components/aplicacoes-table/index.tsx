@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TAplicacoesTableProps = {
   aplicacoes: AplicacaoDTO[]
   page: number
-  totalAreas: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -19,6 +19,7 @@ type TAplicacoesTableProps = {
 export default function AplicacoesTable({
   aplicacoes,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
@@ -56,6 +57,10 @@ export default function AplicacoesTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <AplicacoesTableActions currentFilters={currentFilters} />
@@ -72,8 +77,9 @@ export default function AplicacoesTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/aplicacoes'
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
           enableSorting={true}
+          totalRows={total}
         />
       )}
     </>

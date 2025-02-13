@@ -9,7 +9,7 @@ import DataTable from '@/components/shared/data-table'
 type TPerfisTableProps = {
   perfis: PerfilDTO[]
   page: number
-  totalPerfis: number
+  total: number
   pageCount: number
   onFiltersChange?: (filters: Array<{ id: string; value: string }>) => void
   onPaginationChange?: (page: number, pageSize: number) => void
@@ -18,6 +18,7 @@ type TPerfisTableProps = {
 export function PerfisTable({
   perfis,
   pageCount,
+  total,
   onFiltersChange,
   onPaginationChange,
 }: TPerfisTableProps) {
@@ -40,6 +41,10 @@ export function PerfisTable({
     }
   }
 
+  const handleRowSelectionChange = (newSelectedRows: string[]) => {
+    setSelectedRows(newSelectedRows)
+  }
+
   return (
     <>
       <PerfisTableActions />
@@ -55,7 +60,8 @@ export function PerfisTable({
           initialActiveFiltersCount={initialActiveFiltersCount}
           baseRoute='/administracao/perfis/admin'
           selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
+          onRowSelectionChange={handleRowSelectionChange}
+          totalRows={total}
         />
       )}
     </>

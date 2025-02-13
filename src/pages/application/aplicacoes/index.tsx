@@ -81,7 +81,7 @@ export default function AplicacoesPage() {
       <AplicacoesTable
         aplicacoes={aplicacoes}
         page={page}
-        totalAreas={totalAplicacoes}
+        total={totalAplicacoes}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}

@@ -76,7 +76,7 @@ export default function PerfisAdminPage() {
       <PerfisTable
         perfis={perfis}
         page={page}
-        totalPerfis={totalPerfis}
+        total={totalPerfis}
         pageCount={pageCount}
         onFiltersChange={handleFiltersChange}
         onPaginationChange={handlePaginationChange}
