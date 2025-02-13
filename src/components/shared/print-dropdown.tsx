@@ -1,5 +1,6 @@
 import { PrintOption } from '@/types/data-table'
 import { Printer } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,9 +11,10 @@ import {
 
 interface PrintDropdownProps {
   options?: PrintOption[]
+  className?: string
 }
 
-export function PrintDropdown({ options }: PrintDropdownProps) {
+export function PrintDropdown({ options, className }: PrintDropdownProps) {
   if (!options?.length) return null
 
   return (
@@ -27,7 +29,11 @@ export function PrintDropdown({ options }: PrintDropdownProps) {
           <span className='hidden lg:inline'>Imprimir</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
+      <DropdownMenuContent
+        align='start'
+        side='bottom'
+        className={cn('w-[200px] lg:align-end', className)}
+      >
         {options.map((option) => (
           <DropdownMenuItem key={option.value} onClick={option.onClick}>
             {option.label}

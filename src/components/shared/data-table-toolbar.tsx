@@ -63,7 +63,11 @@ export function DataTableToolbar({
                 <span className='hidden lg:inline'>Colunas</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
+            <DropdownMenuContent
+              align='start'
+              side='bottom'
+              className='w-[200px] lg:align-end'
+            >
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
