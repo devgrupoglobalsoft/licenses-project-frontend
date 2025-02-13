@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts'
+import type { ValueType } from 'recharts/types/component/DefaultTooltipContent'
 import {
   Card,
   CardContent,
@@ -109,8 +110,8 @@ export default function LicencasUsageChart() {
         <CardDescription>Por percentual de utilização</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <ResponsiveContainer width='100%' height={300}>
+        <ResponsiveContainer width='100%' height={300}>
+          <ChartContainer config={chartConfig}>
             <BarChart
               data={licenseUsage}
               layout='vertical'
@@ -139,7 +140,7 @@ export default function LicencasUsageChart() {
                 cursor={false}
                 content={
                   <ChartTooltipContent
-                    formatter={(value: number) => `${value}%`}
+                    formatter={(value: ValueType) => `${value}%`}
                   />
                 }
               />
@@ -162,8 +163,8 @@ export default function LicencasUsageChart() {
                 />
               </Bar>
             </BarChart>
-          </ResponsiveContainer>
-        </ChartContainer>
+          </ChartContainer>
+        </ResponsiveContainer>
       </CardContent>
     </div>
   )
