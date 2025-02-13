@@ -14,7 +14,7 @@ import {
   useReactTable,
   SortingState,
 } from '@tanstack/react-table'
-import { Filter } from 'lucide-react'
+import { Filter, Printer } from 'lucide-react'
 import { ArrowUpDown, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
@@ -246,8 +246,8 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div className='flex flex-col space-y-4'>
-      <div className='flex items-center gap-2 p-2 bg-blue-50 border-blue-100 border rounded-lg'>
-        <div className='flex-1 flex items-center gap-4'>
+      <div className='flex items-center justify-between gap-2 p-2 bg-blue-50 border-blue-100 border rounded-lg'>
+        <div className='flex items-center gap-4'>
           <Button
             variant='ghost'
             size='sm'
@@ -268,7 +268,7 @@ export default function DataTable<TData, TValue>({
 
           <div className='h-4 w-px bg-blue-200' />
 
-          <div className='flex items-center gap-2 flex-wrap'>
+          {/* <div className='flex items-center gap-2 flex-wrap'>
             {columnFilters.map((filter) => {
               const column = columns.find(
                 (col) =>
@@ -291,7 +291,7 @@ export default function DataTable<TData, TValue>({
                 </Badge>
               )
             })}
-          </div>
+          </div> */}
         </div>
       </div>
 
