@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import {
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from '@radix-ui/react-icons'
 import { ArrowUpIcon, ArrowDownIcon } from '@radix-ui/react-icons'
 import {
   ColumnDef,
@@ -14,12 +10,10 @@ import {
   useReactTable,
   SortingState,
 } from '@tanstack/react-table'
-import { Filter, Printer, Plus } from 'lucide-react'
-import { ArrowUpDown, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
+import { PrintOption } from '@/types/data-table'
+import { ArrowUpDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
   Select,
@@ -41,13 +35,7 @@ import {
   DataTableFilterField,
   DataTableColumnDef,
 } from '@/components/shared/data-table-types'
-import { PrintDropdown } from './print-dropdown'
-
-type PrintOption = {
-  label: string
-  value: string
-  onClick: () => void
-}
+import { DataTableToolbar } from './data-table-toolbar'
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
@@ -257,44 +245,12 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div className='flex flex-col space-y-4'>
-      <div className='flex items-center justify-between gap-2 p-2 bg-primary/5 border-primary/10 border rounded-lg'>
-        <div className='flex items-center gap-4'>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={() => setIsFilterModalOpen(true)}
-            className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
-          >
-            <Filter className='h-4 w-4' />
-            Filtros
-            {getActiveFiltersCount() > 0 && (
-              <Badge
-                variant='secondary'
-                className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs bg-primary/10 text-primary'
-              >
-                {getActiveFiltersCount()}
-              </Badge>
-            )}
-          </Button>
-
-          {(printOptions || onAdd) && (
-            <div className='h-4 w-px bg-primary/20' />
-          )}
-          {printOptions && <PrintDropdown options={printOptions} />}
-          {onAdd && printOptions && <div className='h-4 w-px bg-primary/20' />}
-          {onAdd && (
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={onAdd}
-              className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
-            >
-              <Plus className='h-4 w-4' />
-              Adicionar
-            </Button>
-          )}
-        </div>
-      </div>
+      <DataTableToolbar
+        onFilterClick={() => setIsFilterModalOpen(true)}
+        activeFiltersCount={getActiveFiltersCount()}
+        printOptions={printOptions}
+        onAdd={onAdd}
+      />
 
       <DataTableFilterModal
         isOpen={isFilterModalOpen}

@@ -1,3 +1,4 @@
+import { PrintOption } from '@/types/data-table'
 import { Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -6,12 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-type PrintOption = {
-  label: string
-  value: string
-  onClick: () => void
-}
 
 interface PrintDropdownProps {
   options?: PrintOption[]
