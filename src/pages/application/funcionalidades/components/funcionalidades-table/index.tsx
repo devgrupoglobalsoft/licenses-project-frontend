@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import FuncionalidadeCreateForm from '@/pages/application/funcionalidades/components/funcionalidade-forms/funcionalidade-create-form'
 import { columns } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-columns'
 import { filterFields } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-constants'
 import { FuncionalidadesFilterControls } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-filter-controls'
 import FuncionalidadesTableActions from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-table-action'
 import { FuncionalidadeDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TFuncionalidadesTableProps = {
@@ -23,6 +25,7 @@ export default function FuncionalidadesTable({
   onPaginationChange,
   onSortingChange,
 }: TFuncionalidadesTableProps) {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const searchParams = new URLSearchParams(window.location.search)
   const moduloIdParam = searchParams.get('moduloId')
   const initialActiveFiltersCount = moduloIdParam ? 1 : 0
@@ -54,25 +57,64 @@ export default function FuncionalidadesTable({
     }
   }
 
+  const printOptions = [
+    {
+      label: 'Relatório Detalhado',
+      value: 'detailed',
+      onClick: () => {
+        // Handle detailed report printing
+      },
+    },
+    {
+      label: 'Relatório Resumido',
+      value: 'summary',
+      onClick: () => {
+        // Handle summary report printing
+      },
+    },
+  ]
+
+  const moduloFilter = currentFilters?.find(
+    (filter) => filter.id === 'moduloId'
+  )
+  const preSelectedModuloId = moduloFilter?.value || ''
+
   return (
     <>
       <FuncionalidadesTableActions currentFilters={currentFilters} />
       {funcionalidades && (
-        <DataTable
-          columns={columns}
-          data={funcionalidades}
-          pageCount={pageCount}
-          filterFields={filterFields}
-          FilterControls={FuncionalidadesFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/administracao/funcionalidades'
-          selectedRows={selectedRows}
-          onRowSelectionChange={setSelectedRows}
-          enableSorting={true}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={funcionalidades}
+            pageCount={pageCount}
+            filterFields={filterFields}
+            FilterControls={FuncionalidadesFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            initialActiveFiltersCount={initialActiveFiltersCount}
+            baseRoute='/administracao/funcionalidades'
+            selectedRows={selectedRows}
+            onRowSelectionChange={setSelectedRows}
+            enableSorting={true}
+            printOptions={printOptions}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Nova Funcionalidade'
+            description='Crie uma nova funcionalidade'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='lg'
+          >
+            <FuncionalidadeCreateForm
+              modalClose={() => setIsCreateModalOpen(false)}
+              preSelectedModuloId={preSelectedModuloId}
+            />
+          </EnhancedModal>
+        </>
       )}
     </>
   )

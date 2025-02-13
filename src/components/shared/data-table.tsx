@@ -14,7 +14,7 @@ import {
   useReactTable,
   SortingState,
 } from '@tanstack/react-table'
-import { Filter, Printer } from 'lucide-react'
+import { Filter, Printer, Plus } from 'lucide-react'
 import { ArrowUpDown, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
@@ -41,6 +41,13 @@ import {
   DataTableFilterField,
   DataTableColumnDef,
 } from '@/components/shared/data-table-types'
+import { PrintDropdown } from './print-dropdown'
+
+type PrintOption = {
+  label: string
+  value: string
+  onClick: () => void
+}
 
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
@@ -64,6 +71,8 @@ type DataTableProps<TData, TValue> = {
   enableSorting?: boolean
   selectedRows?: string[]
   onRowSelectionChange?: (selectedRows: string[]) => void
+  printOptions?: PrintOption[]
+  onAdd?: () => void
 }
 
 // Add these translations
@@ -95,6 +104,8 @@ export default function DataTable<TData, TValue>({
   enableSorting = true,
   selectedRows,
   onRowSelectionChange,
+  printOptions,
+  onAdd,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
@@ -266,32 +277,22 @@ export default function DataTable<TData, TValue>({
             )}
           </Button>
 
-          <div className='h-4 w-px bg-primary/20' />
-
-          {/* <div className='flex items-center gap-2 flex-wrap'>
-            {columnFilters.map((filter) => {
-              const column = columns.find(
-                (col) =>
-                  ('accessorKey' in col && col.accessorKey === filter.id) ||
-                  col.id === filter.id
-              )
-              if (!column || !filter.value) return null
-
-              return (
-                <Badge
-                  key={filter.id}
-                  variant='secondary'
-                  className='h-7 px-2 flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary/20'
-                >
-                  {'accessorKey' in column &&
-                  typeof column.accessorKey === 'string'
-                    ? column.accessorKey
-                    : filter.id}
-                  : {filter.value.toString()}
-                </Badge>
-              )
-            })}
-          </div> */}
+          {(printOptions || onAdd) && (
+            <div className='h-4 w-px bg-primary/20' />
+          )}
+          {printOptions && <PrintDropdown options={printOptions} />}
+          {onAdd && printOptions && <div className='h-4 w-px bg-primary/20' />}
+          {onAdd && (
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={onAdd}
+              className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
+            >
+              <Plus className='h-4 w-4' />
+              Adicionar
+            </Button>
+          )}
         </div>
       </div>
 
@@ -457,61 +458,11 @@ export default function DataTable<TData, TValue>({
                     </SelectTrigger>
                     <SelectContent side='top'>
                       {pageSizeOptions.map((pageSize) => (
-                        <SelectItem key={pageSize} value={`${pageSize}`}>
-                          {pageSize}
-                        </SelectItem>
+                        <SelectItem key={pageSize} value={`${pageSize}`} />
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
-            </div>
-            <div className='flex w-full items-center justify-between gap-2 sm:justify-end'>
-              <div className='flex w-[100px] items-center justify-center text-sm font-medium'>
-                {ptPTTranslations.page}{' '}
-                {table.getState().pagination.pageIndex + 1}{' '}
-                {ptPTTranslations.of} {table.getPageCount()}
-              </div>
-              <div className='flex items-center space-x-2'>
-                <Button
-                  aria-label={ptPTTranslations.goToFirstPage}
-                  variant='outline'
-                  className='hidden h-8 w-8 p-0 lg:flex'
-                  onClick={() => table.setPageIndex(0)}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <DoubleArrowLeftIcon className='h-4 w-4' aria-hidden='true' />
-                </Button>
-                <Button
-                  aria-label={ptPTTranslations.goToPreviousPage}
-                  variant='outline'
-                  className='h-8 w-8 p-0'
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  <ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
-                </Button>
-                <Button
-                  aria-label={ptPTTranslations.goToNextPage}
-                  variant='outline'
-                  className='h-8 w-8 p-0'
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
-                </Button>
-                <Button
-                  aria-label={ptPTTranslations.goToLastPage}
-                  variant='outline'
-                  className='hidden h-8 w-8 p-0 lg:flex'
-                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                  disabled={!table.getCanNextPage()}
-                >
-                  <DoubleArrowRightIcon
-                    className='h-4 w-4'
-                    aria-hidden='true'
-                  />
-                </Button>
               </div>
             </div>
           </div>
