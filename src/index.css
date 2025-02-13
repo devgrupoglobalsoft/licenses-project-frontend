@@ -166,3 +166,15 @@
 .ant-tree-checkbox-input:focus + .ant-tree-checkbox-inner {
   @apply outline-none;
 }
+
+.filter-bar {
+  transition: all 0.2s ease-in-out;
+}
+
+.filter-badge {
+  transition: all 0.15s ease;
+}
+
+.filter-badge:hover {
+  background-color: hsl(var(--muted));
+}

@@ -14,6 +14,7 @@ import {
   useReactTable,
   SortingState,
 } from '@tanstack/react-table'
+import { Filter } from 'lucide-react'
 import { ArrowUpDown, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
@@ -245,22 +246,53 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div className='flex flex-col space-y-4'>
-      <div className='flex items-center gap-2'>
-        <Button
-          variant='default'
-          onClick={() => setIsFilterModalOpen(true)}
-          className='w-fit'
-        >
-          Filtros
-          {getActiveFiltersCount() > 0 && (
-            <Badge
-              variant='destructive'
-              className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs'
-            >
-              {getActiveFiltersCount()}
-            </Badge>
-          )}
-        </Button>
+      <div className='flex items-center gap-2 p-2 bg-background border rounded-lg shadow-sm'>
+        <div className='flex-1 flex items-center gap-4'>
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => setIsFilterModalOpen(true)}
+            className='h-8 px-2 lg:px-3 flex items-center gap-2'
+          >
+            <Filter className='h-4 w-4' />
+            Filtros
+            {getActiveFiltersCount() > 0 && (
+              <Badge
+                variant='destructive'
+                className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs'
+              >
+                {getActiveFiltersCount()}
+              </Badge>
+            )}
+          </Button>
+
+          <div className='h-4 w-px bg-border' />
+
+          <div className='flex items-center gap-2 flex-wrap'>
+            {columnFilters.map((filter) => {
+              const column = columns.find(
+                (col) =>
+                  ('accessorKey' in col && col.accessorKey === filter.id) ||
+                  col.id === filter.id
+              )
+              if (!column || !filter.value) return null
+
+              return (
+                <Badge
+                  key={filter.id}
+                  variant='secondary'
+                  className='h-7 px-2 flex items-center gap-2'
+                >
+                  {'accessorKey' in column &&
+                  typeof column.accessorKey === 'string'
+                    ? column.accessorKey
+                    : filter.id}
+                  : {filter.value.toString()}
+                </Badge>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
       <DataTableFilterModal
@@ -280,10 +312,7 @@ export default function DataTable<TData, TValue>({
               <Table>
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
-                    <TableRow
-                      key={headerGroup.id}
-                      className='bg-muted hover:bg-muted'
-                    >
+                    <TableRow key={headerGroup.id} className='hover:bg-muted'>
                       {headerGroup.headers.map((header) => (
                         <TableHead
                           key={header.id}
