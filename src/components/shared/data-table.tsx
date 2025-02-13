@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { ArrowUpIcon, ArrowDownIcon } from '@radix-ui/react-icons'
+import {
+  ArrowUpIcon,
+  ArrowDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from '@radix-ui/react-icons'
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -9,11 +16,14 @@ import {
   getPaginationRowModel,
   useReactTable,
   SortingState,
+  getSortedRowModel,
+  VisibilityState,
 } from '@tanstack/react-table'
 import { PrintOption } from '@/types/data-table'
 import { ArrowUpDown } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
   Select,
@@ -103,6 +113,7 @@ export default function DataTable<TData, TValue>({
     useState<ColumnFiltersState>(initialFilters)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [sorting, setSorting] = useState<SortingState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const navigate = useNavigate()
   const [selectedRowIds, setSelectedRowIds] = useState<string[]>(
     selectedRows || []
@@ -111,6 +122,20 @@ export default function DataTable<TData, TValue>({
   useEffect(() => {
     setSelectedRowIds(selectedRows || [])
   }, [selectedRows])
+
+  useEffect(() => {
+    if (hiddenColumns) {
+      setColumnVisibility(
+        hiddenColumns.reduce(
+          (acc, columnId) => ({
+            ...acc,
+            [columnId]: false,
+          }),
+          {}
+        )
+      )
+    }
+  }, [hiddenColumns])
 
   const handlePaginationChange = (
     newPageIndex: number,
@@ -165,13 +190,7 @@ export default function DataTable<TData, TValue>({
     state: {
       pagination: { pageIndex, pageSize },
       columnFilters: pendingColumnFilters,
-      columnVisibility: hiddenColumns?.reduce(
-        (acc, columnId) => ({
-          ...acc,
-          [columnId]: false,
-        }),
-        {}
-      ),
+      columnVisibility,
       sorting,
       rowSelection: selectedRowIds.reduce(
         (acc, id) => ({
@@ -181,6 +200,7 @@ export default function DataTable<TData, TValue>({
         {}
       ),
     },
+    onColumnVisibilityChange: setColumnVisibility,
     getRowId: (row: any) => row.id,
     enableRowSelection: true,
     onRowSelectionChange: (updater) => {
@@ -230,6 +250,7 @@ export default function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     enableSorting,
     manualPagination: true,
     manualFiltering: true,
@@ -250,6 +271,7 @@ export default function DataTable<TData, TValue>({
         activeFiltersCount={getActiveFiltersCount()}
         printOptions={printOptions}
         onAdd={onAdd}
+        table={table}
       />
 
       <DataTableFilterModal
@@ -265,7 +287,7 @@ export default function DataTable<TData, TValue>({
       <div className='flex flex-col gap-4 md:flex-row'>
         <div className='flex-1'>
           <ScrollArea className='h-[calc(100vh-500px)] rounded-md border md:h-[calc(100vh-400px)]'>
-            <div className='rounded-md border'>
+            <div>
               <Table>
                 <TableHeader>
                   {table.getHeaderGroups().map((headerGroup) => (
@@ -384,7 +406,6 @@ export default function DataTable<TData, TValue>({
                 </TableBody>
               </Table>
             </div>
-
             <ScrollBar orientation='horizontal' />
           </ScrollArea>
 
@@ -414,11 +435,61 @@ export default function DataTable<TData, TValue>({
                     </SelectTrigger>
                     <SelectContent side='top'>
                       {pageSizeOptions.map((pageSize) => (
-                        <SelectItem key={pageSize} value={`${pageSize}`} />
+                        <SelectItem key={pageSize} value={`${pageSize}`}>
+                          {pageSize}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+            </div>
+            <div className='flex w-full items-center justify-between gap-2 sm:justify-end'>
+              <div className='flex w-[100px] items-center justify-center text-sm font-medium'>
+                {ptPTTranslations.page}{' '}
+                {table.getState().pagination.pageIndex + 1}{' '}
+                {ptPTTranslations.of} {table.getPageCount()}
+              </div>
+              <div className='flex items-center space-x-2'>
+                <Button
+                  aria-label={ptPTTranslations.goToFirstPage}
+                  variant='outline'
+                  className='hidden h-8 w-8 p-0 lg:flex'
+                  onClick={() => table.setPageIndex(0)}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <DoubleArrowLeftIcon className='h-4 w-4' aria-hidden='true' />
+                </Button>
+                <Button
+                  aria-label={ptPTTranslations.goToPreviousPage}
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
+                </Button>
+                <Button
+                  aria-label={ptPTTranslations.goToNextPage}
+                  variant='outline'
+                  className='h-8 w-8 p-0'
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
+                </Button>
+                <Button
+                  aria-label={ptPTTranslations.goToLastPage}
+                  variant='outline'
+                  className='hidden h-8 w-8 p-0 lg:flex'
+                  onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  disabled={!table.getCanNextPage()}
+                >
+                  <DoubleArrowRightIcon
+                    className='h-4 w-4'
+                    aria-hidden='true'
+                  />
+                </Button>
               </div>
             </div>
           </div>

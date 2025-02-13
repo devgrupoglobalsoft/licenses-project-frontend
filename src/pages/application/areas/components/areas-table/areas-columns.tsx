@@ -32,6 +32,7 @@ export const columns: DataTableColumnDef<AreaDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -40,6 +41,7 @@ export const columns: DataTableColumnDef<AreaDTO>[] = [
     accessorKey: 'color',
     header: 'Cor',
     enableSorting: false,
+    enableHiding: true,
     sortKey: 'color',
     meta: {
       align: 'left',
@@ -75,5 +77,6 @@ export const columns: DataTableColumnDef<AreaDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

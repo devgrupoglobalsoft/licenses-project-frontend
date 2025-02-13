@@ -33,6 +33,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     accessorKey: 'nome',
     header: 'Nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -48,6 +49,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     accessorKey: 'email',
     header: 'Email',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -56,6 +58,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     accessorKey: 'roleId',
     header: 'Role',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -74,6 +77,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     accessorKey: 'cliente.nome',
     header: 'Cliente',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -90,6 +94,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     accessorKey: 'ativo',
     header: 'Estado',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -112,5 +117,6 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

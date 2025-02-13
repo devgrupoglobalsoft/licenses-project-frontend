@@ -32,6 +32,7 @@ export const columns: DataTableColumnDef<ClienteDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -41,6 +42,7 @@ export const columns: DataTableColumnDef<ClienteDTO>[] = [
     header: 'Sigla',
     sortKey: 'sigla',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -50,6 +52,7 @@ export const columns: DataTableColumnDef<ClienteDTO>[] = [
     header: 'NIF',
     sortKey: 'nif',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -58,6 +61,7 @@ export const columns: DataTableColumnDef<ClienteDTO>[] = [
     accessorKey: 'ativo',
     header: () => <div className='text-center'>Estado</div>,
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -80,5 +84,6 @@ export const columns: DataTableColumnDef<ClienteDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

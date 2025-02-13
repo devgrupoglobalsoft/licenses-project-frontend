@@ -24,7 +24,7 @@ export function PrintDropdown({ options }: PrintDropdownProps) {
           className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
         >
           <Printer className='h-4 w-4' />
-          Imprimir
+          <span className='hidden lg:inline'>Imprimir</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>

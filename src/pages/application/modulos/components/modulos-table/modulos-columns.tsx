@@ -32,6 +32,7 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -41,6 +42,7 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Descrição',
     sortKey: 'descricao',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -50,6 +52,7 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -68,6 +71,7 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Aplicação',
     sortKey: 'aplicacao.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -99,6 +103,7 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
     header: 'Área',
     sortKey: 'aplicacao.area.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
       hidden: false,
@@ -124,7 +129,6 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
         </div>
       )
     },
-    enableHiding: true,
   },
   {
     id: 'actions',
@@ -135,5 +139,6 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

@@ -32,6 +32,7 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -41,6 +42,7 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Descrição',
     sortKey: 'descricao',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -50,6 +52,7 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -68,6 +71,7 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Aplicação',
     sortKey: 'modulo.aplicacao.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -98,6 +102,7 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
     header: 'Módulo',
     sortKey: 'modulo.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -132,5 +137,6 @@ export const columns: DataTableColumnDef<FuncionalidadeDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

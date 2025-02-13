@@ -32,6 +32,7 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -50,6 +51,7 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
     header: 'Estado',
     sortKey: 'ativo',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -68,6 +70,7 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
     header: 'Área',
     sortKey: 'area.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -100,5 +103,6 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

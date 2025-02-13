@@ -33,6 +33,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -47,6 +48,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: 'Cliente',
     sortKey: 'cliente.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -64,6 +66,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: 'Aplicação',
     sortKey: 'aplicacao.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -94,6 +97,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: 'Nº Utilizadores',
     sortKey: 'numeroUtilizadores',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -103,6 +107,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: 'Data Início',
     sortKey: 'dataInicio',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -116,6 +121,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: 'Data Fim',
     sortKey: 'dataFim',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -129,6 +135,7 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -151,5 +158,6 @@ export const columns: DataTableColumnDef<LicencaDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

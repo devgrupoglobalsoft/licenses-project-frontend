@@ -40,6 +40,7 @@ export const columns: ColumnDef<PerfilDTO>[] = [
     accessorKey: 'ativo',
     header: 'Estado',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -62,5 +63,6 @@ export const columns: ColumnDef<PerfilDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]

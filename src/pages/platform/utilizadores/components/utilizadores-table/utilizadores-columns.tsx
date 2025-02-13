@@ -34,6 +34,7 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Nome',
     sortKey: 'nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -50,6 +51,7 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Email',
     sortKey: 'email',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -59,6 +61,7 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Role',
     sortKey: 'roleId',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -78,6 +81,7 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: 'Cliente',
     sortKey: 'cliente.nome',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'left',
     },
@@ -95,6 +99,7 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     header: () => <div className='text-center'>Estado</div>,
     sortKey: 'ativo',
     enableSorting: true,
+    enableHiding: true,
     meta: {
       align: 'center',
     },
@@ -117,5 +122,6 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
       </div>
     ),
     enableSorting: false,
+    enableHiding: false,
   },
 ]
