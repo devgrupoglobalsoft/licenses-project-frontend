@@ -48,7 +48,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         description='Atualize os dados do módulo'
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        size='md'
+        size='lg'
       >
         {selectedModulo && (
           <ModuloUpdateForm

@@ -33,7 +33,7 @@ export default function ModulosTableActions({
           description='Crie um novo modulo'
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          size='md'
+          size='lg'
         >
           <ModuloCreateForm
             modalClose={() => setIsCreateModalOpen(false)}
