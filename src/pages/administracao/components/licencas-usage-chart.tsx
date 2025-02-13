@@ -143,7 +143,7 @@ export default function LicencasUsageChart() {
                   />
                 }
               />
-              <Bar dataKey='usage' radius={4} barSize={20}>
+              <Bar dataKey='usage' radius={4} barSize={40}>
                 {licenseUsage.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
                 ))}
