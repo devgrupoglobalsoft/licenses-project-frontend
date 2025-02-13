@@ -246,27 +246,27 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div className='flex flex-col space-y-4'>
-      <div className='flex items-center gap-2 p-2 bg-background border rounded-lg shadow-sm'>
+      <div className='flex items-center gap-2 p-2 bg-blue-50 border-blue-100 border rounded-lg'>
         <div className='flex-1 flex items-center gap-4'>
           <Button
             variant='ghost'
             size='sm'
             onClick={() => setIsFilterModalOpen(true)}
-            className='h-8 px-2 lg:px-3 flex items-center gap-2'
+            className='h-8 px-2 lg:px-3 flex items-center gap-2 text-blue-600 hover:bg-blue-100 hover:text-blue-700'
           >
             <Filter className='h-4 w-4' />
             Filtros
             {getActiveFiltersCount() > 0 && (
               <Badge
-                variant='destructive'
-                className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs'
+                variant='secondary'
+                className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs bg-blue-100 text-blue-600'
               >
                 {getActiveFiltersCount()}
               </Badge>
             )}
           </Button>
 
-          <div className='h-4 w-px bg-border' />
+          <div className='h-4 w-px bg-blue-200' />
 
           <div className='flex items-center gap-2 flex-wrap'>
             {columnFilters.map((filter) => {
@@ -281,7 +281,7 @@ export default function DataTable<TData, TValue>({
                 <Badge
                   key={filter.id}
                   variant='secondary'
-                  className='h-7 px-2 flex items-center gap-2'
+                  className='h-7 px-2 flex items-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200'
                 >
                   {'accessorKey' in column &&
                   typeof column.accessorKey === 'string'
