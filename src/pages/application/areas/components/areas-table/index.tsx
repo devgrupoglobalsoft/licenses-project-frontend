@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import AreaCreateForm from '@/pages/application/areas/components/area-forms/area-create-form'
 import { columns } from '@/pages/application/areas/components/areas-table/areas-columns'
 import { filterFields } from '@/pages/application/areas/components/areas-table/areas-constants'
 import { AreasFilterControls } from '@/pages/application/areas/components/areas-table/areas-filter-controls'
-import AreaTableActions from '@/pages/application/areas/components/areas-table/areas-table-action'
 import { AreaDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TAreasTableProps = {
@@ -25,6 +26,7 @@ export default function AreasTable({
   onSortingChange,
 }: TAreasTableProps) {
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -54,22 +56,34 @@ export default function AreasTable({
 
   return (
     <>
-      <AreaTableActions />
       {areas && (
-        <DataTable
-          columns={columns}
-          data={areas}
-          pageCount={pageCount}
-          totalRows={total}
-          filterFields={filterFields}
-          FilterControls={AreasFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          selectedRows={selectedRows}
-          onRowSelectionChange={handleRowSelectionChange}
-          enableSorting={true}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={areas}
+            pageCount={pageCount}
+            totalRows={total}
+            filterFields={filterFields}
+            FilterControls={AreasFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            selectedRows={selectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
+            enableSorting={true}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Nova Área'
+            description='Crie uma nova área para atribuir nas aplicações'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='md'
+          >
+            <AreaCreateForm modalClose={() => setIsCreateModalOpen(false)} />
+          </EnhancedModal>
+        </>
       )}
     </>
   )

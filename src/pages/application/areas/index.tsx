@@ -72,7 +72,7 @@ export default function AreasPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Áreas | GSLP' />
       <Breadcrumbs
         items={[
@@ -80,15 +80,17 @@ export default function AreasPage() {
           { title: 'Áreas', link: '/administracao/areas' },
         ]}
       />
-      <AreasTable
-        areas={areas}
-        page={page}
-        total={totalAreas}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
-      />
+      <div className='mt-10'>
+        <AreasTable
+          areas={areas}
+          page={page}
+          total={totalAreas}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+        />
+      </div>
     </div>
   )
 }

@@ -27,46 +27,50 @@ export function DataTableToolbar({
   table,
 }: DataTableToolbarProps) {
   return (
-    <div className='flex items-center justify-between gap-2 p-2 bg-primary/5 border-primary/10 border rounded-lg'>
-      <div className='flex items-center gap-4'>
+    <div className='flex items-center justify-between gap-4'>
+      {/* Left side */}
+      <div className='flex items-center gap-2'>
         <Button
-          variant='ghost'
+          variant='outline'
           size='sm'
           onClick={onFilterClick}
-          className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
+          className='h-8 border-dashed'
         >
-          <Filter className='h-4 w-4' />
-          <span className='hidden lg:inline'>Filtros</span>
+          <Filter className='h-4 w-4 sm:mr-2' />
+          <span className='hidden sm:inline-block'>
+            Filtros
+            {activeFiltersCount > 0 && (
+              <Badge
+                variant='secondary'
+                className='ml-2 bg-primary/20 text-primary'
+              >
+                {activeFiltersCount}
+              </Badge>
+            )}
+          </span>
+          {/* Mobile badge */}
           {activeFiltersCount > 0 && (
             <Badge
               variant='secondary'
-              className='ml-2 flex h-5 w-5 items-center justify-center rounded-full p-0 text-xs bg-primary/10 text-primary'
+              className='ml-1 bg-primary/20 text-primary sm:hidden'
             >
               {activeFiltersCount}
             </Badge>
           )}
         </Button>
 
-        {(printOptions || onAdd || table) && (
-          <div className='h-4 w-px bg-primary/20' />
-        )}
-
         {table && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant='ghost'
-                size='sm'
-                className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
-              >
-                <Columns className='h-4 w-4' />
-                <span className='hidden lg:inline'>Colunas</span>
+              <Button variant='outline' size='sm' className='h-8 border-dashed'>
+                <Columns className='h-4 w-4 sm:mr-2' />
+                <span className='hidden sm:inline-block'>Colunas</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              align='start'
+              align='end'
               side='bottom'
-              className='w-[200px] lg:align-end'
+              className='w-[200px]'
             >
               {table
                 .getAllColumns()
@@ -93,21 +97,20 @@ export function DataTableToolbar({
           </DropdownMenu>
         )}
 
-        {table && (printOptions || onAdd) && (
-          <div className='h-4 w-px bg-primary/20' />
-        )}
-
         {printOptions && <PrintDropdown options={printOptions} />}
-        {onAdd && printOptions && <div className='h-4 w-px bg-primary/20' />}
+      </div>
+
+      {/* Right side */}
+      <div className='flex items-center gap-2'>
         {onAdd && (
           <Button
-            variant='ghost'
+            variant='emerald'
             size='sm'
             onClick={onAdd}
-            className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
+            className='h-8 border-dashed'
           >
-            <Plus className='h-4 w-4' />
-            <span className='hidden lg:inline'>Adicionar</span>
+            <Plus className='h-4 w-4 sm:mr-2' />
+            <span className='hidden sm:inline-block'>Adicionar</span>
           </Button>
         )}
       </div>

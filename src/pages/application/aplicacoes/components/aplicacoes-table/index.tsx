@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import AplicacaoCreateForm from '@/pages/application/aplicacoes/components/aplicacao-forms/aplicacao-create-form'
 import { columns } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-columns'
 import { filterFields } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-constants'
 import { AplicacoesFilterControls } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-filter-controls'
-import AplicacoesTableActions from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-table-action'
 import { AplicacaoDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TAplicacoesTableProps = {
@@ -28,6 +29,7 @@ export default function AplicacoesTable({
   const areaIdParam = searchParams.get('areaId')
   const initialActiveFiltersCount = areaIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   // Get current filters from table state and URL
   const [currentFilters, setCurrentFilters] = useState<
@@ -61,26 +63,44 @@ export default function AplicacoesTable({
     setSelectedRows(newSelectedRows)
   }
 
+  const areaFilter = currentFilters?.find((filter) => filter.id === 'areaId')
+  const preSelectedAreaId = areaFilter?.value || ''
+
   return (
     <>
-      <AplicacoesTableActions currentFilters={currentFilters} />
       {aplicacoes && (
-        <DataTable
-          columns={columns}
-          data={aplicacoes}
-          pageCount={pageCount}
-          filterFields={filterFields}
-          FilterControls={AplicacoesFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/administracao/aplicacoes'
-          selectedRows={selectedRows}
-          onRowSelectionChange={handleRowSelectionChange}
-          enableSorting={true}
-          totalRows={total}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={aplicacoes}
+            pageCount={pageCount}
+            filterFields={filterFields}
+            FilterControls={AplicacoesFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            initialActiveFiltersCount={initialActiveFiltersCount}
+            baseRoute='/administracao/aplicacoes'
+            selectedRows={selectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
+            enableSorting={true}
+            totalRows={total}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Nova Aplicação'
+            description='Crie uma nova aplicação'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='lg'
+          >
+            <AplicacaoCreateForm
+              modalClose={() => setIsCreateModalOpen(false)}
+              preSelectedAreaId={preSelectedAreaId}
+            />
+          </EnhancedModal>
+        </>
       )}
     </>
   )

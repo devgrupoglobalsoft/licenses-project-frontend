@@ -3,7 +3,6 @@ import FuncionalidadeCreateForm from '@/pages/application/funcionalidades/compon
 import { columns } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-columns'
 import { filterFields } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-constants'
 import { FuncionalidadesFilterControls } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-filter-controls'
-import FuncionalidadesTableActions from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-table-action'
 import { FuncionalidadeDTO } from '@/types/dtos'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
@@ -86,7 +85,7 @@ export default function FuncionalidadesTable({
 
   return (
     <>
-      <FuncionalidadesTableActions currentFilters={currentFilters} />
+      {/* <FuncionalidadesTableActions currentFilters={currentFilters} /> */}
       {funcionalidades && (
         <>
           <DataTable

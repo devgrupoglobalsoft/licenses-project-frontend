@@ -70,7 +70,7 @@ export default function FuncionalidadesPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Funcionalidades | GSLP' />
       <Breadcrumbs
         items={[
@@ -78,15 +78,17 @@ export default function FuncionalidadesPage() {
           { title: 'Funcionalidades', link: '/administracao/funcionalidades' },
         ]}
       />
-      <FuncionalidadesTable
-        funcionalidades={funcionalidades}
-        page={page}
-        total={totalFuncionalidades}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
-      />
+      <div className='mt-10'>
+        <FuncionalidadesTable
+          funcionalidades={funcionalidades}
+          page={page}
+          total={totalFuncionalidades}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+        />
+      </div>
     </div>
   )
 }

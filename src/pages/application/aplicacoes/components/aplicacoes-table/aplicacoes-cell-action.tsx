@@ -49,7 +49,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         description='Atualize os dados da aplicação'
         isOpen={isUpdateModalOpen}
         onClose={() => setIsUpdateModalOpen(false)}
-        size='md'
+        size='lg'
       >
         {selectedAplicacao && (
           <AplicacaoUpdateForm

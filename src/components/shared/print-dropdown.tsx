@@ -20,19 +20,15 @@ export function PrintDropdown({ options, className }: PrintDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          size='sm'
-          className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
-        >
-          <Printer className='h-4 w-4' />
-          <span className='hidden lg:inline'>Imprimir</span>
+        <Button variant='outline' size='sm' className='h-8 border-dashed'>
+          <Printer className='h-4 w-4 sm:mr-2' />
+          <span className='hidden sm:inline-block'>Imprimir</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align='start'
+        align='end'
         side='bottom'
-        className={cn('w-[200px] lg:align-end', className)}
+        className={cn('w-[200px]', className)}
       >
         {options.map((option) => (
           <DropdownMenuItem key={option.value} onClick={option.onClick}>
