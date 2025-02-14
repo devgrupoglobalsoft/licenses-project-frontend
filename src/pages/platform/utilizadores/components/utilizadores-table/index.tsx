@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import { UtilizadorCreateForm } from '@/pages/platform/utilizadores/components/utilizador-forms/utilizador-create-form'
 import { columns } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-columns'
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadoresFilterControls } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-filter-controls'
-import UtilizadoresTableActions from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-table-action'
 import { UtilizadorDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TUtilizadoresTableProps = {
@@ -28,6 +29,7 @@ export default function UtilizadoresTable({
   const utilizadorIdParam = searchParams.get('utilizadorId')
   const initialActiveFiltersCount = utilizadorIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -57,27 +59,38 @@ export default function UtilizadoresTable({
 
   return (
     <>
-      <UtilizadoresTableActions
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
-      />
       {utilizadores && (
-        <DataTable
-          columns={columns}
-          data={utilizadores}
-          pageCount={pageCount}
-          filterFields={filterFields}
-          FilterControls={UtilizadoresFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/administracao/utilizadores'
-          enableSorting={true}
-          selectedRows={selectedRows}
-          onRowSelectionChange={handleRowSelectionChange}
-          totalRows={total}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={utilizadores}
+            pageCount={pageCount}
+            filterFields={filterFields}
+            FilterControls={UtilizadoresFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            initialActiveFiltersCount={initialActiveFiltersCount}
+            baseRoute='/administracao/utilizadores'
+            enableSorting={true}
+            selectedRows={selectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
+            totalRows={total}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Novo Utilizador'
+            description='Crie um novo utilizador'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='xl'
+          >
+            <UtilizadorCreateForm
+              modalClose={() => setIsCreateModalOpen(false)}
+            />
+          </EnhancedModal>
+        </>
       )}
     </>
   )

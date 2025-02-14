@@ -70,7 +70,7 @@ export default function ClientesPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Aplicações | GSLP' />
       <Breadcrumbs
         items={[
@@ -78,15 +78,17 @@ export default function ClientesPage() {
           { title: 'Clientes', link: '/administracao/clientes' },
         ]}
       />
-      <ClientesTable
-        clientes={clientes}
-        page={page}
-        total={totalClientes}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
-      />
+      <div className='mt-10'>
+        <ClientesTable
+          clientes={clientes}
+          page={page}
+          total={totalClientes}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+        />
+      </div>
     </div>
   )
 }

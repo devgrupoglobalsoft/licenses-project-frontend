@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import ModuloCreateForm from '@/pages/application/modulos/components/modulo-forms/modulo-create-form'
 import { columns } from '@/pages/application/modulos/components/modulos-table/modulos-columns'
 import { filterFields } from '@/pages/application/modulos/components/modulos-table/modulos-constants'
 import { ModulosFilterControls } from '@/pages/application/modulos/components/modulos-table/modulos-filter-controls'
-import ModulosTableActions from '@/pages/application/modulos/components/modulos-table/modulos-table-actions'
 import { ModuloDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TModulosTableProps = {
@@ -28,6 +29,7 @@ export default function ModulosTable({
   const aplicacaoIdParam = searchParams.get('aplicacaoId')
   const initialActiveFiltersCount = aplicacaoIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [currentFilters, setCurrentFilters] = useState<
     Array<{ id: string; value: string }>
   >(aplicacaoIdParam ? [{ id: 'aplicacaoId', value: aplicacaoIdParam }] : [])
@@ -59,26 +61,47 @@ export default function ModulosTable({
     setSelectedRows(newSelectedRows)
   }
 
+  const aplicacaoFilter = currentFilters?.find(
+    (filter) => filter.id === 'aplicacaoId'
+  )
+  const preSelectedAplicacaoId = aplicacaoFilter?.value || ''
+
   return (
     <>
-      <ModulosTableActions currentFilters={currentFilters} />
+      {/* <ModulosTableActions currentFilters={currentFilters} /> */}
       {modulos && (
-        <DataTable
-          columns={columns}
-          data={modulos}
-          pageCount={pageCount}
-          filterFields={filterFields}
-          FilterControls={ModulosFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/administracao/modulos'
-          selectedRows={selectedRows}
-          onRowSelectionChange={handleRowSelectionChange}
-          enableSorting={true}
-          totalRows={total}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={modulos}
+            pageCount={pageCount}
+            filterFields={filterFields}
+            FilterControls={ModulosFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            initialActiveFiltersCount={initialActiveFiltersCount}
+            baseRoute='/administracao/modulos'
+            selectedRows={selectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
+            enableSorting={true}
+            totalRows={total}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Novo Modulo'
+            description='Crie um novo modulo'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='lg'
+          >
+            <ModuloCreateForm
+              modalClose={() => setIsCreateModalOpen(false)}
+              preSelectedAplicacaoId={preSelectedAplicacaoId}
+            />
+          </EnhancedModal>
+        </>
       )}
     </>
   )

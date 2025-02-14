@@ -71,7 +71,7 @@ export default function UtilizadoresPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Aplicações | GSLP' />
       <Breadcrumbs
         items={[
@@ -79,15 +79,17 @@ export default function UtilizadoresPage() {
           { title: 'Utilizadores', link: '/administracao/utilizadores' },
         ]}
       />
-      <UtilizadoresTable
-        utilizadores={utilizadores}
-        page={page}
-        total={totalUtilizadores}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
-      />
+      <div className='mt-10'>
+        <UtilizadoresTable
+          utilizadores={utilizadores}
+          page={page}
+          total={totalUtilizadores}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+        />
+      </div>
     </div>
   )
 }

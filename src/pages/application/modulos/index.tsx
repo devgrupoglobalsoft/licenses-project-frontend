@@ -73,7 +73,7 @@ export default function ModulosPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Modulos | GSLP' />
       <Breadcrumbs
         items={[
@@ -81,15 +81,17 @@ export default function ModulosPage() {
           { title: 'Modulos', link: '/administracao/modulos' },
         ]}
       />
-      <ModulosTable
-        modulos={modulos}
-        page={page}
-        total={totalModulos}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
-      />
+      <div className='mt-10'>
+        <ModulosTable
+          modulos={modulos}
+          page={page}
+          total={totalModulos}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+        />
+      </div>
     </div>
   )
 }

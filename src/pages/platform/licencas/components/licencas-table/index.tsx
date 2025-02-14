@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import LicencaCreateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-create-form'
 import { columns } from '@/pages/platform/licencas/components/licencas-table/licencas-columns'
 import { filterFields } from '@/pages/platform/licencas/components/licencas-table/licencas-constants'
 import { LicencasFilterControls } from '@/pages/platform/licencas/components/licencas-table/licencas-filter-controls'
-import LicencasTableActions from '@/pages/platform/licencas/components/licencas-table/licencas-table-actions'
 import { LicencaDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TLicencasTableProps = {
@@ -28,6 +29,7 @@ export function LicencasTable({
   const clienteIdParam = searchParams.get('clienteId')
   const initialActiveFiltersCount = clienteIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -57,24 +59,37 @@ export function LicencasTable({
 
   return (
     <>
-      <LicencasTableActions />
+      {/* <LicencasTableActions /> */}
       {licencas && (
-        <DataTable
-          columns={columns}
-          data={licencas}
-          pageCount={pageCount}
-          filterFields={filterFields}
-          FilterControls={LicencasFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/administracao/licencas'
-          enableSorting={true}
-          selectedRows={selectedRows}
-          onRowSelectionChange={handleRowSelectionChange}
-          totalRows={total}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={licencas}
+            pageCount={pageCount}
+            filterFields={filterFields}
+            FilterControls={LicencasFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            initialActiveFiltersCount={initialActiveFiltersCount}
+            baseRoute='/administracao/licencas'
+            enableSorting={true}
+            selectedRows={selectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
+            totalRows={total}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Nova Licença'
+            description='Crie uma nova licença'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='xl'
+          >
+            <LicencaCreateForm modalClose={() => setIsCreateModalOpen(false)} />
+          </EnhancedModal>
+        </>
       )}
     </>
   )

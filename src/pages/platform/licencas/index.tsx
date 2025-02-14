@@ -70,7 +70,7 @@ export default function LicencasPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Licenças | GSLP' />
       <Breadcrumbs
         items={[
@@ -78,15 +78,17 @@ export default function LicencasPage() {
           { title: 'Licenças', link: '/administracao/licencas' },
         ]}
       />
-      <LicencasTable
-        licencas={licencas}
-        page={page}
-        total={totalLicencas}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-        onSortingChange={handleSortingChange}
-      />
+      <div className='mt-10'>
+        <LicencasTable
+          licencas={licencas}
+          page={page}
+          total={totalLicencas}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
+        />
+      </div>
     </div>
   )
 }

@@ -1,9 +1,10 @@
 import { useState } from 'react'
+import ClienteCreateForm from '@/pages/platform/clientes/components/cliente-forms/cliente-create-form'
 import { columns } from '@/pages/platform/clientes/components/clientes-table/clientes-columns'
 import { filterFields } from '@/pages/platform/clientes/components/clientes-table/clientes-constants'
 import { ClientesFilterControls } from '@/pages/platform/clientes/components/clientes-table/clientes-filter-controls'
-import ClientesTableActions from '@/pages/platform/clientes/components/clientes-table/clientes-table-action'
 import { ClienteDTO } from '@/types/dtos'
+import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
 type TClientesTableProps = {
@@ -28,6 +29,7 @@ export default function ClientesTable({
   const clienteIdParam = searchParams.get('clienteId')
   const initialActiveFiltersCount = clienteIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -57,24 +59,37 @@ export default function ClientesTable({
 
   return (
     <>
-      <ClientesTableActions />
+      {/* <ClientesTableActions /> */}
       {clientes && (
-        <DataTable
-          columns={columns}
-          data={clientes}
-          pageCount={pageCount}
-          filterFields={filterFields}
-          FilterControls={ClientesFilterControls}
-          onFiltersChange={handleFiltersChange}
-          onPaginationChange={handlePaginationChange}
-          onSortingChange={handleSortingChange}
-          initialActiveFiltersCount={initialActiveFiltersCount}
-          baseRoute='/administracao/clientes'
-          enableSorting={true}
-          selectedRows={selectedRows}
-          onRowSelectionChange={handleRowSelectionChange}
-          totalRows={total}
-        />
+        <>
+          <DataTable
+            columns={columns}
+            data={clientes}
+            pageCount={pageCount}
+            filterFields={filterFields}
+            FilterControls={ClientesFilterControls}
+            onFiltersChange={handleFiltersChange}
+            onPaginationChange={handlePaginationChange}
+            onSortingChange={handleSortingChange}
+            initialActiveFiltersCount={initialActiveFiltersCount}
+            baseRoute='/administracao/clientes'
+            enableSorting={true}
+            selectedRows={selectedRows}
+            onRowSelectionChange={handleRowSelectionChange}
+            totalRows={total}
+            onAdd={() => setIsCreateModalOpen(true)}
+          />
+
+          <EnhancedModal
+            title='Criar Novo Cliente'
+            description='Crie um novo cliente'
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            size='xl'
+          >
+            <ClienteCreateForm modalClose={() => setIsCreateModalOpen(false)} />
+          </EnhancedModal>
+        </>
       )}
     </>
   )
