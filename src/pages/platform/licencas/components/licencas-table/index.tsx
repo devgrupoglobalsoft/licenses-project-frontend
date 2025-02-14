@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import LicencaCreateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-create-form'
-import { columns } from '@/pages/platform/licencas/components/licencas-table/licencas-columns'
-import { filterFields } from '@/pages/platform/licencas/components/licencas-table/licencas-constants'
-import { LicencasFilterControls } from '@/pages/platform/licencas/components/licencas-table/licencas-filter-controls'
 import { LicencaDTO } from '@/types/dtos'
+import { Plus } from 'lucide-react'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
+import { columns } from './licencas-columns'
+import { filterFields } from './licencas-constants'
+import { LicencasFilterControls } from './licencas-filter-controls'
 
 type TLicencasTableProps = {
   licencas: LicencaDTO[]
@@ -77,7 +78,14 @@ export function LicencasTable({
             selectedRows={selectedRows}
             onRowSelectionChange={handleRowSelectionChange}
             totalRows={total}
-            onAdd={() => setIsCreateModalOpen(true)}
+            toolbarActions={[
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal

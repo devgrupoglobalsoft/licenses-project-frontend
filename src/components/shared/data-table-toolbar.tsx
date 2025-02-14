@@ -1,6 +1,7 @@
 import { Table } from '@tanstack/react-table'
 import { PrintOption } from '@/types/data-table'
 import { Filter, Plus, Columns } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,22 +10,23 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { DataTableAction } from '@/components/shared/data-table-types'
 import { PrintDropdown } from './print-dropdown'
 
 interface DataTableToolbarProps {
   onFilterClick: () => void
   activeFiltersCount: number
   printOptions?: PrintOption[]
-  onAdd?: () => void
   table?: Table<any>
+  toolbarActions?: DataTableAction[]
 }
 
 export function DataTableToolbar({
   onFilterClick,
   activeFiltersCount,
   printOptions,
-  onAdd,
   table,
+  toolbarActions,
 }: DataTableToolbarProps) {
   return (
     <div className='flex items-center justify-between gap-4'>
@@ -102,17 +104,27 @@ export function DataTableToolbar({
 
       {/* Right side */}
       <div className='flex items-center gap-2'>
-        {onAdd && (
+        {toolbarActions?.map((action, index) => (
           <Button
-            variant='emerald'
+            key={index}
+            variant={action.variant || 'default'}
             size='sm'
-            onClick={onAdd}
-            className='h-8 border-dashed'
+            onClick={action.onClick}
+            disabled={action.disabled}
+            className={cn('h-8', action.className)}
           >
-            <Plus className='h-4 w-4 sm:mr-2' />
-            <span className='hidden sm:inline-block'>Adicionar</span>
+            {action.icon && (
+              <span
+                className={cn('h-4 w-4', action.showOnlyIcon ? '' : 'sm:mr-2')}
+              >
+                {action.icon}
+              </span>
+            )}
+            {!action.showOnlyIcon && (
+              <span className='hidden sm:inline-block'>{action.label}</span>
+            )}
           </Button>
-        )}
+        ))}
       </div>
     </div>
   )

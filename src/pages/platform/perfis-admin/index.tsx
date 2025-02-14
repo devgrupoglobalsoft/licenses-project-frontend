@@ -65,7 +65,7 @@ export default function PerfisAdminPage() {
   }
 
   return (
-    <div className='p-4 md:p-8'>
+    <div className='px-4 pb-4 md:px-8 md:pb-8'>
       <PageHead title='Licenças | GSLP' />
       <Breadcrumbs
         items={[
@@ -73,14 +73,16 @@ export default function PerfisAdminPage() {
           { title: 'Perfis', link: '/administracao/perfis/admin' },
         ]}
       />
-      <PerfisTable
-        perfis={perfis}
-        page={page}
-        total={totalPerfis}
-        pageCount={pageCount}
-        onFiltersChange={handleFiltersChange}
-        onPaginationChange={handlePaginationChange}
-      />
+      <div className='mt-10'>
+        <PerfisTable
+          perfis={perfis}
+          page={page}
+          total={totalPerfis}
+          pageCount={pageCount}
+          onFiltersChange={handleFiltersChange}
+          onPaginationChange={handlePaginationChange}
+        />
+      </div>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import { columns } from '@/pages/application/aplicacoes/components/aplicacoes-ta
 import { filterFields } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-constants'
 import { AplicacoesFilterControls } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-filter-controls'
 import { AplicacaoDTO } from '@/types/dtos'
+import { Plus } from 'lucide-react'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
@@ -85,7 +86,14 @@ export default function AplicacoesTable({
             onRowSelectionChange={handleRowSelectionChange}
             enableSorting={true}
             totalRows={total}
-            onAdd={() => setIsCreateModalOpen(true)}
+            toolbarActions={[
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal

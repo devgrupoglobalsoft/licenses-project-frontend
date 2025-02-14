@@ -54,6 +54,22 @@ import {
 } from '@/components/shared/data-table-types'
 import { DataTableToolbar } from './data-table-toolbar'
 
+export type DataTableAction = {
+  label: string
+  icon: React.ReactNode
+  onClick: () => void
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'emerald'
+  disabled?: boolean
+  showOnlyIcon?: boolean
+  className?: string
+}
+
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -77,8 +93,8 @@ type DataTableProps<TData, TValue> = {
   selectedRows?: string[]
   onRowSelectionChange?: (selectedRows: string[]) => void
   printOptions?: PrintOption[]
-  onAdd?: () => void
   totalRows?: number
+  toolbarActions?: DataTableAction[]
 }
 
 // Add these translations
@@ -111,8 +127,8 @@ export default function DataTable<TData, TValue>({
   selectedRows,
   onRowSelectionChange,
   printOptions,
-  onAdd,
   totalRows,
+  toolbarActions,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useState(0)
   const [pageSize, setPageSize] = useState(10)
@@ -263,8 +279,8 @@ export default function DataTable<TData, TValue>({
         onFilterClick={() => setIsFilterModalOpen(true)}
         activeFiltersCount={getActiveFiltersCount()}
         printOptions={printOptions}
-        onAdd={onAdd}
         table={table}
+        toolbarActions={toolbarActions}
       />
 
       <DataTableFilterModal

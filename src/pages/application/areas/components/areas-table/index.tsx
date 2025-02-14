@@ -4,6 +4,7 @@ import { columns } from '@/pages/application/areas/components/areas-table/areas-
 import { filterFields } from '@/pages/application/areas/components/areas-table/areas-constants'
 import { AreasFilterControls } from '@/pages/application/areas/components/areas-table/areas-filter-controls'
 import { AreaDTO } from '@/types/dtos'
+import { Plus } from 'lucide-react'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
@@ -71,7 +72,14 @@ export default function AreasTable({
             selectedRows={selectedRows}
             onRowSelectionChange={handleRowSelectionChange}
             enableSorting={true}
-            onAdd={() => setIsCreateModalOpen(true)}
+            toolbarActions={[
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal

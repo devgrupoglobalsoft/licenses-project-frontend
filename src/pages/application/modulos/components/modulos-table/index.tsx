@@ -4,6 +4,7 @@ import { columns } from '@/pages/application/modulos/components/modulos-table/mo
 import { filterFields } from '@/pages/application/modulos/components/modulos-table/modulos-constants'
 import { ModulosFilterControls } from '@/pages/application/modulos/components/modulos-table/modulos-filter-controls'
 import { ModuloDTO } from '@/types/dtos'
+import { Plus } from 'lucide-react'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
@@ -86,12 +87,19 @@ export default function ModulosTable({
             onRowSelectionChange={handleRowSelectionChange}
             enableSorting={true}
             totalRows={total}
-            onAdd={() => setIsCreateModalOpen(true)}
+            toolbarActions={[
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal
-            title='Criar Novo Modulo'
-            description='Crie um novo modulo'
+            title='Criar Novo Módulo'
+            description='Crie um novo módulo'
             isOpen={isCreateModalOpen}
             onClose={() => setIsCreateModalOpen(false)}
             size='lg'

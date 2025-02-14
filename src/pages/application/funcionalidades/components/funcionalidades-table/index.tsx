@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import FuncionalidadeCreateForm from '@/pages/application/funcionalidades/components/funcionalidade-forms/funcionalidade-create-form'
-import { columns } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-columns'
-import { filterFields } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-constants'
-import { FuncionalidadesFilterControls } from '@/pages/application/funcionalidades/components/funcionalidades-table/funcionalidades-filter-controls'
 import { FuncionalidadeDTO } from '@/types/dtos'
+import { Plus } from 'lucide-react'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
+import { columns } from './funcionalidades-columns'
+import { filterFields } from './funcionalidades-constants'
+import { FuncionalidadesFilterControls } from './funcionalidades-filter-controls'
 
 type TFuncionalidadesTableProps = {
   funcionalidades: FuncionalidadeDTO[]
@@ -25,11 +26,11 @@ export default function FuncionalidadesTable({
   onPaginationChange,
   onSortingChange,
 }: TFuncionalidadesTableProps) {
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const searchParams = new URLSearchParams(window.location.search)
   const moduloIdParam = searchParams.get('moduloId')
   const initialActiveFiltersCount = moduloIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [currentFilters, setCurrentFilters] = useState<
     Array<{ id: string; value: string }>
   >(moduloIdParam ? [{ id: 'moduloId', value: moduloIdParam }] : [])
@@ -61,23 +62,6 @@ export default function FuncionalidadesTable({
     setSelectedRows(newSelectedRows)
   }
 
-  const printOptions = [
-    {
-      label: 'Relatório Detalhado',
-      value: 'detailed',
-      onClick: () => {
-        // Handle detailed report printing
-      },
-    },
-    {
-      label: 'Relatório Resumido',
-      value: 'summary',
-      onClick: () => {
-        // Handle summary report printing
-      },
-    },
-  ]
-
   const moduloFilter = currentFilters?.find(
     (filter) => filter.id === 'moduloId'
   )
@@ -85,7 +69,6 @@ export default function FuncionalidadesTable({
 
   return (
     <>
-      {/* <FuncionalidadesTableActions currentFilters={currentFilters} /> */}
       {funcionalidades && (
         <>
           <DataTable
@@ -102,9 +85,15 @@ export default function FuncionalidadesTable({
             selectedRows={selectedRows}
             onRowSelectionChange={handleRowSelectionChange}
             enableSorting={true}
-            printOptions={printOptions}
-            onAdd={() => setIsCreateModalOpen(true)}
             totalRows={total}
+            toolbarActions={[
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal

@@ -14,3 +14,19 @@ export type DataTableColumnDef<TData> = ColumnDef<TData, any> & {
     width?: string
   }
 }
+
+export type DataTableAction = {
+  label: string
+  icon?: React.ReactNode
+  onClick: () => void
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'emerald'
+  disabled?: boolean
+  showOnlyIcon?: boolean
+  className?: string
+}

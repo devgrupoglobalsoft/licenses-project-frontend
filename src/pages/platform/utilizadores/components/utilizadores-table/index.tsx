@@ -4,8 +4,12 @@ import { columns } from '@/pages/platform/utilizadores/components/utilizadores-t
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadoresFilterControls } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-filter-controls'
 import { UtilizadorDTO } from '@/types/dtos'
+import { Plus, Trash2 } from 'lucide-react'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultipleUtilizadores } from '../../queries/utilizadores-mutations'
 
 type TUtilizadoresTableProps = {
   utilizadores: UtilizadorDTO[]
@@ -30,6 +34,9 @@ export default function UtilizadoresTable({
   const initialActiveFiltersCount = utilizadorIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const deleteMultipleUtilizadores = useDeleteMultipleUtilizadores()
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -57,6 +64,24 @@ export default function UtilizadoresTable({
     setSelectedRows(newSelectedRows)
   }
 
+  const handleDeleteConfirm = async () => {
+    try {
+      const response =
+        await deleteMultipleUtilizadores.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Utilizadores removidos com sucesso')
+      } else {
+        toast.error('Erro ao remover utilizadores')
+      }
+    } catch (error) {
+      toast.error('Erro ao remover utilizadores')
+    } finally {
+      setSelectedRows([])
+      setOpen(false)
+    }
+  }
+
   return (
     <>
       {utilizadores && (
@@ -76,7 +101,21 @@ export default function UtilizadoresTable({
             selectedRows={selectedRows}
             onRowSelectionChange={handleRowSelectionChange}
             totalRows={total}
-            onAdd={() => setIsCreateModalOpen(true)}
+            toolbarActions={[
+              {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal
@@ -90,6 +129,13 @@ export default function UtilizadoresTable({
               modalClose={() => setIsCreateModalOpen(false)}
             />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={open}
+            onClose={() => setOpen(false)}
+            onConfirm={handleDeleteConfirm}
+            loading={deleteMultipleUtilizadores.isPending}
+          />
         </>
       )}
     </>

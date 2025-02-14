@@ -4,6 +4,7 @@ import { columns } from '@/pages/platform/clientes/components/clientes-table/cli
 import { filterFields } from '@/pages/platform/clientes/components/clientes-table/clientes-constants'
 import { ClientesFilterControls } from '@/pages/platform/clientes/components/clientes-table/clientes-filter-controls'
 import { ClienteDTO } from '@/types/dtos'
+import { Plus } from 'lucide-react'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import DataTable from '@/components/shared/data-table'
 
@@ -77,7 +78,14 @@ export default function ClientesTable({
             selectedRows={selectedRows}
             onRowSelectionChange={handleRowSelectionChange}
             totalRows={total}
-            onAdd={() => setIsCreateModalOpen(true)}
+            toolbarActions={[
+              {
+                label: 'Adicionar',
+                icon: <Plus className='h-4 w-4' />,
+                onClick: () => setIsCreateModalOpen(true),
+                variant: 'emerald',
+              },
+            ]}
           />
 
           <EnhancedModal
