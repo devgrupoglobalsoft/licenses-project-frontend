@@ -21,9 +21,16 @@ import {
 } from '@tanstack/react-table'
 import { PrintOption } from '@/types/data-table'
 import { ArrowUpDown } from 'lucide-react'
+import { Eye } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
   Select,
@@ -298,44 +305,81 @@ export default function DataTable<TData, TValue>({
                           )}
                         >
                           {header.isPlaceholder ? null : (
-                            <div
-                              {...{
-                                className: cn(
-                                  'flex items-center gap-2',
-                                  (
-                                    header.column
-                                      .columnDef as DataTableColumnDef<TData>
-                                  ).meta?.align === 'center' &&
-                                    'justify-center',
-                                  (
-                                    header.column
-                                      .columnDef as DataTableColumnDef<TData>
-                                  ).meta?.align === 'right' && 'justify-end',
-                                  header.column.getCanSort() &&
-                                    'cursor-pointer select-none'
-                                ),
-                                onClick:
-                                  header.column.getToggleSortingHandler(),
-                              }}
-                            >
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                              {header.column.getCanSort() && (
-                                <div className='w-4'>
-                                  {header.column.getIsSorted() === 'asc' && (
-                                    <ArrowUpIcon className='h-4 w-4' />
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <div
+                                  className={cn(
+                                    'flex items-center gap-2',
+                                    (
+                                      header.column
+                                        .columnDef as DataTableColumnDef<TData>
+                                    ).meta?.align === 'center' &&
+                                      'justify-center',
+                                    (
+                                      header.column
+                                        .columnDef as DataTableColumnDef<TData>
+                                    ).meta?.align === 'right' && 'justify-end',
+                                    header.column.getCanSort() &&
+                                      'cursor-pointer select-none'
                                   )}
-                                  {header.column.getIsSorted() === 'desc' && (
-                                    <ArrowDownIcon className='h-4 w-4' />
+                                >
+                                  {flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
                                   )}
-                                  {!header.column.getIsSorted() && (
-                                    <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                  {header.column.getCanSort() && (
+                                    <div className='w-4'>
+                                      {header.column.getIsSorted() ===
+                                        'asc' && (
+                                        <ArrowUpIcon className='h-4 w-4' />
+                                      )}
+                                      {header.column.getIsSorted() ===
+                                        'desc' && (
+                                        <ArrowDownIcon className='h-4 w-4' />
+                                      )}
+                                      {!header.column.getIsSorted() && (
+                                        <ArrowUpDown className='h-4 w-4 opacity-50' />
+                                      )}
+                                    </div>
                                   )}
                                 </div>
-                              )}
-                            </div>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align='start'>
+                                {header.column.getCanSort() && (
+                                  <>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        header.column.toggleSorting(false)
+                                      }
+                                      className='gap-2'
+                                    >
+                                      <ArrowUpIcon className='h-3.5 w-3.5' />
+                                      Asc
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                      onClick={() =>
+                                        header.column.toggleSorting(true)
+                                      }
+                                      className='gap-2'
+                                    >
+                                      <ArrowDownIcon className='h-3.5 w-3.5' />
+                                      Desc
+                                    </DropdownMenuItem>
+                                  </>
+                                )}
+                                {header.column.getCanHide() && (
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      header.column.toggleVisibility(false)
+                                    }
+                                    className='gap-2'
+                                  >
+                                    <Eye className='h-3.5 w-3.5' />
+                                    Esconder
+                                  </DropdownMenuItem>
+                                )}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           )}
                         </TableHead>
                       ))}

@@ -1,6 +1,6 @@
 import { Table } from '@tanstack/react-table'
 import { PrintOption } from '@/types/data-table'
-import { Filter, Plus, View } from 'lucide-react'
+import { Filter, Plus, Columns } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -59,7 +59,7 @@ export function DataTableToolbar({
                 size='sm'
                 className='h-8 px-2 lg:px-3 flex items-center gap-2 text-primary hover:bg-primary/10 hover:text-primary'
               >
-                <View className='h-4 w-4' />
+                <Columns className='h-4 w-4' />
                 <span className='hidden lg:inline'>Colunas</span>
               </Button>
             </DropdownMenuTrigger>
