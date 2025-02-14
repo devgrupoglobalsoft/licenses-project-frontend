@@ -10,6 +10,7 @@ import ModulosPage from '@/pages/application/modulos'
 import NotFound from '@/pages/not-found'
 import ClientesPage from '@/pages/platform/clientes'
 import LicencasPage from '@/pages/platform/licencas'
+import LicencasAdminPage from '@/pages/platform/licencas-admin'
 import PerfisAdminPage from '@/pages/platform/perfis-admin'
 import UtilizadoresPage from '@/pages/platform/utilizadores'
 import UtilizadoresAdminPage from '@/pages/platform/utilizadores-admin'
@@ -135,7 +136,7 @@ export default function AppRouter() {
           path: 'administracao/licencas/admin',
           element: (
             <RoleProtectedRoute allowedRoles={['admin']}>
-              <div>Licenças Admin</div>
+              <LicencasAdminPage />
             </RoleProtectedRoute>
           ),
         },
