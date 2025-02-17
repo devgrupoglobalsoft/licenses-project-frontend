@@ -28,19 +28,7 @@ export function LicencaUtilizadoresList({
   console.log('LicencaUtilizadoresList - response:', utilizadoresResponse)
   console.log('LicencaUtilizadoresList - error:', error)
 
-  const utilizadores = [
-    ...(utilizadoresResponse?.info?.data || []),
-    ...[...Array(17)].map((_, index) => ({
-      utilizador: {
-        id: `mock-${index}`,
-        firstName: `User`,
-        lastName: `${index + 4}`,
-        email: `user${index + 4}@example.com`,
-        roleId: index % 2 === 0 ? 'client' : 'admin',
-      },
-      ativo: index % 3 === 0,
-    })),
-  ]
+  const utilizadores = utilizadoresResponse?.info?.data || []
   console.log('LicencaUtilizadoresList - utilizadores:', utilizadores)
 
   const handleToggleUser = (userId: string, currentActive: boolean) => {
@@ -105,17 +93,21 @@ export function LicencaUtilizadoresList({
           return (
             <div
               key={utilizador.utilizador.id}
-              className='flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-all hover:shadow-md'
+              className='flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-all hover:shadow-md cursor-pointer'
+              onClick={() =>
+                utilizador.utilizador.id &&
+                handleToggleUser(utilizador.utilizador.id, utilizador.ativo)
+              }
             >
               <div className='flex items-center space-x-4'>
-                <Avatar className='h-10 w-10 ring-2 ring-primary/20 ring-offset-2 ring-offset-background'>
+                <Avatar className='h-12 w-12 ring-2 ring-primary/20 ring-offset-2 ring-offset-background'>
                   <AvatarImage
                     src=''
                     alt={fullName}
                     className='aspect-square h-full w-full object-cover'
                   />
                   <AvatarFallback>
-                    <div className='flex h-full w-full items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-medium'>
+                    <div className='flex h-full w-full items-center justify-center rounded-full bg-primary/80 text-white text-xs font-medium'>
                       {initials}
                     </div>
                   </AvatarFallback>
