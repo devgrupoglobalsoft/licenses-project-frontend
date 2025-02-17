@@ -86,8 +86,8 @@ export function LicencaUtilizadoresList({
   }
 
   return (
-    <ScrollArea className='h-[600px]'>
-      <div className='space-y-4 p-6'>
+    <ScrollArea className='h-[calc(100vh-200px)] sm:h-[600px]'>
+      <div className='space-y-2 p-2 sm:space-y-4 sm:p-6'>
         {utilizadores.map((utilizador) => {
           const role = (utilizador.utilizador.roleId?.toLowerCase() ||
             'client') as keyof typeof roleLabelMap
@@ -106,41 +106,50 @@ export function LicencaUtilizadoresList({
           return (
             <div
               key={utilizador.utilizador.id}
-              className='flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-all hover:shadow-md cursor-pointer'
+              className='flex flex-row items-center justify-between rounded-lg border bg-card p-2 sm:p-4 shadow-sm transition-all hover:shadow-md cursor-pointer gap-2 sm:gap-4'
               onClick={() =>
                 utilizador.utilizador.id &&
                 handleToggleUser(utilizador.utilizador.id, utilizador.ativo)
               }
             >
-              <div className='flex items-center space-x-4'>
-                <div className='relative'>
-                  <Avatar className='h-12 w-12'>
+              <div className='flex items-center space-x-2 sm:space-x-4 min-w-0'>
+                <div className='relative shrink-0'>
+                  <Avatar className='h-8 w-8 sm:h-12 sm:w-12'>
                     <AvatarImage
                       src=''
                       alt={fullName}
                       className='aspect-square h-full w-full object-cover'
                     />
                     <AvatarFallback className='bg-primary'>
-                      <span className='text-sm font-medium text-primary-foreground'>
+                      <span className='text-xs sm:text-sm font-medium text-primary-foreground'>
                         {initials}
                       </span>
                     </AvatarFallback>
                   </Avatar>
                   <div
                     className={cn(
-                      'absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-background',
+                      'absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 sm:h-4 sm:w-4 rounded-full border-2 border-background',
                       utilizador.ativo ? 'bg-green-500' : 'bg-muted'
                     )}
                   />
                 </div>
-                <div className='space-y-1'>
-                  <Label className='text-base font-medium'>{fullName}</Label>
-                  <p className='text-sm text-muted-foreground'>
-                    <span className={cn(roleVariants({ role }), 'mr-2')}>
+                <div className='min-w-0 flex-1'>
+                  <div className='flex items-center gap-1.5 mb-0.5'>
+                    <Label className='text-xs sm:text-base font-medium truncate'>
+                      {fullName}
+                    </Label>
+                    <span
+                      className={cn(
+                        roleVariants({ role }),
+                        'text-[9px] sm:text-[10px] px-1.5 py-0.5'
+                      )}
+                    >
                       {roleLabelMap[role]}
                     </span>
+                  </div>
+                  <span className='text-[10px] sm:text-xs text-muted-foreground truncate block'>
                     {utilizador.utilizador.email}
-                  </p>
+                  </span>
                 </div>
               </div>
               <Switch
@@ -148,7 +157,7 @@ export function LicencaUtilizadoresList({
                 onCheckedChange={() =>
                   handleToggleUser(utilizador.utilizador.id!, utilizador.ativo)
                 }
-                className='data-[state=checked]:bg-primary'
+                className='data-[state=checked]:bg-primary shrink-0'
                 aria-label='Toggle user activation'
               />
             </div>
