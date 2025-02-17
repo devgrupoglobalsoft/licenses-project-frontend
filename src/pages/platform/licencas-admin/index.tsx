@@ -23,14 +23,14 @@ export default function LicencasAdminPage() {
       />
       <div className='mt-10 grid grid-cols-1 md:grid-cols-12 gap-6'>
         <div className='col-span-1 md:col-span-6'>
-          <Card className='min-h-[500px] md:h-[calc(100vh-200px)]'>
-            <div className='p-4 border-b'>
+          <Card className='h-[500px] md:h-[calc(100vh-200px)] overflow-hidden flex flex-col'>
+            <div className='p-4 border-b flex flex-col justify-center'>
               <h3 className='text-lg font-medium'>Utilizadores da Licença</h3>
               <p className='text-sm text-muted-foreground'>
                 Lista de utilizadores que podem ser ativados nesta licença
               </p>
             </div>
-            <ScrollArea className='h-[calc(100%-80px)]'>
+            <ScrollArea className='flex-1'>
               <div className='p-4'>
                 {licencaId && <LicencaUtilizadoresList licencaId={licencaId} />}
               </div>
