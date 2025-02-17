@@ -1,28 +1,29 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { jwtDecode } from 'jwt-decode';
-import { GSResponseToken } from '@/types/api/responses';
+import { GSResponseToken } from '@/types/api/responses'
+import { jwtDecode } from 'jwt-decode'
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface AuthState {
-  token: string;
-  refreshToken: string;
-  refreshTokenExpiryTime: string;
-  email: string;
-  name: string;
-  userId: string;
-  roleId: string;
-  clientId: string;
-  permissions: Record<string, number>;
-  isLoaded: boolean;
-  isAuthenticated: boolean;
+  token: string
+  refreshToken: string
+  refreshTokenExpiryTime: string
+  email: string
+  name: string
+  userId: string
+  roleId: string
+  clientId: string
+  licencaId: string
+  permissions: Record<string, number>
+  isLoaded: boolean
+  isAuthenticated: boolean
 }
 
 interface AuthActions {
-  setToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
-  setUser: (email: string) => void;
-  decodeToken: () => void;
-  clearAuth: () => void;
+  setToken: (token: string) => void
+  setRefreshToken: (token: string) => void
+  setUser: (email: string) => void
+  decodeToken: () => void
+  clearAuth: () => void
 }
 
 const initialState: AuthState = {
@@ -36,8 +37,8 @@ const initialState: AuthState = {
   clientId: '',
   permissions: {},
   isLoaded: false,
-  isAuthenticated: false
-};
+  isAuthenticated: false,
+}
 
 export const useAuthStore = create<AuthState & AuthActions>()(
   persist(
@@ -45,48 +46,48 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       ...initialState,
 
       setToken: (token: string) => {
-        set({ token, isAuthenticated: !!token, isLoaded: true });
-        get().decodeToken();
+        set({ token, isAuthenticated: !!token, isLoaded: true })
+        get().decodeToken()
       },
 
       setRefreshToken: (refreshToken: string) => {
-        set({ refreshToken });
+        set({ refreshToken })
       },
 
       setUser: (email: string) => {
-        set({ email });
+        set({ email })
       },
 
       decodeToken: () => {
-        const { token } = get();
+        const { token } = get()
         if (!token) {
-          console.warn('No token available to decode');
-          return;
+          console.warn('No token available to decode')
+          return
         }
 
         try {
-          const decoded: GSResponseToken = jwtDecode(token);
+          const decoded: GSResponseToken = jwtDecode(token)
           set({
             name: decoded.name,
             userId: decoded.uid,
             roleId: decoded.roles.toLowerCase(),
-            isLoaded: true
-          });
+            isLoaded: true,
+          })
         } catch (err) {
-          console.error('Failed to decode JWT:', err);
-          get().clearAuth();
+          console.error('Failed to decode JWT:', err)
+          get().clearAuth()
         }
       },
 
       clearAuth: () => {
-        set({ ...initialState, isLoaded: true });
-      }
+        set({ ...initialState, isLoaded: true })
+      },
     }),
     {
       name: 'auth-storage',
       onRehydrateStorage: () => (state) => {
-        state?.setToken(state.token);
-      }
+        state?.setToken(state.token)
+      },
     }
   )
-);
+)

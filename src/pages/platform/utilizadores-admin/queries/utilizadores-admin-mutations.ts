@@ -13,6 +13,7 @@ export const useCreateUser = () => {
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }

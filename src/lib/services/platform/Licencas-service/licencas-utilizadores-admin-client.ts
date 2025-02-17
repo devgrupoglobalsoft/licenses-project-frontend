@@ -201,4 +201,31 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
       }
     })
   }
+
+  public async updateUtilizadoresLicenca(
+    licencaId: string,
+    data: { utilizadorId: string; ativo: boolean }[]
+  ): Promise<ResponseApi<GSResponse<string>>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.putRequest<
+          { utilizadorId: string; ativo: boolean }[],
+          GSResponse<string>
+        >(`/api/licencas/${licencaId}/utilizadores`, data)
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new LicencaError(
+          'Falha ao atualizar utilizadores da licença',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

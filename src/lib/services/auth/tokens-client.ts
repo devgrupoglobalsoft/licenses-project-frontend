@@ -48,6 +48,7 @@ class TokensClient {
         if (licenseResponse.info.data) {
           useAuthStore.setState({
             clientId: licenseResponse.info.data.clienteId,
+            licencaId: licenseResponse.info.data.id,
           })
         }
 
