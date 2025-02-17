@@ -5,7 +5,7 @@ import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import PageHead from '@/components/shared/page-head'
 import { LicencaExpirationProgress } from './components/licenca-expiration-progress'
 import { LicencaUtilizadoresList } from './components/licenca-utilizadores-list'
-import { PerfisComMaisUsuariosChart } from './components/perfis-com-mais-usuarios-chart'
+import { PerfisComMaisUtilizadoresChart } from './components/perfis-com-mais-utilizadores-chart'
 
 export default function LicencasAdminPage() {
   const { licencaId } = useAuthStore()
@@ -41,7 +41,7 @@ export default function LicencasAdminPage() {
           <div className='flex flex-col gap-6 md:max-h-[calc(100vh-200px)] md:overflow-auto'>
             {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
             <Card>
-              <PerfisComMaisUsuariosChart />
+              <PerfisComMaisUtilizadoresChart />
             </Card>
           </div>
         </div>

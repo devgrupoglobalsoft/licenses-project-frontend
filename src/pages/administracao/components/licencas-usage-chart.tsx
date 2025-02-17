@@ -152,7 +152,7 @@ export default function LicencasUsageChart() {
                   dataKey='name'
                   position='insideLeft'
                   offset={8}
-                  className='fill-[--color-label] text-xs'
+                  className='fill-[--color-label] dark:fill-white text-xs'
                 />
                 <LabelList
                   dataKey='usage'

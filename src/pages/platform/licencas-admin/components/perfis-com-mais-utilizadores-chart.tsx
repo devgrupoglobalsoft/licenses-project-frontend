@@ -29,7 +29,7 @@ interface PerfilCount {
   fill: string
 }
 
-export function PerfisComMaisUsuariosChart() {
+export function PerfisComMaisUtilizadoresChart() {
   const { data: perfisResponse, isLoading, error } = useGetPerfis()
   const perfis = perfisResponse || []
 
@@ -93,7 +93,7 @@ export function PerfisComMaisUsuariosChart() {
       <div className='p-4 border-b flex flex-col justify-center'>
         <h3 className='text-sm font-medium'>Distribuição por Perfil</h3>
         <p className='text-xs text-muted-foreground'>
-          Top 5 perfis com mais usuários
+          Top 5 perfis com mais utilizadores
         </p>
       </div>
       <CardContent>
