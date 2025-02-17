@@ -108,14 +108,14 @@ export function LicencaUtilizadoresList({
               className='flex items-center justify-between rounded-lg border bg-card p-4 shadow-sm transition-all hover:shadow-md'
             >
               <div className='flex items-center space-x-4'>
-                <Avatar className='h-14 w-14 ring-2 ring-primary ring-offset-2'>
+                <Avatar className='h-10 w-10 ring-2 ring-primary/20 ring-offset-2 ring-offset-background'>
                   <AvatarImage
                     src=''
                     alt={fullName}
                     className='aspect-square h-full w-full object-cover'
                   />
-                  <AvatarFallback className='flex h-full w-full items-center justify-center'>
-                    <div className='flex h-full w-full items-center justify-center rounded-full bg-primary text-primary-foreground text-md font-semibold'>
+                  <AvatarFallback>
+                    <div className='flex h-full w-full items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-medium'>
                       {initials}
                     </div>
                   </AvatarFallback>
