@@ -34,6 +34,11 @@ export interface UtilizadorDTO {
   phoneNumber?: string
 }
 
+export interface LicencaUtilizadorDTO {
+  utilizador: UtilizadorDTO
+  ativo: boolean
+}
+
 // Helper functions
 export const toCreateUtilizadorDTO = (
   user: UtilizadorDTO

@@ -4,6 +4,7 @@ import {
   CreateUtilizadorDTO,
   UpdateUtilizadorDTO,
   UtilizadorDTO,
+  LicencaUtilizadorDTO,
 } from '@/types/dtos'
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient } from '@/lib/base-client'
@@ -96,6 +97,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
     data: UpdateUtilizadorDTO
   ): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
     return this.withRetry(async () => {
+      console.log('data:', data)
       try {
         const response = await this.httpClient.putRequest<
           UpdateUtilizadorDTO,
@@ -173,5 +175,30 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
         }
       })
     )
+  }
+
+  public async getUtilizadoresLicenca(
+    licencaId: string
+  ): Promise<ResponseApi<GSResponse<LicencaUtilizadorDTO[]>>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.getRequest<
+          GSResponse<LicencaUtilizadorDTO[]>
+        >(`/api/licencas/${licencaId}/utilizadores`)
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new LicencaError(
+          'Falha ao obter utilizadores da licença',
+          undefined,
+          error
+        )
+      }
+    })
   }
 }

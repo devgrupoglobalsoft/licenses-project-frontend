@@ -32,6 +32,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   }
 
   const handleUpdateClick = (utilizador: UtilizadorDTO) => {
+    console.log('Selected utilizador:', utilizador)
     setSelectedUtilizador(utilizador)
     setIsUpdateModalOpen(true)
   }
@@ -48,14 +49,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         {selectedUtilizador && (
           <UtilizadorAdminUpdateForm
             modalClose={() => setIsUpdateModalOpen(false)}
-            utilizadorId={selectedUtilizador.id || ''}
+            utilizadorId={selectedUtilizador.id}
             initialData={{
-              email: selectedUtilizador.email,
               firstName: selectedUtilizador.firstName,
               lastName: selectedUtilizador.lastName,
-              roleId: selectedUtilizador.roleId || '',
-              isActive: Boolean(selectedUtilizador.isActive),
-              perfilId: selectedUtilizador.perfisUtilizador?.[0] || '',
+              email: selectedUtilizador.email,
+              roleId: selectedUtilizador.roleId,
+              isActive: selectedUtilizador.isActive ?? false,
+              perfilId: selectedUtilizador.perfisUtilizador?.[0],
+              perfisUtilizador: selectedUtilizador.perfisUtilizador,
             }}
           />
         )}

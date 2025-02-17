@@ -63,6 +63,7 @@ interface UtilizadorAdminUpdateFormProps {
     roleId: string
     isActive: boolean
     perfilId?: string
+    perfisUtilizador?: string[]
   }
 }
 
@@ -71,6 +72,8 @@ export function UtilizadorAdminUpdateForm({
   utilizadorId,
   initialData,
 }: UtilizadorAdminUpdateFormProps) {
+  console.log('Initial data:', initialData)
+
   const { clientId } = useAuthStore()
   const { data: perfisData } = useGetPerfis()
   const updateUtilizador = useUpdateUser()
@@ -86,9 +89,11 @@ export function UtilizadorAdminUpdateForm({
       email: initialData.email,
       roleId: initialData.roleId,
       isActive: initialData.isActive,
-      perfilId: initialData.perfilId || '',
+      perfilId: initialData.perfisUtilizador?.[0] ?? initialData.perfilId ?? '',
     },
   })
+
+  console.log('Form values:', form.getValues())
 
   // Watch for role changes to show/hide perfil field
   useEffect(() => {
@@ -111,10 +116,8 @@ export function UtilizadorAdminUpdateForm({
       const submitData = {
         ...data,
         clienteId: clientId,
-        // Only include perfilId if role is client
-        ...(data.roleId.toLowerCase() === 'client'
-          ? { perfilId: data.perfilId }
-          : {}),
+        perfilId:
+          data.roleId.toLowerCase() === 'client' ? data.perfilId : undefined,
       }
 
       const response = await updateUtilizador.mutateAsync({
@@ -271,7 +274,10 @@ export function UtilizadorAdminUpdateForm({
                     <FormLabel>Perfil</FormLabel>
                     <FormControl>
                       <Select
-                        onValueChange={field.onChange}
+                        onValueChange={(value) => {
+                          console.log('Selected value:', value)
+                          field.onChange(value)
+                        }}
                         value={field.value}
                       >
                         <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
@@ -279,7 +285,7 @@ export function UtilizadorAdminUpdateForm({
                         </SelectTrigger>
                         <SelectContent>
                           {perfisData?.map((perfil) => (
-                            <SelectItem key={perfil.id} value={perfil.id || ''}>
+                            <SelectItem key={perfil.id} value={perfil.id ?? ''}>
                               <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
                                 <span className='truncate'>{perfil.nome}</span>
                               </div>
