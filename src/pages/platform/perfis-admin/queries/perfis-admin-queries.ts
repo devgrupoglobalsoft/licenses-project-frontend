@@ -5,7 +5,7 @@ export const useGetPerfisPaginated = (
   pageNumber: number,
   pageLimit: number,
   filters: Array<{ id: string; value: string }> | null,
-  sorting: string[] | null
+  sorting: Array<{ id: string; desc: boolean }> | null
 ) => {
   return useQuery({
     queryKey: [

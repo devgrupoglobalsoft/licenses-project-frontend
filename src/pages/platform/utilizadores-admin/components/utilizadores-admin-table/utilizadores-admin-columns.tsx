@@ -1,4 +1,3 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { CellAction } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-cell-action'
 import { UtilizadorDTO } from '@/types/dtos'
@@ -6,8 +5,9 @@ import { Check, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { roleVariants, roleLabelMap } from '@/constants/roles'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<UtilizadorDTO>[] = [
+export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -33,6 +33,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
     enableSorting: true,
     enableHiding: true,
     meta: {
@@ -49,6 +50,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'email',
     header: 'Email',
+    sortKey: 'email',
     enableSorting: true,
     enableHiding: true,
     meta: {
@@ -58,6 +60,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'roleId',
     header: 'Role',
+    sortKey: 'roleId',
     enableSorting: true,
     enableHiding: true,
     meta: {
@@ -77,6 +80,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'cliente.nome',
     header: 'Cliente',
+    sortKey: 'cliente.nome',
     enableSorting: true,
     enableHiding: true,
     meta: {
@@ -109,6 +113,7 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
   {
     accessorKey: 'ativo',
     header: 'Estado',
+    sortKey: 'ativo',
     enableSorting: true,
     enableHiding: true,
     meta: {

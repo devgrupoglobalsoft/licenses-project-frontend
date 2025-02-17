@@ -19,13 +19,16 @@ export default function UtilizadoresAdminPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     utilizadorIdParam ? [{ id: 'utilizadorId', value: utilizadorIdParam }] : []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetUtilizadoresPaginated(
     clientId,
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } =
     usePrefetchAdjacentUtilizadores(clientId, page, pageSize, filters)
@@ -41,6 +44,12 @@ export default function UtilizadoresAdminPage() {
   const handlePaginationChange = (newPage: number, newPageSize: number) => {
     setPage(newPage)
     setPageSize(newPageSize)
+  }
+
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
   }
 
   useEffect(() => {
@@ -81,6 +90,7 @@ export default function UtilizadoresAdminPage() {
           pageCount={pageCount}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
         />
       </div>
     </div>
