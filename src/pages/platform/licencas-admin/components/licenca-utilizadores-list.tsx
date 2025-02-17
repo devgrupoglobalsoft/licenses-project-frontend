@@ -1,4 +1,7 @@
 import { cn } from '@/lib/utils'
+import { handleApiError } from '@/utils/error-handlers'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { roleVariants, roleLabelMap, roleColors } from '@/constants/roles'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Label } from '@/components/ui/label'
@@ -31,7 +34,7 @@ export function LicencaUtilizadoresList({
   const utilizadores = utilizadoresResponse?.info?.data || []
   console.log('LicencaUtilizadoresList - utilizadores:', utilizadores)
 
-  const handleToggleUser = (userId: string, currentActive: boolean) => {
+  const handleToggleUser = async (userId: string, currentActive: boolean) => {
     if (!licencaId) return
 
     const updatedUsers = utilizadores
@@ -41,10 +44,20 @@ export function LicencaUtilizadoresList({
         ativo: u.utilizador.id === userId ? !currentActive : u.ativo,
       }))
 
-    updateLicencaMutation.mutate({
-      licencaId,
-      data: updatedUsers,
-    })
+    try {
+      const response = await updateLicencaMutation.mutateAsync({
+        licencaId,
+        data: updatedUsers,
+      })
+
+      if (response.info.succeeded) {
+        toast.success('Utilizadores atualizados com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao atualizar utilizadores'))
+      }
+    } catch (error) {
+      toast.error(handleApiError(error, 'Erro ao atualizar utilizadores'))
+    }
   }
 
   if (isLoading) {
@@ -133,7 +146,7 @@ export function LicencaUtilizadoresList({
               <Switch
                 checked={utilizador.ativo}
                 onCheckedChange={() =>
-                  handleToggleUser(utilizador.utilizador.id, utilizador.ativo)
+                  handleToggleUser(utilizador.utilizador.id!, utilizador.ativo)
                 }
                 className='data-[state=checked]:bg-primary'
                 aria-label='Toggle user activation'
