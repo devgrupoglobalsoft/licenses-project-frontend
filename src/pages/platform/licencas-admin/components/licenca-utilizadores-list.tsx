@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { roleVariants, roleLabelMap } from '@/constants/roles'
+import { roleVariants, roleLabelMap, roleColors } from '@/constants/roles'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Label } from '@/components/ui/label'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -100,18 +100,26 @@ export function LicencaUtilizadoresList({
               }
             >
               <div className='flex items-center space-x-4'>
-                <Avatar className='h-12 w-12 ring-2 ring-primary/20 ring-offset-2 ring-offset-background'>
-                  <AvatarImage
-                    src=''
-                    alt={fullName}
-                    className='aspect-square h-full w-full object-cover'
+                <div className='relative'>
+                  <Avatar className='h-12 w-12'>
+                    <AvatarImage
+                      src=''
+                      alt={fullName}
+                      className='aspect-square h-full w-full object-cover'
+                    />
+                    <AvatarFallback className='bg-primary'>
+                      <span className='text-sm font-medium text-primary-foreground'>
+                        {initials}
+                      </span>
+                    </AvatarFallback>
+                  </Avatar>
+                  <div
+                    className={cn(
+                      'absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-background',
+                      utilizador.ativo ? 'bg-green-500' : 'bg-muted'
+                    )}
                   />
-                  <AvatarFallback>
-                    <div className='flex h-full w-full items-center justify-center rounded-full bg-primary/80 text-white text-xs font-medium'>
-                      {initials}
-                    </div>
-                  </AvatarFallback>
-                </Avatar>
+                </div>
                 <div className='space-y-1'>
                   <Label className='text-base font-medium'>{fullName}</Label>
                   <p className='text-sm text-muted-foreground'>
