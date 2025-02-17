@@ -1,5 +1,6 @@
 import { useAuthStore } from '@/stores/auth-store'
 import { Card } from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import PageHead from '@/components/shared/page-head'
 import { LicencaExpirationProgress } from './components/licenca-expiration-progress'
@@ -22,21 +23,27 @@ export default function LicencasAdminPage() {
       />
       <div className='mt-10 grid grid-cols-1 md:grid-cols-12 gap-6'>
         <div className='col-span-1 md:col-span-6'>
-          <Card>
+          <Card className='min-h-[500px] md:h-[calc(100vh-200px)]'>
             <div className='p-4 border-b'>
               <h3 className='text-lg font-medium'>Utilizadores da Licença</h3>
               <p className='text-sm text-muted-foreground'>
                 Lista de utilizadores que podem ser ativados nesta licença
               </p>
             </div>
-            {licencaId && <LicencaUtilizadoresList licencaId={licencaId} />}
+            <ScrollArea className='h-[calc(100%-80px)]'>
+              <div className='p-4'>
+                {licencaId && <LicencaUtilizadoresList licencaId={licencaId} />}
+              </div>
+            </ScrollArea>
           </Card>
         </div>
-        <div className='col-span-1 md:col-span-6 space-y-6'>
-          {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
-          <Card>
-            <PerfisComMaisUsuariosChart />
-          </Card>
+        <div className='col-span-1 md:col-span-6'>
+          <div className='flex flex-col gap-6 md:max-h-[calc(100vh-200px)] md:overflow-auto'>
+            {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
+            <Card>
+              <PerfisComMaisUsuariosChart />
+            </Card>
+          </div>
         </div>
       </div>
     </div>
