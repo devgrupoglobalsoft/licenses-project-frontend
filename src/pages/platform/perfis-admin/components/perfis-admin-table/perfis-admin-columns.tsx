@@ -1,10 +1,10 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { CellAction } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-cell-action'
 import { PerfilDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
-export const columns: ColumnDef<PerfilDTO>[] = [
+export const columns: DataTableColumnDef<PerfilDTO>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -30,6 +30,8 @@ export const columns: ColumnDef<PerfilDTO>[] = [
   {
     accessorKey: 'nome',
     header: 'Nome',
+    sortKey: 'nome',
+    enableSorting: true,
     cell: ({ row }) => (
       <div className='max-w-[200px] truncate' title={row.original.nome}>
         {row.original.nome}
@@ -39,8 +41,8 @@ export const columns: ColumnDef<PerfilDTO>[] = [
   {
     accessorKey: 'ativo',
     header: 'Estado',
+    sortKey: 'ativo',
     enableSorting: true,
-    enableHiding: true,
     meta: {
       align: 'center',
     },

@@ -17,12 +17,15 @@ export default function PerfisAdminPage() {
   const [filters, setFilters] = useState<Array<{ id: string; value: string }>>(
     perfilIdParam ? [{ id: 'perfilId', value: perfilIdParam }] : []
   )
+  const [sorting, setSorting] = useState<Array<{ id: string; desc: boolean }>>(
+    []
+  )
 
   const { data, isLoading } = useGetPerfisPaginated(
     page,
     pageSize,
     filters,
-    null
+    sorting
   )
 
   const { prefetchPreviousPage, prefetchNextPage } = usePrefetchAdjacentPerfis(
@@ -41,6 +44,12 @@ export default function PerfisAdminPage() {
   const handlePaginationChange = (newPage: number, newPageSize: number) => {
     setPage(newPage)
     setPageSize(newPageSize)
+  }
+
+  const handleSortingChange = (
+    newSorting: Array<{ id: string; desc: boolean }>
+  ) => {
+    setSorting(newSorting)
   }
 
   useEffect(() => {
@@ -81,6 +90,7 @@ export default function PerfisAdminPage() {
           pageCount={pageCount}
           onFiltersChange={handleFiltersChange}
           onPaginationChange={handlePaginationChange}
+          onSortingChange={handleSortingChange}
         />
       </div>
     </div>
