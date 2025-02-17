@@ -4,6 +4,7 @@ import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import PageHead from '@/components/shared/page-head'
 import { LicencaExpirationProgress } from './components/licenca-expiration-progress'
 import { LicencaUtilizadoresList } from './components/licenca-utilizadores-list'
+import { PerfisComMaisUsuariosChart } from './components/perfis-com-mais-usuarios-chart'
 
 export default function LicencasAdminPage() {
   const { licencaId } = useAuthStore()
@@ -31,8 +32,11 @@ export default function LicencasAdminPage() {
             {licencaId && <LicencaUtilizadoresList licencaId={licencaId} />}
           </Card>
         </div>
-        <div className='col-span-1 md:col-span-6'>
+        <div className='col-span-1 md:col-span-6 space-y-6'>
           {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
+          <Card>
+            <PerfisComMaisUsuariosChart />
+          </Card>
         </div>
       </div>
     </div>
