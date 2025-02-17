@@ -108,10 +108,11 @@ export function LicencaExpirationProgress({
       </div>
       <Card>
         <div className='p-4'>
-          <h3 className='text-lg font-medium'>Progresso da Licença</h3>
-          <p className='text-sm text-muted-foreground'>
+          <h3 className='text-sm font-medium'>Progresso da Licença</h3>
+          <p className='text-xs text-muted-foreground'>
             Percentual de tempo utilizado da licença
           </p>
+
           <div className='mt-4 space-y-2'>
             <Progress value={percentage} className='h-2' />
             <div className='flex justify-between text-sm text-muted-foreground'>

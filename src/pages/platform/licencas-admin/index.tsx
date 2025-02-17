@@ -25,8 +25,8 @@ export default function LicencasAdminPage() {
         <div className='col-span-1 md:col-span-6'>
           <Card className='h-[500px] md:h-[calc(100vh-200px)] overflow-hidden flex flex-col'>
             <div className='p-4 border-b flex flex-col justify-center'>
-              <h3 className='text-lg font-medium'>Utilizadores da Licença</h3>
-              <p className='text-sm text-muted-foreground'>
+              <h3 className='text-sm font-medium'>Utilizadores da Licença</h3>
+              <p className='text-xs text-muted-foreground'>
                 Lista de utilizadores que podem ser ativados nesta licença
               </p>
             </div>

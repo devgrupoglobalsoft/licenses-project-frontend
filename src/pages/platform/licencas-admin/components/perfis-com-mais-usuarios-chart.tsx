@@ -90,10 +90,12 @@ export function PerfisComMaisUsuariosChart() {
 
   return (
     <div>
-      <CardHeader>
-        <CardTitle>Distribuição por Perfil</CardTitle>
-        <CardDescription>Top 5 perfis com mais usuários</CardDescription>
-      </CardHeader>
+      <div className='p-4 border-b flex flex-col justify-center'>
+        <h3 className='text-sm font-medium'>Distribuição por Perfil</h3>
+        <p className='text-xs text-muted-foreground'>
+          Top 5 perfis com mais usuários
+        </p>
+      </div>
       <CardContent>
         <ResponsiveContainer width='100%' height={300}>
           <ChartContainer
