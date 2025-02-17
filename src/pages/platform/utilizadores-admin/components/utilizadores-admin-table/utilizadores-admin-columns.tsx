@@ -1,4 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
+import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { CellAction } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-cell-action'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
@@ -91,6 +92,21 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     ),
   },
   {
+    accessorKey: 'perfisUtilizador',
+    header: 'Perfil',
+    enableSorting: false,
+    enableHiding: true,
+    meta: {
+      align: 'left',
+    },
+    cell: ({ row }) => {
+      const perfis = row.original.perfisUtilizador
+      if (!perfis || perfis.length === 0) return '-'
+
+      return <PerfilCell perfilId={perfis[0]} />
+    },
+  },
+  {
     accessorKey: 'ativo',
     header: 'Estado',
     enableSorting: true,
@@ -120,3 +136,22 @@ export const columns: ColumnDef<UtilizadorDTO>[] = [
     enableHiding: false,
   },
 ]
+
+const PerfilCell = ({ perfilId }: { perfilId: string }) => {
+  const { data: perfis } = useGetPerfis()
+  const perfil = perfis?.find((p) => p.id === perfilId)
+
+  if (!perfil) return '-'
+
+  return (
+    <div
+      className={cn(
+        'inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+        'bg-slate-100 text-slate-700 border border-slate-200'
+      )}
+      title={perfil.nome}
+    >
+      {perfil.nome}
+    </div>
+  )
+}

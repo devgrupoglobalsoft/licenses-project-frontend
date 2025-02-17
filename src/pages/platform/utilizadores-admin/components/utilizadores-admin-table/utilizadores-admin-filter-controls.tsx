@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { filterFields } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-constants'
 import { UtilizadorDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
@@ -22,6 +23,7 @@ export function UtilizadoresAdminFilterControls({
 }: BaseFilterControlsProps<UtilizadorDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
   const { data: clientes } = useGetClientesSelect()
+  const { data: perfis } = useGetPerfis()
 
   useEffect(() => {
     const currentFilters = table.getState().columnFilters
@@ -115,6 +117,29 @@ export function UtilizadoresAdminFilterControls({
             <SelectItem value='all'>Todos</SelectItem>
             <SelectItem value='true'>Ativo</SelectItem>
             <SelectItem value='false'>Inativo</SelectItem>
+          </SelectContent>
+        </Select>
+      )
+    }
+
+    if (column.accessorKey === 'perfisUtilizador') {
+      return (
+        <Select
+          value={filterValues['perfisUtilizador'] || 'all'}
+          onValueChange={(value) =>
+            handleFilterChange('perfisUtilizador', value)
+          }
+        >
+          <SelectTrigger className={commonInputStyles}>
+            <SelectValue placeholder='Selecione um perfil' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='all'>Todos</SelectItem>
+            {perfis?.map((perfil) => (
+              <SelectItem key={perfil.id} value={perfil.nome}>
+                {perfil.nome}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       )
