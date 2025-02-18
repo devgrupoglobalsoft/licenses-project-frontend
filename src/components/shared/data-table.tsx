@@ -320,7 +320,8 @@ export default function DataTable<TData, TValue>({
                             ).meta?.align === 'left' && 'text-left'
                           )}
                         >
-                          {header.isPlaceholder ? null : (
+                          {header.isPlaceholder ? null : header.column.getCanSort() ||
+                            header.column.getCanHide() ? (
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <div
@@ -396,6 +397,25 @@ export default function DataTable<TData, TValue>({
                                 )}
                               </DropdownMenuContent>
                             </DropdownMenu>
+                          ) : (
+                            <div
+                              className={cn(
+                                'flex items-center gap-2',
+                                (
+                                  header.column
+                                    .columnDef as DataTableColumnDef<TData>
+                                ).meta?.align === 'center' && 'justify-center',
+                                (
+                                  header.column
+                                    .columnDef as DataTableColumnDef<TData>
+                                ).meta?.align === 'right' && 'justify-end'
+                              )}
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </div>
                           )}
                         </TableHead>
                       ))}
