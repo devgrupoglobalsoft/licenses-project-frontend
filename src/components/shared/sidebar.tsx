@@ -14,20 +14,12 @@ type SidebarProps = {
 
 export default function Sidebar({ className }: SidebarProps) {
   const { isMinimized, toggle } = useSidebar()
-  const [status, setStatus] = useState(false)
   const menuItems = useMenuItems()
-
-  const handleToggle = () => {
-    setStatus(true)
-    toggle()
-    setTimeout(() => setStatus(false), 300)
-  }
 
   return (
     <nav
       className={cn(
-        `relative z-10 hidden h-screen flex-none px-3 md:block`,
-        status && 'duration-300',
+        `relative z-10 hidden h-screen flex-none px-3 md:block transition-all duration-300`,
         !isMinimized ? 'w-72' : 'w-[80px]',
         className
       )}
@@ -44,7 +36,7 @@ export default function Sidebar({ className }: SidebarProps) {
             isMinimized && 'cursor-pointer',
             'transition-all duration-300'
           )}
-          onClick={isMinimized ? handleToggle : undefined}
+          onClick={isMinimized ? toggle : undefined}
         >
           <Logo
             width={isMinimized ? 40 : 95}
@@ -55,7 +47,7 @@ export default function Sidebar({ className }: SidebarProps) {
         {!isMinimized && (
           <div
             className='flex size-8 cursor-pointer items-center justify-center rounded-full border bg-background text-foreground'
-            onClick={handleToggle}
+            onClick={toggle}
           >
             <ChevronsLeft
               className={cn('size-4', isMinimized && 'rotate-180')}

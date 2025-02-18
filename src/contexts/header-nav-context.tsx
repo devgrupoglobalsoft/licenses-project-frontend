@@ -64,24 +64,17 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
       return null
     }
 
-    // Only update if the current menu doesn't match the pathname
     const newMenu = determineCurrentMenu(location.pathname).toLowerCase()
+    const newActiveMenuItem = findActiveMenuItem(location.pathname)
+
     if (currentMenu !== newMenu) {
       setCurrentMenu(newMenu)
     }
 
-    // Only update active menu item if it's different
-    const newActiveMenuItem = findActiveMenuItem(location.pathname)
     if (JSON.stringify(activeMenuItem) !== JSON.stringify(newActiveMenuItem)) {
       setActiveMenuItem(newActiveMenuItem)
     }
-  }, [
-    location.pathname,
-    menuItems,
-    headerMenuItems,
-    currentMenu,
-    activeMenuItem,
-  ])
+  }, [location.pathname, menuItems])
 
   return (
     <HeaderNavContext.Provider
