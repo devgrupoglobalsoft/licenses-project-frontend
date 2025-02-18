@@ -130,4 +130,30 @@ export class AreasClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleAreas(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/areas/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new AreaError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new AreaError(
+          'Falha ao deletar múltiplas áreas',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }
