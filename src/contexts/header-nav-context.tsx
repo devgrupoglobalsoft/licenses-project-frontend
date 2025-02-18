@@ -35,27 +35,26 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const determineCurrentMenu = (pathname: string) => {
       // Find matching menu item from sidebar items
-      const matchingItem = menuItems.find((item) => {
-        if (pathname === item.href) return true
-        if (pathname.startsWith(item.href + '/')) return true
-        return false
-      })
-
+      const matchingItem = menuItems.find(
+        (item) => pathname === item.href || pathname.startsWith(item.href + '/')
+      )
       return matchingItem?.title || 'dashboard'
     }
 
     const findActiveMenuItem = (pathname: string) => {
+      // Only search for active menu item if we have header menu items
+      if (!Array.isArray(headerMenuItems) || !headerMenuItems.length)
+        return null
+
       for (const item of headerMenuItems) {
-        // Check if the item has subitems and matches the current path
         if (item.items) {
-          const matchingSubItem = item.items.find((subItem) => {
-            return (
+          const matchingSubItem = item.items.find(
+            (subItem) =>
               pathname === subItem.href ||
               pathname.startsWith(subItem.href + '/')
-            )
-          })
+          )
 
-          if (matchingSubItem && matchingSubItem.secondaryMenu) {
+          if (matchingSubItem?.secondaryMenu) {
             return {
               label: matchingSubItem.label,
               href: matchingSubItem.href,
@@ -67,14 +66,12 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
       return null
     }
 
+    // Batch our state updates
     const newMenu = determineCurrentMenu(location.pathname)
-    setCurrentMenu(newMenu.toLowerCase())
-
-    // Find and set the active menu item
     const newActiveMenuItem = findActiveMenuItem(location.pathname)
-    if (newActiveMenuItem) {
-      setActiveMenuItem(newActiveMenuItem)
-    }
+
+    setCurrentMenu(newMenu.toLowerCase())
+    setActiveMenuItem(newActiveMenuItem)
   }, [location.pathname, menuItems, headerMenuItems])
 
   return (

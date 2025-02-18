@@ -31,12 +31,14 @@ export default function DashboardNav({
   const location = useLocation()
 
   const handleMenuClick = (title: string) => {
+    // Always reset secondary menu first
+    setActiveMenuItem(null)
+
     // Only update the current menu if it's different
     if (title.toLowerCase() !== currentMenu) {
       setCurrentMenu(title.toLowerCase())
     }
-    // Reset secondary menu
-    setActiveMenuItem(null)
+
     if (setOpen) setOpen(false)
   }
 

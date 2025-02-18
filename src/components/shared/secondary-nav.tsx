@@ -31,6 +31,7 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
     <div
       className={cn(
         'border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+        'transition-all duration-200 ease-in-out',
         className
       )}
     >
