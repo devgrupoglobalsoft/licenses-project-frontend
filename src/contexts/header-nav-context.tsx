@@ -67,14 +67,20 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
     const newMenu = determineCurrentMenu(location.pathname).toLowerCase()
     const newActiveMenuItem = findActiveMenuItem(location.pathname)
 
+    // Only update if values are actually different
     if (currentMenu !== newMenu) {
       setCurrentMenu(newMenu)
     }
 
-    if (JSON.stringify(activeMenuItem) !== JSON.stringify(newActiveMenuItem)) {
+    const activeItemChanged =
+      (!activeMenuItem && newActiveMenuItem) ||
+      (activeMenuItem && !newActiveMenuItem) ||
+      activeMenuItem?.href !== newActiveMenuItem?.href
+
+    if (activeItemChanged) {
       setActiveMenuItem(newActiveMenuItem)
     }
-  }, [location.pathname, menuItems])
+  }, [location.pathname, menuItems, headerMenuItems]) // Removed currentMenu and activeMenuItem from dependencies
 
   return (
     <HeaderNavContext.Provider
