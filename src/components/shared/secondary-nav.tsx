@@ -30,13 +30,14 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
   return (
     <div
       className={cn(
-        'border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+        'border-b bg-primary backdrop-blur supports-[backdrop-filter]:bg-primary/95',
+        'shadow-sm',
         'transition-all duration-200 ease-in-out',
         className
       )}
     >
-      <div className='flex h-10 items-center px-4'>
-        <nav className='flex space-x-6'>
+      <div className='flex h-12 items-center px-6'>
+        <nav className='flex space-x-8'>
           {items.map((item, index) => {
             const Icon = item.icon && Icons[item.icon as keyof typeof Icons]
 
@@ -45,17 +46,22 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
                 <DropdownMenu key={index}>
                   <DropdownMenuTrigger
                     className={cn(
-                      'flex items-center space-x-2 text-xs font-medium transition-colors hover:text-primary',
+                      'flex items-center space-x-2 text-xs font-medium',
+                      'transition-all duration-200 ease-in-out',
+                      'hover:text-white/90 focus:outline-none',
                       isItemActive(item.href)
-                        ? 'text-primary font-semibold'
-                        : 'text-muted-foreground'
+                        ? 'text-white font-semibold'
+                        : 'text-white/70'
                     )}
                   >
                     {Icon && <Icon className='h-3.5 w-3.5' />}
                     <span>{item.label}</span>
-                    <ChevronDown className='h-3.5 w-3.5 opacity-50' />
+                    <ChevronDown className='h-3.5 w-3.5 opacity-50 transition-transform duration-200 group-data-[state=open]:rotate-180' />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align='start' className='w-52'>
+                  <DropdownMenuContent
+                    align='start'
+                    className='w-52 animate-in fade-in-50 data-[side=bottom]:slide-in-from-top-1'
+                  >
                     {item.dropdown.map((dropdownItem, dropdownIndex) => {
                       const DropdownIcon = dropdownItem.icon
                         ? Icons[dropdownItem.icon as keyof typeof Icons]
@@ -65,7 +71,7 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
                           key={dropdownIndex}
                           asChild
                           className={cn(
-                            'py-1.5',
+                            'py-2',
                             isItemActive(dropdownItem.href) && 'bg-muted'
                           )}
                         >
@@ -91,10 +97,14 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
                 key={index}
                 to={item.href}
                 className={cn(
-                  'flex items-center space-x-2 text-xs font-medium transition-colors hover:text-primary',
+                  'flex items-center space-x-2 text-xs font-medium',
+                  'transition-all duration-200 ease-in-out',
+                  'hover:text-white/90 focus:outline-none',
+                  'relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:scale-x-0 after:bg-white after:transition-transform after:duration-200',
+                  'hover:after:scale-x-100',
                   isItemActive(item.href)
-                    ? 'text-primary font-semibold'
-                    : 'text-muted-foreground'
+                    ? 'text-white font-semibold after:scale-x-100'
+                    : 'text-white/70 after:scale-x-0'
                 )}
               >
                 {Icon && <Icon className='h-3.5 w-3.5' />}
