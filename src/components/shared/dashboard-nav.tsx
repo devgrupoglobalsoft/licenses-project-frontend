@@ -27,7 +27,7 @@ export default function DashboardNav({
   isMobileNav = false,
 }: DashboardNavProps) {
   const { isMinimized } = useSidebar()
-  const { setCurrentMenu, currentMenu } = useHeaderNav()
+  const { setCurrentMenu, currentMenu, setActiveMenuItem } = useHeaderNav()
   const location = useLocation()
 
   const handleMenuClick = (title: string) => {
@@ -35,6 +35,8 @@ export default function DashboardNav({
     if (title.toLowerCase() !== currentMenu) {
       setCurrentMenu(title.toLowerCase())
     }
+    // Reset secondary menu
+    setActiveMenuItem(null)
     if (setOpen) setOpen(false)
   }
 

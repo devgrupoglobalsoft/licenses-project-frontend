@@ -34,7 +34,7 @@ export default function DashboardLayout({
       >
         <div
           className={cn(
-            'fixed left-0 right-0 top-0 z-20 hidden bg-background md:block',
+            'fixed left-0 right-0 top-0 z-20 hidden flex-col bg-background md:block',
             isMinimized ? 'md:ml-[80px]' : 'md:ml-[288px]'
           )}
         >
@@ -50,7 +50,7 @@ export default function DashboardLayout({
           </button>
           <Header />
         </div>
-        <main className='relative flex-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-background pt-16 md:mx-0 md:my-4 md:mr-4 md:rounded-xl'>
+        <main className='relative flex-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-background pt-28 md:mx-0 md:my-4 md:mr-4 md:rounded-xl'>
           {children}
         </main>
       </div>
