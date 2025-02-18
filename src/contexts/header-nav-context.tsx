@@ -34,7 +34,6 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const determineCurrentMenu = (pathname: string) => {
-      // Find matching menu item from sidebar items
       const matchingItem = menuItems.find(
         (item) => pathname === item.href || pathname.startsWith(item.href + '/')
       )
@@ -42,7 +41,6 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
     }
 
     const findActiveMenuItem = (pathname: string) => {
-      // Only search for active menu item if we have header menu items
       if (!Array.isArray(headerMenuItems) || !headerMenuItems.length)
         return null
 
@@ -66,13 +64,24 @@ export const HeaderNavProvider: React.FC<{ children: React.ReactNode }> = ({
       return null
     }
 
-    // Batch our state updates
-    const newMenu = determineCurrentMenu(location.pathname)
-    const newActiveMenuItem = findActiveMenuItem(location.pathname)
+    // Only update if the current menu doesn't match the pathname
+    const newMenu = determineCurrentMenu(location.pathname).toLowerCase()
+    if (currentMenu !== newMenu) {
+      setCurrentMenu(newMenu)
+    }
 
-    setCurrentMenu(newMenu.toLowerCase())
-    setActiveMenuItem(newActiveMenuItem)
-  }, [location.pathname, menuItems, headerMenuItems])
+    // Only update active menu item if it's different
+    const newActiveMenuItem = findActiveMenuItem(location.pathname)
+    if (JSON.stringify(activeMenuItem) !== JSON.stringify(newActiveMenuItem)) {
+      setActiveMenuItem(newActiveMenuItem)
+    }
+  }, [
+    location.pathname,
+    menuItems,
+    headerMenuItems,
+    currentMenu,
+    activeMenuItem,
+  ])
 
   return (
     <HeaderNavContext.Provider
