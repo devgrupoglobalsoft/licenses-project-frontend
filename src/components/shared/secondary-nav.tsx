@@ -21,10 +21,25 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
 
   if (!items?.length) return null
 
-  const isItemActive = (href: string) => {
-    return (
-      location.pathname === href || location.pathname.startsWith(href + '/')
-    )
+  const isItemActive = (href: string, dropdownItems?: MenuItem[]) => {
+    // Check direct path match
+    if (
+      location.pathname === href ||
+      location.pathname.startsWith(href + '/')
+    ) {
+      return true
+    }
+
+    // Check dropdown items if they exist
+    if (dropdownItems) {
+      return dropdownItems.some(
+        (item) =>
+          location.pathname === item.href ||
+          location.pathname.startsWith(item.href + '/')
+      )
+    }
+
+    return false
   }
 
   return (
@@ -49,9 +64,11 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
                       'flex items-center space-x-2 text-xs font-medium',
                       'transition-all duration-200 ease-in-out',
                       'hover:text-white/90 focus:outline-none',
-                      isItemActive(item.href)
-                        ? 'text-white font-semibold'
-                        : 'text-white/70'
+                      'relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:scale-x-0 after:bg-white after:transition-transform after:duration-200',
+                      'hover:after:scale-x-100',
+                      isItemActive(item.href, item.dropdown)
+                        ? 'text-white font-semibold after:scale-x-100'
+                        : 'text-white/70 after:scale-x-0'
                     )}
                   >
                     {Icon && <Icon className='h-3.5 w-3.5' />}
