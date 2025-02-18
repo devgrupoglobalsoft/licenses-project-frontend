@@ -23,7 +23,7 @@ export default function LicencasAdminPage() {
       />
       <div className='mt-10 grid grid-cols-1 md:grid-cols-12 gap-6'>
         <div className='col-span-1 md:col-span-6'>
-          <Card className='h-[500px] md:h-[calc(100vh-200px)] overflow-hidden flex flex-col'>
+          <Card className='h-[400px] md:h-[calc(100vh-300px)] overflow-hidden flex flex-col'>
             <div className='p-4 border-b flex flex-col justify-center'>
               <h3 className='text-sm font-medium'>Utilizadores da Licença</h3>
               <p className='text-xs text-muted-foreground'>
@@ -38,7 +38,7 @@ export default function LicencasAdminPage() {
           </Card>
         </div>
         <div className='col-span-1 md:col-span-6'>
-          <div className='flex flex-col gap-6 md:max-h-[calc(100vh-200px)] md:overflow-auto'>
+          <div className='flex flex-col gap-6 md:max-h-[calc(100vh-300px)] md:overflow-auto'>
             {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
             <Card>
               <PerfisComMaisUtilizadoresChart />
