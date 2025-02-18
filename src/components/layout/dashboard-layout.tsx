@@ -50,7 +50,7 @@ export default function DashboardLayout({
           </button>
           <Header />
         </div>
-        <main className='relative flex-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-background pt-28 md:mx-0 md:my-4 md:mr-4 md:rounded-xl'>
+        <main className='relative flex-1 overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-background md:pt-28 pt-14 md:mx-0 md:my-4 md:mr-4 md:rounded-xl'>
           {children}
         </main>
       </div>
