@@ -38,7 +38,7 @@ export default function LicencasAdminPage() {
           </Card>
         </div>
         <div className='col-span-1 md:col-span-6'>
-          <div className='flex flex-col gap-6 md:max-h-[calc(100vh-300px)] md:overflow-auto'>
+          <div className='flex flex-col gap-6'>
             {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
             <Card>
               <PerfisComMaisUtilizadoresChart />
