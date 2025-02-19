@@ -5,7 +5,7 @@ export const roleConfig = {
   },
   admin: {
     label: 'Admin',
-    color: '#4ECDC4',
+    color: '#2563eb',
   },
   client: {
     label: 'Cliente',
@@ -16,7 +16,7 @@ export const roleConfig = {
 export const roleConfigAdmin = {
   admin: {
     label: 'Admin',
-    color: '#4ECDC4',
+    color: '#2563eb',
   },
   client: {
     label: 'Cliente',
