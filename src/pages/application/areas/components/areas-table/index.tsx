@@ -102,7 +102,9 @@ export default function AreasTable({
                 icon: <Trash2 className='h-4 w-4' />,
                 onClick: () => setIsDeleteModalOpen(true),
                 variant: 'destructive',
-                disabled: selectedRows.length === 0,
+                disabled:
+                  selectedRows.length === 0 ||
+                  deleteMultipleAreasMutation.isPending,
               },
               {
                 label: 'Adicionar',
