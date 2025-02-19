@@ -170,7 +170,7 @@ export const roleHeaderMenus = {
       {
         label: 'Configuração',
         href: '#',
-        icon: 'settings',
+        icon: '',
         items: [
           {
             label: 'Licenças',
