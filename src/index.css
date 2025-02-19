@@ -127,6 +127,22 @@
   .dark .ant-tree .ant-tree-switcher {
     @apply bg-transparent text-foreground;
   }
+
+  .secondary-nav-container {
+    @apply relative;
+  }
+
+  .secondary-nav-wrapper {
+    @apply absolute left-0 right-0 transform transition-all duration-200 ease-in-out;
+  }
+
+  .secondary-nav-enter {
+    @apply translate-y-0 opacity-100;
+  }
+
+  .secondary-nav-exit {
+    @apply -translate-y-2 opacity-0;
+  }
 }
 
 /* Add after your existing .ant-tree styles */
