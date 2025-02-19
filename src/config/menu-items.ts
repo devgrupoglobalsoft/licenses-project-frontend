@@ -1,5 +1,3 @@
-import { IconKey } from '@/components/ui/icons'
-
 export const roleMenuItems = {
   administrator: [
     {

@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { ChevronsLeft } from 'lucide-react'
 import { Logo } from '@/assets/logo'
 import { cn } from '@/lib/utils'

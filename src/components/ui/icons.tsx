@@ -26,10 +26,8 @@ import {
   Settings,
   SunMedium,
   Trash,
-  Twitter,
   User,
   User2,
-  UserX2,
   X,
 } from 'lucide-react'
 
