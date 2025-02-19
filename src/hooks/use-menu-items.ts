@@ -8,7 +8,9 @@ export const useMenuItems = (): NavItem[] => {
   // Default to guest menu if no role or unknown role
   const role = roleId?.toLowerCase() || 'guest'
 
-  return Array.from(
-    roleMenuItems[role as keyof typeof roleMenuItems] || roleMenuItems.guest
-  )
+  // Get menu items for the role, fallback to guest menu
+  return [
+    ...(roleMenuItems[role as keyof typeof roleMenuItems] ||
+      roleMenuItems.guest),
+  ]
 }

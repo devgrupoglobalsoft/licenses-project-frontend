@@ -50,15 +50,21 @@ export function HeaderNav() {
     return false
   }
 
-  const handleMenuItemClick = (item: MenuItem) => {
+  const handleMenuItemClick = (item: MenuItem, isDropdownTrigger?: boolean) => {
+    // Don't modify secondary menu state if just opening a dropdown
+    if (isDropdownTrigger) return
+
     if (item.secondaryMenu) {
       setActiveMenuItem({
         label: item.label,
         href: item.href,
         items: item.secondaryMenu,
       })
+    } else if (item.items) {
+      // If the item has items but no secondary menu, just clear the secondary nav
+      setActiveMenuItem(null)
     } else {
-      // If the item doesn't have a secondary menu, clear it
+      // If the item has no items and no secondary menu, clear it
       setActiveMenuItem(null)
     }
   }
@@ -82,7 +88,7 @@ export function HeaderNav() {
                           isItemActive(item.href, item.items) &&
                             'bg-accent text-accent-foreground'
                         )}
-                        onClick={() => handleMenuItemClick(item)}
+                        onClick={() => handleMenuItemClick(item, true)}
                       >
                         <div className='flex items-center gap-2'>
                           {item.icon && (
@@ -107,7 +113,7 @@ export function HeaderNav() {
                                 isItemActive(subItem.href) &&
                                   'bg-accent text-accent-foreground'
                               )}
-                              onClick={() => handleMenuItemClick(subItem)}
+                              onClick={(e) => handleMenuItemClick(subItem)}
                             >
                               <div className='flex items-center'>
                                 {subItem.description}
