@@ -4,9 +4,13 @@ import { columns } from '@/pages/application/aplicacoes/components/aplicacoes-ta
 import { filterFields } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-constants'
 import { AplicacoesFilterControls } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-filter-controls'
 import { AplicacaoDTO } from '@/types/dtos'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultipleAplicacoes } from '../../queries/aplicacoes-mutations'
 
 type TAplicacoesTableProps = {
   aplicacoes: AplicacaoDTO[]
@@ -31,6 +35,8 @@ export default function AplicacoesTable({
   const initialActiveFiltersCount = areaIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const deleteMultipleAplicacoesMutation = useDeleteMultipleAplicacoes()
 
   // Get current filters from table state and URL
   const [currentFilters, setCurrentFilters] = useState<
@@ -67,6 +73,24 @@ export default function AplicacoesTable({
   const areaFilter = currentFilters?.find((filter) => filter.id === 'areaId')
   const preSelectedAreaId = areaFilter?.value || ''
 
+  const handleDeleteMultiple = async () => {
+    try {
+      const response =
+        await deleteMultipleAplicacoesMutation.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Aplicações removidas com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao remover aplicações'))
+      }
+    } catch (error) {
+      toast.error('Erro ao remover aplicações')
+    } finally {
+      setSelectedRows([])
+      setIsDeleteModalOpen(false)
+    }
+  }
+
   return (
     <>
       {aplicacoes && (
@@ -88,6 +112,13 @@ export default function AplicacoesTable({
             totalRows={total}
             toolbarActions={[
               {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setIsDeleteModalOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
+              {
                 label: 'Adicionar',
                 icon: <Plus className='h-4 w-4' />,
                 onClick: () => setIsCreateModalOpen(true),
@@ -108,6 +139,15 @@ export default function AplicacoesTable({
               preSelectedAreaId={preSelectedAreaId}
             />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteMultiple}
+            loading={deleteMultipleAplicacoesMutation.isPending}
+            title='Remover Aplicações'
+            description='Tem certeza que deseja remover as aplicações selecionadas?'
+          />
         </>
       )}
     </>

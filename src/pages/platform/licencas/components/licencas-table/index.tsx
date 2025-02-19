@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import LicencaCreateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-create-form'
 import { LicencaDTO } from '@/types/dtos'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultipleLicencas } from '../../queries/licencas-mutations'
+import LicencaCreateForm from '../licenca-forms/licenca-create-form'
 import { columns } from './licencas-columns'
 import { filterFields } from './licencas-constants'
 import { LicencasFilterControls } from './licencas-filter-controls'
@@ -18,7 +22,7 @@ type TLicencasTableProps = {
   onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
-export function LicencasTable({
+export default function LicencasTable({
   licencas,
   pageCount,
   total,
@@ -26,11 +30,10 @@ export function LicencasTable({
   onPaginationChange,
   onSortingChange,
 }: TLicencasTableProps) {
-  const searchParams = new URLSearchParams(window.location.search)
-  const clienteIdParam = searchParams.get('clienteId')
-  const initialActiveFiltersCount = clienteIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const deleteMultipleLicencasMutation = useDeleteMultipleLicencas()
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -58,6 +61,24 @@ export function LicencasTable({
     setSelectedRows(newSelectedRows)
   }
 
+  const handleDeleteMultiple = async () => {
+    try {
+      const response =
+        await deleteMultipleLicencasMutation.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Licenças removidas com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao remover licenças'))
+      }
+    } catch (error) {
+      toast.error('Erro ao remover licenças')
+    } finally {
+      setSelectedRows([])
+      setIsDeleteModalOpen(false)
+    }
+  }
+
   return (
     <>
       {/* <LicencasTableActions /> */}
@@ -72,13 +93,18 @@ export function LicencasTable({
             onFiltersChange={handleFiltersChange}
             onPaginationChange={handlePaginationChange}
             onSortingChange={handleSortingChange}
-            initialActiveFiltersCount={initialActiveFiltersCount}
-            baseRoute='/administracao/licencas'
-            enableSorting={true}
             selectedRows={selectedRows}
             onRowSelectionChange={handleRowSelectionChange}
+            enableSorting={true}
             totalRows={total}
             toolbarActions={[
+              {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setIsDeleteModalOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
               {
                 label: 'Adicionar',
                 icon: <Plus className='h-4 w-4' />,
@@ -93,10 +119,19 @@ export function LicencasTable({
             description='Crie uma nova licença'
             isOpen={isCreateModalOpen}
             onClose={() => setIsCreateModalOpen(false)}
-            size='xl'
+            size='lg'
           >
             <LicencaCreateForm modalClose={() => setIsCreateModalOpen(false)} />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteMultiple}
+            loading={deleteMultipleLicencasMutation.isPending}
+            title='Remover Licenças'
+            description='Tem certeza que deseja remover as licenças selecionadas?'
+          />
         </>
       )}
     </>

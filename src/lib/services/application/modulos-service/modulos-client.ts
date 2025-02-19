@@ -143,4 +143,30 @@ export class ModulosClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleModulos(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/modulos/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new ModuloError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new ModuloError(
+          'Falha ao deletar múltiplos módulos',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

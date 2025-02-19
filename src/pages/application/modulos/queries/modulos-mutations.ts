@@ -45,3 +45,18 @@ export const useUpdateModulo = () => {
     },
   })
 }
+
+export const useDeleteMultipleModulos = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ids: string[]) =>
+      ModulosService('modulos').deleteMultipleModulos(ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['modulos-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['modulos'] })
+      queryClient.invalidateQueries({ queryKey: ['modulos-count'] })
+      queryClient.invalidateQueries({ queryKey: ['modulos-select'] })
+    },
+  })
+}

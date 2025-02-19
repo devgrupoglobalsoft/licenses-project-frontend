@@ -284,4 +284,30 @@ export class LicencasClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleLicencas(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/licencas/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new LicencaError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new LicencaError(
+          'Falha ao deletar múltiplas licenças',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

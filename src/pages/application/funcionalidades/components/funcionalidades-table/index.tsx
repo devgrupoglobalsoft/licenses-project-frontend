@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import FuncionalidadeCreateForm from '@/pages/application/funcionalidades/components/funcionalidade-forms/funcionalidade-create-form'
 import { FuncionalidadeDTO } from '@/types/dtos'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultipleFuncionalidades } from '../../queries/funcionalidades-mutations'
+import FuncionalidadeCreateForm from '../funcionalidade-forms/funcionalidade-create-form'
 import { columns } from './funcionalidades-columns'
 import { filterFields } from './funcionalidades-constants'
 import { FuncionalidadesFilterControls } from './funcionalidades-filter-controls'
@@ -31,14 +35,13 @@ export default function FuncionalidadesTable({
   const initialActiveFiltersCount = moduloIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [currentFilters, setCurrentFilters] = useState<
-    Array<{ id: string; value: string }>
-  >(moduloIdParam ? [{ id: 'moduloId', value: moduloIdParam }] : [])
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const deleteMultipleFuncionalidadesMutation =
+    useDeleteMultipleFuncionalidades()
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {
-    setCurrentFilters(filters)
     if (onFiltersChange) {
       onFiltersChange(filters)
     }
@@ -62,10 +65,25 @@ export default function FuncionalidadesTable({
     setSelectedRows(newSelectedRows)
   }
 
-  const moduloFilter = currentFilters?.find(
-    (filter) => filter.id === 'moduloId'
-  )
-  const preSelectedModuloId = moduloFilter?.value || ''
+  const handleDeleteMultiple = async () => {
+    try {
+      const response =
+        await deleteMultipleFuncionalidadesMutation.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Funcionalidades removidas com sucesso')
+      } else {
+        toast.error(
+          getErrorMessage(response, 'Erro ao remover funcionalidades')
+        )
+      }
+    } catch (error) {
+      toast.error('Erro ao remover funcionalidades')
+    } finally {
+      setSelectedRows([])
+      setIsDeleteModalOpen(false)
+    }
+  }
 
   return (
     <>
@@ -88,6 +106,13 @@ export default function FuncionalidadesTable({
             totalRows={total}
             toolbarActions={[
               {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setIsDeleteModalOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
+              {
                 label: 'Adicionar',
                 icon: <Plus className='h-4 w-4' />,
                 onClick: () => setIsCreateModalOpen(true),
@@ -105,9 +130,18 @@ export default function FuncionalidadesTable({
           >
             <FuncionalidadeCreateForm
               modalClose={() => setIsCreateModalOpen(false)}
-              preSelectedModuloId={preSelectedModuloId}
+              preSelectedModuloId={moduloIdParam || undefined}
             />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteMultiple}
+            loading={deleteMultipleFuncionalidadesMutation.isPending}
+            title='Remover Funcionalidades'
+            description='Tem certeza que deseja remover as funcionalidades selecionadas?'
+          />
         </>
       )}
     </>

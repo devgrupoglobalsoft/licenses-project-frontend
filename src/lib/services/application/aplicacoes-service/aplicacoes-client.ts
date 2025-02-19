@@ -148,4 +148,30 @@ export class AplicacoesClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleAplicacoes(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/aplicacoes/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new AplicacaoError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new AplicacaoError(
+          'Falha ao deletar múltiplas aplicações',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

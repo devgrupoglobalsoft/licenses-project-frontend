@@ -4,9 +4,13 @@ import { columns } from '@/pages/platform/clientes/components/clientes-table/cli
 import { filterFields } from '@/pages/platform/clientes/components/clientes-table/clientes-constants'
 import { ClientesFilterControls } from '@/pages/platform/clientes/components/clientes-table/clientes-filter-controls'
 import { ClienteDTO } from '@/types/dtos'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultipleClientes } from '../../queries/clientes-mutations'
 
 type TClientesTableProps = {
   clientes: ClienteDTO[]
@@ -31,6 +35,8 @@ export default function ClientesTable({
   const initialActiveFiltersCount = clienteIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const deleteMultipleClientesMutation = useDeleteMultipleClientes()
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -58,6 +64,24 @@ export default function ClientesTable({
     setSelectedRows(newSelectedRows)
   }
 
+  const handleDeleteMultiple = async () => {
+    try {
+      const response =
+        await deleteMultipleClientesMutation.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Clientes removidos com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao remover clientes'))
+      }
+    } catch (error) {
+      toast.error('Erro ao remover clientes')
+    } finally {
+      setSelectedRows([])
+      setIsDeleteModalOpen(false)
+    }
+  }
+
   return (
     <>
       {/* <ClientesTableActions /> */}
@@ -80,6 +104,13 @@ export default function ClientesTable({
             totalRows={total}
             toolbarActions={[
               {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setIsDeleteModalOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
+              {
                 label: 'Adicionar',
                 icon: <Plus className='h-4 w-4' />,
                 onClick: () => setIsCreateModalOpen(true),
@@ -97,6 +128,15 @@ export default function ClientesTable({
           >
             <ClienteCreateForm modalClose={() => setIsCreateModalOpen(false)} />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteMultiple}
+            loading={deleteMultipleClientesMutation.isPending}
+            title='Remover Clientes'
+            description='Tem certeza que deseja remover os clientes selecionados?'
+          />
         </>
       )}
     </>

@@ -4,9 +4,13 @@ import { columns } from '@/pages/application/modulos/components/modulos-table/mo
 import { filterFields } from '@/pages/application/modulos/components/modulos-table/modulos-constants'
 import { ModulosFilterControls } from '@/pages/application/modulos/components/modulos-table/modulos-filter-controls'
 import { ModuloDTO } from '@/types/dtos'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultipleModulos } from '../../queries/modulos-mutations'
 
 type TModulosTableProps = {
   modulos: ModuloDTO[]
@@ -31,14 +35,12 @@ export default function ModulosTable({
   const initialActiveFiltersCount = aplicacaoIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [currentFilters, setCurrentFilters] = useState<
-    Array<{ id: string; value: string }>
-  >(aplicacaoIdParam ? [{ id: 'aplicacaoId', value: aplicacaoIdParam }] : [])
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const deleteMultipleModulosMutation = useDeleteMultipleModulos()
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
   ) => {
-    setCurrentFilters(filters)
     if (onFiltersChange) {
       onFiltersChange(filters)
     }
@@ -62,10 +64,23 @@ export default function ModulosTable({
     setSelectedRows(newSelectedRows)
   }
 
-  const aplicacaoFilter = currentFilters?.find(
-    (filter) => filter.id === 'aplicacaoId'
-  )
-  const preSelectedAplicacaoId = aplicacaoFilter?.value || ''
+  const handleDeleteMultiple = async () => {
+    try {
+      const response =
+        await deleteMultipleModulosMutation.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Módulos removidos com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao remover módulos'))
+      }
+    } catch (error) {
+      toast.error('Erro ao remover módulos')
+    } finally {
+      setSelectedRows([])
+      setIsDeleteModalOpen(false)
+    }
+  }
 
   return (
     <>
@@ -89,6 +104,13 @@ export default function ModulosTable({
             totalRows={total}
             toolbarActions={[
               {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setIsDeleteModalOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
+              {
                 label: 'Adicionar',
                 icon: <Plus className='h-4 w-4' />,
                 onClick: () => setIsCreateModalOpen(true),
@@ -106,9 +128,18 @@ export default function ModulosTable({
           >
             <ModuloCreateForm
               modalClose={() => setIsCreateModalOpen(false)}
-              preSelectedAplicacaoId={preSelectedAplicacaoId}
+              preSelectedAplicacaoId={aplicacaoIdParam || undefined}
             />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteMultiple}
+            loading={deleteMultipleModulosMutation.isPending}
+            title='Remover Módulos'
+            description='Tem certeza que deseja remover os módulos selecionados?'
+          />
         </>
       )}
     </>

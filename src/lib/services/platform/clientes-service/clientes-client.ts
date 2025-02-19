@@ -138,4 +138,30 @@ export class ClientesClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleClientes(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/clientes/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new ClienteError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new ClienteError(
+          'Falha ao deletar múltiplos clientes',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

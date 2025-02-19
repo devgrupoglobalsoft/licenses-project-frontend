@@ -160,4 +160,30 @@ export class FuncionalidadesClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultipleFuncionalidades(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/funcionalidades/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new FuncionalidadeError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new FuncionalidadeError(
+          'Falha ao deletar múltiplas funcionalidades',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }

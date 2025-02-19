@@ -64,3 +64,20 @@ export const useUpdateFuncionalidade = () => {
     },
   })
 }
+
+export const useDeleteMultipleFuncionalidades = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ids: string[]) =>
+      FuncionalidadesService('funcionalidades').deleteMultipleFuncionalidades(
+        ids
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['funcionalidades-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['funcionalidades'] })
+      queryClient.invalidateQueries({ queryKey: ['funcionalidades-count'] })
+      queryClient.invalidateQueries({ queryKey: ['funcionalidades-select'] })
+    },
+  })
+}
