@@ -12,6 +12,7 @@ export const useDeleteUtilizador = () => {
       queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }
@@ -26,6 +27,7 @@ export const useCreateUtilizador = () => {
       queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }
@@ -40,6 +42,7 @@ export const useUpdateUtilizador = () => {
       queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }
@@ -54,6 +57,7 @@ export const useDeleteMultipleUtilizadores = () => {
       queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }
