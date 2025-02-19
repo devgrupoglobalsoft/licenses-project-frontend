@@ -1,7 +1,9 @@
 import { CellAction } from '@/pages/application/areas/components/areas-table/areas-cell-action'
 import { AreaDTO } from '@/types/dtos'
+import { Circle } from 'lucide-react'
 import { PREDEFINED_COLORS } from '@/lib/constants/colors'
 import { Checkbox } from '@/components/ui/checkbox'
+import { ColoredBadge } from '@/components/shared/colored-badge'
 import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
 export const columns: DataTableColumnDef<AreaDTO>[] = [
@@ -49,22 +51,14 @@ export const columns: DataTableColumnDef<AreaDTO>[] = [
     cell: ({ row }) => {
       const color = row.original.color
       return (
-        <div className='flex items-center gap-2'>
-          <div
-            className='h-4 w-4 rounded-full border'
-            style={{ backgroundColor: color }}
-          />
-          <div
-            className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold'
-            style={{
-              backgroundColor: `${color}20`,
-              color: color,
-              border: `1px solid ${color}`,
-            }}
-          >
-            {PREDEFINED_COLORS.find((c) => c.value === color)?.label || color}
-          </div>
-        </div>
+        <ColoredBadge
+          label={
+            PREDEFINED_COLORS.find((c) => c.value === color)?.label || color
+          }
+          color={color}
+          icon={<Circle className='h-3.5 w-3.5' fill={color} />}
+          size='md'
+        />
       )
     },
   },

@@ -1,7 +1,8 @@
 import { CellAction } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-cell-action'
 import { AplicacaoDTO } from '@/types/dtos'
-import { Check, X } from 'lucide-react'
+import { Check, X, Circle, FolderGit2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { ColoredBadge } from '@/components/shared/colored-badge'
 import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
 export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
@@ -81,16 +82,12 @@ export const columns: DataTableColumnDef<AplicacaoDTO>[] = [
       }
 
       return (
-        <div
-          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-          style={{
-            backgroundColor: `${area.color}20`,
-            color: area.color,
-            border: `1px solid ${area.color}`,
-          }}
-        >
-          {area.nome}
-        </div>
+        <ColoredBadge
+          label={area.nome}
+          color={area.color}
+          icon={<FolderGit2 className='h-3.5 w-3.5' />}
+          size='md'
+        />
       )
     },
   },

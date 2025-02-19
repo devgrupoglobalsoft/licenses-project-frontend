@@ -1,7 +1,9 @@
 import { CellAction } from '@/pages/application/modulos/components/modulos-table/modulos-cell-action'
 import { ModuloDTO } from '@/types/dtos'
 import { Check, X } from 'lucide-react'
+import { Layers, FolderGit2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
+import { ColoredBadge } from '@/components/shared/colored-badge'
 import { DataTableColumnDef } from '@/components/shared/data-table-types'
 
 export const columns: DataTableColumnDef<ModuloDTO>[] = [
@@ -79,21 +81,13 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
       const area = row.original.aplicacao?.area
       const appName = row.original.aplicacao?.nome || '-'
 
-      if (!area) {
-        return <div>{appName}</div>
-      }
-
       return (
-        <div
-          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-          style={{
-            backgroundColor: `${area.color}20`,
-            color: area.color,
-            border: `1px solid ${area.color}`,
-          }}
-        >
-          {appName}
-        </div>
+        <ColoredBadge
+          label={appName}
+          color={area?.color}
+          icon={<Layers className='h-3.5 w-3.5' />}
+          size='md'
+        />
       )
     },
   },
@@ -112,21 +106,13 @@ export const columns: DataTableColumnDef<ModuloDTO>[] = [
       const area = row.original.aplicacao?.area
       const areaName = area?.nome || '-'
 
-      if (!area) {
-        return <div>{areaName}</div>
-      }
-
       return (
-        <div
-          className='inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2'
-          style={{
-            backgroundColor: `${area.color}20`,
-            color: area.color,
-            border: `1px solid ${area.color}`,
-          }}
-        >
-          {areaName}
-        </div>
+        <ColoredBadge
+          label={areaName}
+          color={area?.color}
+          icon={<FolderGit2 className='h-3.5 w-3.5' />}
+          size='md'
+        />
       )
     },
   },

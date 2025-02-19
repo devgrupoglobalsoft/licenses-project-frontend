@@ -42,3 +42,9 @@ export const roleVariants = cva(
     },
   }
 )
+
+export const roleColorMap = {
+  administrator: '#FF6B6B',
+  admin: '#4ECDC4',
+  client: '#45B7D1',
+} as const
