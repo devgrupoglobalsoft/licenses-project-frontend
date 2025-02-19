@@ -44,6 +44,7 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
   return (
     <div
       className={cn(
+        'secondary-nav',
         'border-b bg-primary backdrop-blur supports-[backdrop-filter]:bg-primary/95',
         'shadow-sm',
         'transition-all duration-200 ease-in-out',

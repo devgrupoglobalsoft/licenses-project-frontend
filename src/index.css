@@ -178,3 +178,13 @@
 .filter-badge:hover {
   background-color: hsl(var(--muted));
 }
+
+/* Add these styles at the end of your index.css file */
+.secondary-nav a:focus,
+.secondary-nav a:focus-visible,
+.secondary-nav button:focus,
+.secondary-nav button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+}
