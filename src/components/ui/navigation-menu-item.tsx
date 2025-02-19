@@ -1,13 +1,13 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { NavigationMenuLink } from '@/components/ui/navigation-menu';
-import { cn } from '@/lib/utils';
-import { Icons } from '@/components/ui/icons';
+import * as React from 'react'
+import { Link } from 'react-router-dom'
+import { cn } from '@/lib/utils'
+import { Icons } from '@/components/ui/icons'
+import { NavigationMenuLink } from '@/components/ui/navigation-menu'
 
 interface ListItemProps extends React.ComponentPropsWithoutRef<'a'> {
-  title: string;
-  to: string;
-  icon?: keyof typeof Icons;
+  title: string
+  to: string
+  icon?: keyof typeof Icons
 }
 
 const ListItem = React.forwardRef<React.ElementRef<'a'>, ListItemProps>(
@@ -24,25 +24,23 @@ const ListItem = React.forwardRef<React.ElementRef<'a'>, ListItemProps>(
             )}
             {...props}
           >
-            <div className="flex items-center text-sm font-medium leading-none">
-              {title}
+            <div className='flex items-center gap-2 text-sm font-medium leading-none'>
               {icon && (
-                <span className="ml-2">
-                  {Icons[icon as keyof typeof Icons]?.({
-                    className: 'h-3 w-3'
-                  })}
+                <span className='h-4 w-4'>
+                  {React.createElement(Icons[icon], { className: 'h-4 w-4' })}
                 </span>
               )}
+              {title}
             </div>
-            <span className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+            <span className='line-clamp-2 text-xs leading-snug text-muted-foreground'>
               {children}
             </span>
           </Link>
         </NavigationMenuLink>
       </li>
-    );
+    )
   }
-);
-ListItem.displayName = 'ListItem';
+)
+ListItem.displayName = 'ListItem'
 
-export { ListItem };
+export { ListItem }

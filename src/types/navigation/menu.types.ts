@@ -1,11 +1,11 @@
-import { Icons } from '@/components/ui/icons'
+import { IconKey } from '@/components/ui/icons'
 
 export interface MenuItem {
   label: string
   href: string
   items?: MenuItem[]
   description?: string
-  icon?: keyof typeof Icons
+  icon?: IconKey
   dropdown?: MenuItem[]
   secondaryMenu?: MenuItem[]
 }

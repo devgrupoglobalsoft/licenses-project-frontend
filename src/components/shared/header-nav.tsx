@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useHeaderNav } from '@/contexts/header-nav-context'
 import { MenuItem } from '@/types/navigation/menu.types'
 import { Link, useLocation } from 'react-router-dom'
@@ -83,7 +84,16 @@ export function HeaderNav() {
                         )}
                         onClick={() => handleMenuItemClick(item)}
                       >
-                        {item.label}
+                        <div className='flex items-center gap-2'>
+                          {item.icon && (
+                            <span className='h-4 w-4'>
+                              {React.createElement(Icons[item.icon], {
+                                className: 'h-4 w-4',
+                              })}
+                            </span>
+                          )}
+                          {item.label}
+                        </div>
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <ul className='grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]'>
@@ -117,7 +127,16 @@ export function HeaderNav() {
                             'bg-accent text-accent-foreground'
                         )}
                       >
-                        {item.label}
+                        <div className='flex items-center gap-2'>
+                          {item.icon && (
+                            <span className='h-4 w-4'>
+                              {React.createElement(Icons[item.icon], {
+                                className: 'h-4 w-4',
+                              })}
+                            </span>
+                          )}
+                          {item.label}
+                        </div>
                       </Link>
                     </NavigationMenuLink>
                   )}

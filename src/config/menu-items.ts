@@ -1,17 +1,17 @@
-import { Icons } from '@/components/ui/icons'
+import { IconKey } from '@/components/ui/icons'
 
 export const roleMenuItems = {
   administrator: [
     {
       title: 'dashboard',
       href: '/',
-      icon: 'dashboard' as keyof typeof Icons,
+      icon: 'dashboard',
       label: 'Dashboard',
     },
     {
       title: 'administracao',
       href: '/administracao',
-      icon: 'user' as keyof typeof Icons,
+      icon: 'user',
       label: 'Administração',
     },
   ],
@@ -19,12 +19,12 @@ export const roleMenuItems = {
     {
       title: 'administracao',
       href: '/administracao',
-      icon: 'user' as keyof typeof Icons,
+      icon: 'user',
       label: 'Administração',
     },
   ],
   guest: [],
-}
+} as const
 
 export const roleHeaderMenus = {
   administrator: {
@@ -32,11 +32,13 @@ export const roleHeaderMenus = {
       {
         label: 'Plataforma',
         href: '#',
+        icon: '',
         items: [
           {
             label: 'Áreas',
             href: '/administracao/areas',
             description: 'Faca a gestão das áreas da sua empresa',
+            icon: 'dashboard',
             secondaryMenu: [
               {
                 label: 'Lista de Áreas',
@@ -46,7 +48,7 @@ export const roleHeaderMenus = {
               {
                 label: 'Nova Área',
                 href: '/administracao/areas/novo',
-                icon: 'plus',
+                icon: 'add',
               },
               {
                 label: 'Configurações',
@@ -81,7 +83,7 @@ export const roleHeaderMenus = {
                   {
                     label: 'Todas as Aplicações',
                     href: '/administracao/aplicacoes/todas',
-                    icon: 'list',
+                    icon: 'dashboard',
                   },
                   {
                     label: 'Ativas',
@@ -91,14 +93,14 @@ export const roleHeaderMenus = {
                   {
                     label: 'Inativas',
                     href: '/administracao/aplicacoes/inativas',
-                    icon: 'x',
+                    icon: 'close',
                   },
                 ],
               },
               {
                 label: 'Nova Aplicação',
                 href: '/administracao/aplicacoes/novo',
-                icon: 'plus',
+                icon: 'add',
               },
               {
                 label: 'Configurações',
@@ -128,36 +130,39 @@ export const roleHeaderMenus = {
             label: 'Modulos',
             href: '/administracao/modulos',
             description: 'Faça a gestão dos modulos da sua empresa',
-            icon: 'application' as keyof typeof Icons,
+            icon: 'application',
           },
           {
             label: 'Funcionalidades',
             href: '/administracao/funcionalidades',
             description: 'Faça a gestão das funcionalidades da sua empresa',
-            icon: 'application' as keyof typeof Icons,
+            icon: 'settings',
           },
         ],
       },
       {
         label: 'Clientes',
         href: '#',
+        icon: '',
         items: [
           {
             label: 'Clientes',
             href: '/administracao/clientes',
             description: 'Faca a gestão dos clientes da sua empresa',
+            icon: 'user',
           },
           {
             label: 'Licenças',
             href: '/administracao/licencas',
             description: 'Faça a gestão das licenças da sua empresa',
-            icon: 'application' as keyof typeof Icons,
+            icon: 'lock',
           },
         ],
       },
       {
         label: 'Utilizadores',
         href: '/administracao/utilizadores',
+        icon: '',
         description: 'Faça a gestão dos utilizadores da sua empresa',
       },
     ],
@@ -167,21 +172,25 @@ export const roleHeaderMenus = {
       {
         label: 'Configuração',
         href: '#',
+        icon: 'settings',
         items: [
           {
             label: 'Licenças',
             href: '/administracao/licencas/admin',
             description: 'Faca a gestão da sua licença',
+            icon: 'lock',
           },
           {
             label: 'Perfis',
             href: '/administracao/perfis/admin',
             description: 'Faca a gestão da sua configuração',
+            icon: 'user',
           },
           {
             label: 'Utilizadores',
             href: '/administracao/utilizadores/admin',
             description: 'Faca a gestão dos utilizadores da sua empresa',
+            icon: 'profile',
           },
         ],
       },
@@ -189,4 +198,4 @@ export const roleHeaderMenus = {
   },
   user: {},
   guest: {},
-}
+} as const
