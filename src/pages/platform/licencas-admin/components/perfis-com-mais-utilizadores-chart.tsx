@@ -1,9 +1,7 @@
-import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
-import { LicencaDTO } from '@/types/dtos/licenca.dto'
+import { useGetPerfisUtilizadoresFromLicenca } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { PieChart, Pie, ResponsiveContainer, Label } from 'recharts'
 import { PREDEFINED_COLORS } from '@/lib/constants/colors'
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -15,14 +13,6 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 
-interface PerfilDTO {
-  id?: string
-  nome?: string
-  ativo?: boolean
-  licenca: LicencaDTO
-  createdOn: Date
-}
-
 interface PerfilCount {
   name: string
   value: number
@@ -30,8 +20,12 @@ interface PerfilCount {
 }
 
 export function PerfisComMaisUtilizadoresChart() {
-  const { data: perfisResponse, isLoading, error } = useGetPerfis()
-  const perfis = perfisResponse || []
+  const {
+    data: perfisResponse,
+    isLoading,
+    error,
+  } = useGetPerfisUtilizadoresFromLicenca()
+  const perfis = perfisResponse?.info?.data?.perfis || []
 
   if (isLoading) {
     return (
@@ -53,7 +47,7 @@ export function PerfisComMaisUtilizadoresChart() {
     if (perfil.ativo) {
       acc.push({
         name: perfil.nome || 'Sem nome',
-        value: 1,
+        value: perfil.utilizadores.length,
         fill: PREDEFINED_COLORS[acc.length % PREDEFINED_COLORS.length].value,
       })
     }
@@ -71,6 +65,11 @@ export function PerfisComMaisUtilizadoresChart() {
           : perfil.name,
     }))
 
+  const chartData = topPerfis.map((perfil) => ({
+    ...perfil,
+    fill: perfil.fill,
+  }))
+
   const chartConfig = topPerfis.reduce(
     (acc, perfil) => {
       acc[perfil.name] = {
@@ -81,21 +80,19 @@ export function PerfisComMaisUtilizadoresChart() {
     },
     {
       value: {
-        label: 'Perfis',
+        label: 'Utilizadores',
       },
     } as Record<string, { label: string; color?: string }>
   )
 
-  const totalPerfis = topPerfis.reduce((sum, item) => sum + item.value, 0)
+  const totalUtilizadores = topPerfis.reduce((sum, item) => sum + item.value, 0)
 
   return (
     <div>
-      <div className='p-4 border-b flex flex-col justify-center'>
-        <h3 className='text-sm font-medium'>Distribuição por Perfil</h3>
-        <p className='text-xs text-muted-foreground'>
-          Top 5 perfis com mais utilizadores
-        </p>
-      </div>
+      <CardHeader>
+        <CardTitle>Distribuição por Perfil</CardTitle>
+        <CardDescription>Utilizadores por perfil</CardDescription>
+      </CardHeader>
       <CardContent>
         <ResponsiveContainer width='100%' height={300}>
           <ChartContainer
@@ -108,7 +105,7 @@ export function PerfisComMaisUtilizadoresChart() {
                 content={<ChartTooltipContent hideLabel />}
               />
               <Pie
-                data={topPerfis}
+                data={chartData}
                 dataKey='value'
                 nameKey='name'
                 innerRadius={60}
@@ -129,14 +126,14 @@ export function PerfisComMaisUtilizadoresChart() {
                             y={viewBox.cy}
                             className='fill-foreground text-3xl font-bold'
                           >
-                            {totalPerfis.toLocaleString()}
+                            {totalUtilizadores.toLocaleString()}
                           </tspan>
                           <tspan
                             x={viewBox.cx}
                             y={(viewBox.cy || 0) + 24}
                             className='fill-muted-foreground'
                           >
-                            Perfis
+                            Utilizadores
                           </tspan>
                         </text>
                       )

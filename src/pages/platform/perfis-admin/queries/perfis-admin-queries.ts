@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAuthStore } from '@/stores/auth-store'
 import PerfisService from '@/lib/services/platform/perfis-service'
 
 export const useGetPerfisPaginated = (
@@ -99,5 +100,21 @@ export const useGetPerfisModulosFuncionalidades = (id: string) => {
       return response.info.data
     },
     enabled: !!id,
+  })
+}
+
+export const useGetPerfisUtilizadoresFromLicenca = (role?: string) => {
+  const { licencaId } = useAuthStore()
+
+  return useQuery({
+    queryKey: ['perfis-admin-utilizadores', licencaId, role],
+    queryFn: () =>
+      PerfisService('perfis-admin').Admin.getPerfisUtilizadoresFromLicenca(
+        licencaId!,
+        role
+      ),
+    enabled: !!licencaId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   })
 }

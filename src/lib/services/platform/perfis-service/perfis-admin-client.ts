@@ -9,6 +9,7 @@ import {
   PerfilDTO,
   PerfilFuncionalidadeDTO,
   UpdatePerfilDTO,
+  LicencaPerfilUtilizadoresDTO,
 } from '@/types/dtos'
 import {
   ResponseApi,
@@ -283,5 +284,39 @@ export class PerfilAdminClient extends BaseApiClient {
         )
       }
     })
+  }
+
+  public async getPerfisUtilizadoresFromLicenca(
+    licencaId: string,
+    role?: string
+  ): Promise<ResponseApi<GSResponse<LicencaPerfilUtilizadoresDTO>>> {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      `/api/licencas/${licencaId}/perfis/utilizadores${role ? `?role=${role}` : ''}`
+    )
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<LicencaPerfilUtilizadoresDTO>
+          >(
+            `/api/licencas/${licencaId}/perfis/utilizadores${role ? `?role=${role}` : ''}`
+          )
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new PerfilError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new PerfilError(
+            'Falha ao obter utilizadores dos perfis da licença',
+            undefined,
+            error
+          )
+        }
+      })
+    )
   }
 }

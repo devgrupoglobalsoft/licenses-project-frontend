@@ -15,6 +15,7 @@ export const useCreateUser = () => {
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -34,6 +35,7 @@ export const useUpdateUser = () => {
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['utilizador-admin-basic'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -49,6 +51,8 @@ export const useDeleteUser = () => {
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -65,6 +69,7 @@ export const useDeleteMultipleUsers = () => {
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }

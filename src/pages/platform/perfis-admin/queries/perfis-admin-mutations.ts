@@ -17,6 +17,7 @@ export const useDeletePerfil = () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-count'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-select'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -32,6 +33,7 @@ export const useCreatePerfil = () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-count'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-select'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -47,6 +49,7 @@ export const useUpdatePerfil = () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-count'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-select'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -92,6 +95,7 @@ export const useAddUtilizadorPerfil = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
       queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }
@@ -107,6 +111,7 @@ export const useDeleteMultiplePerfis = () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-count'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-select'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
     },
   })
 }

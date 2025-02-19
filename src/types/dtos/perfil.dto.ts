@@ -1,3 +1,5 @@
+import { ResponseUser } from '../responses'
+
 export interface CreatePerfilDTO {
   nome: string
   ativo: boolean
@@ -37,4 +39,12 @@ export interface PerfilModuloDTO {
   moduloNome: string
   funcionalidades: PerfilFuncionalidadeDTO[]
   estado: number
+}
+
+export interface PerfilWithUtilizadoresDTO extends PerfilDTO {
+  utilizadores: ResponseUser[]
+}
+
+export interface LicencaPerfilUtilizadoresDTO {
+  perfis: PerfilWithUtilizadoresDTO[]
 }
