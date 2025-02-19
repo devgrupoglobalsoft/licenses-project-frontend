@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { ColumnDef, ColumnFilter } from '@tanstack/react-table'
-import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
 import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
 import { filterFields } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-constants'
 import { UtilizadorDTO } from '@/types/dtos'
@@ -22,7 +21,6 @@ export function UtilizadoresAdminFilterControls({
   columns,
 }: BaseFilterControlsProps<UtilizadorDTO>) {
   const [filterValues, setFilterValues] = useState<Record<string, string>>({})
-  const { data: clientes } = useGetClientesSelect()
   const { data: perfis } = useGetPerfis()
 
   useEffect(() => {
@@ -67,7 +65,7 @@ export function UtilizadoresAdminFilterControls({
           <SelectContent>
             <SelectItem value='all'>Todos</SelectItem>
             {Object.entries(roleConfigAdmin).map(([role, config]) => (
-              <SelectItem key={role} value={role}>
+              <SelectItem key={role} value={role.toLowerCase()}>
                 <div className='flex items-center gap-2'>
                   <div
                     className='h-4 w-4 rounded-full'
@@ -77,27 +75,6 @@ export function UtilizadoresAdminFilterControls({
                   />
                   <span>{config.label}</span>
                 </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      )
-    }
-
-    if (column.accessorKey === 'cliente.nome') {
-      return (
-        <Select
-          value={filterValues['cliente.nome'] || 'all'}
-          onValueChange={(value) => handleFilterChange('cliente.nome', value)}
-        >
-          <SelectTrigger className={commonInputStyles}>
-            <SelectValue placeholder='Selecione um cliente' />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value='all'>Todos</SelectItem>
-            {clientes?.map((cliente) => (
-              <SelectItem key={cliente.id} value={cliente.nome}>
-                {cliente.nome}
               </SelectItem>
             ))}
           </SelectContent>

@@ -18,13 +18,8 @@ export const filterFields: DataTableFilterField<UtilizadorDTO>[] = [
     order: 3,
   },
   {
-    label: 'Cliente',
-    value: 'cliente.nome',
-    order: 4,
-  },
-  {
     label: 'Estado',
     value: 'ativo',
-    order: 5,
+    order: 4,
   },
 ]

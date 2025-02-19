@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { UtilizadoresFilterControls } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-filter-controls'
+import { UtilizadoresAdminFilterControls } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-filter-controls'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Plus, Trash2 } from 'lucide-react'
 import { getErrorMessage } from '@/utils/error-handlers'
@@ -90,7 +90,7 @@ export default function UtilizadoresAdminTable({
             data={utilizadores}
             pageCount={pageCount}
             filterFields={filterFields}
-            FilterControls={UtilizadoresFilterControls}
+            FilterControls={UtilizadoresAdminFilterControls}
             onFiltersChange={handleFiltersChange}
             onPaginationChange={handlePaginationChange}
             onSortingChange={handleSortingChange}

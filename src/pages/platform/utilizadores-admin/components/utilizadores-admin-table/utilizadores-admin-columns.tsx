@@ -81,24 +81,24 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
       )
     },
   },
-  {
-    accessorKey: 'cliente.nome',
-    header: 'Cliente',
-    sortKey: 'cliente.nome',
-    enableSorting: true,
-    enableHiding: true,
-    meta: {
-      align: 'left',
-    },
-    cell: ({ row }) => (
-      <div
-        className='truncate max-w-[200px]'
-        title={row.original.cliente?.nome}
-      >
-        {row.original.cliente?.nome || '-'}
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: 'cliente.nome',
+  //   header: 'Cliente',
+  //   sortKey: 'cliente.nome',
+  //   enableSorting: true,
+  //   enableHiding: true,
+  //   meta: {
+  //     align: 'left',
+  //   },
+  //   cell: ({ row }) => (
+  //     <div
+  //       className='truncate max-w-[200px]'
+  //       title={row.original.cliente?.nome}
+  //     >
+  //       {row.original.cliente?.nome || '-'}
+  //     </div>
+  //   ),
+  // },
   {
     accessorKey: 'perfisUtilizador',
     header: 'Perfil',
