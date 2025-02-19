@@ -95,3 +95,18 @@ export const useAddUtilizadorPerfil = () => {
     },
   })
 }
+
+export const useDeleteMultiplePerfis = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ids: string[]) =>
+      PerfisService('perfis-admin').Admin.deleteMultiplePerfis(ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-count'] })
+      queryClient.invalidateQueries({ queryKey: ['perfis-admin-select'] })
+    },
+  })
+}

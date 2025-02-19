@@ -4,9 +4,13 @@ import { columns } from '@/pages/platform/perfis-admin/components/perfis-admin-t
 import { filterFields } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-constants'
 import { PerfisFilterControls } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-filter-controls'
 import { PerfilDTO } from '@/types/dtos'
-import { Plus } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
+import { getErrorMessage } from '@/utils/error-handlers'
+import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
+import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
+import { useDeleteMultiplePerfis } from '../../queries/perfis-admin-mutations'
 
 type TPerfisTableProps = {
   perfis: PerfilDTO[]
@@ -31,6 +35,8 @@ export function PerfisTable({
   const initialActiveFiltersCount = perfilIdParam ? 1 : 0
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const deleteMultiplePerfisMutation = useDeleteMultiplePerfis()
 
   const handleFiltersChange = (
     filters: Array<{ id: string; value: string }>
@@ -58,6 +64,24 @@ export function PerfisTable({
     setSelectedRows(newSelectedRows)
   }
 
+  const handleDeleteMultiple = async () => {
+    try {
+      const response =
+        await deleteMultiplePerfisMutation.mutateAsync(selectedRows)
+
+      if (response.info.succeeded) {
+        toast.success('Perfis removidos com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao remover perfis'))
+      }
+    } catch (error) {
+      toast.error('Erro ao remover perfis')
+    } finally {
+      setSelectedRows([])
+      setIsDeleteModalOpen(false)
+    }
+  }
+
   return (
     <>
       {perfis && (
@@ -79,6 +103,13 @@ export function PerfisTable({
             totalRows={total}
             toolbarActions={[
               {
+                label: 'Remover',
+                icon: <Trash2 className='h-4 w-4' />,
+                onClick: () => setIsDeleteModalOpen(true),
+                variant: 'destructive',
+                disabled: selectedRows.length === 0,
+              },
+              {
                 label: 'Adicionar',
                 icon: <Plus className='h-4 w-4' />,
                 onClick: () => setIsCreateModalOpen(true),
@@ -98,6 +129,15 @@ export function PerfisTable({
               modalClose={() => setIsCreateModalOpen(false)}
             />
           </EnhancedModal>
+
+          <AlertModal
+            isOpen={isDeleteModalOpen}
+            onClose={() => setIsDeleteModalOpen(false)}
+            onConfirm={handleDeleteMultiple}
+            loading={deleteMultiplePerfisMutation.isPending}
+            title='Remover Perfis'
+            description='Tem certeza que deseja remover os perfis selecionados?'
+          />
         </>
       )}
     </>

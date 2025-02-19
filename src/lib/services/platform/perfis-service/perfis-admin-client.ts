@@ -258,4 +258,30 @@ export class PerfilAdminClient extends BaseApiClient {
       }
     })
   }
+
+  public async deleteMultiplePerfis(
+    ids: string[]
+  ): Promise<ResponseApi<GSGenericResponse>> {
+    return this.withRetry(async () => {
+      try {
+        const response = await this.httpClient.deleteRequestWithBody<
+          { ids: string[] },
+          GSGenericResponse
+        >('/api/perfis/admin/bulk-delete', { ids: ids })
+
+        if (!response.info) {
+          console.error('Formato de resposta inválido:', response)
+          throw new PerfilError('Formato de resposta inválido')
+        }
+
+        return response
+      } catch (error) {
+        throw new PerfilError(
+          'Falha ao remover múltiplos perfis',
+          undefined,
+          error
+        )
+      }
+    })
+  }
 }
