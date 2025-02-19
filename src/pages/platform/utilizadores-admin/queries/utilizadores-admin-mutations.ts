@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { CreateUtilizadorDTO, UpdateUtilizadorDTO } from '@/types/dtos'
 import LicencasService from '@/lib/services/platform/licencas-service'
+import UtilizadoresService from '@/lib/services/platform/utilizadores-service'
 
 export const useCreateUser = () => {
   const queryClient = useQueryClient()
@@ -48,6 +49,22 @@ export const useDeleteUser = () => {
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
+    },
+  })
+}
+
+export const useDeleteMultipleUsers = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (ids: string[]) =>
+      UtilizadoresService('utilizadores').Admin.deleteMultipleUsers(ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-admin'] })
+      queryClient.invalidateQueries({
+        queryKey: ['utilizadores-admin-paginated'],
+      })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }

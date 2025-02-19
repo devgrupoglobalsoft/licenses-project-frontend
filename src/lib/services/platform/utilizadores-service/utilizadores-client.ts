@@ -12,8 +12,16 @@ import {
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 import { UtilizadorError } from './utilizador-error'
+import { UtilizadoresAdminClient } from './utilizadores-admin-client'
 
 export class UtilizadoresClient extends BaseApiClient {
+  public Admin: UtilizadoresAdminClient
+
+  constructor(idFuncionalidade: string) {
+    super(idFuncionalidade)
+    this.Admin = new UtilizadoresAdminClient(idFuncionalidade)
+  }
+
   public async getUtilizadoresPaginated(
     params: PaginatedRequest
   ): Promise<ResponseApi<PaginatedResponse<UtilizadorDTO>>> {

@@ -6,4 +6,5 @@ const UtilizadoresService = (idFuncionalidade: string) =>
 export default UtilizadoresService
 
 export * from './utilizadores-client'
+export * from './utilizadores-admin-client'
 export * from './utilizador-error'

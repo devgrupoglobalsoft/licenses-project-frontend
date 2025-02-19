@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { LicencasTable } from '@/pages/platform/licencas/components/licencas-table'
+import LicencasTable from '@/pages/platform/licencas/components/licencas-table'
 import {
   useGetLicencasPaginated,
   usePrefetchAdjacentLicencas,
