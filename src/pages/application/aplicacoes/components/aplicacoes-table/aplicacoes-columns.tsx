@@ -1,6 +1,6 @@
 import { CellAction } from '@/pages/application/aplicacoes/components/aplicacoes-table/aplicacoes-cell-action'
 import { AplicacaoDTO } from '@/types/dtos'
-import { Check, X, Circle, FolderGit2 } from 'lucide-react'
+import { Check, X, FolderGit2 } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ColoredBadge } from '@/components/shared/colored-badge'
 import { DataTableColumnDef } from '@/components/shared/data-table-types'

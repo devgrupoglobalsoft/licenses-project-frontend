@@ -7,7 +7,7 @@ import { useCreateUtilizador } from '@/pages/platform/utilizadores/queries/utili
 import { Eye, EyeOff } from 'lucide-react'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleColors, roleLabelMap } from '@/constants/roles'
+import { roleColorMap, roleLabelMap } from '@/constants/roles'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -275,10 +275,13 @@ export function UtilizadorCreateForm({
                           <SelectItem key={role} value={role}>
                             <div className='flex items-center gap-2'>
                               <div
-                                className={`h-4 w-4 rounded-full ${
-                                  roleColors[role as keyof typeof roleColors]
-                                    .indicator
-                                }`}
+                                className='h-4 w-4 rounded-full'
+                                style={{
+                                  backgroundColor:
+                                    roleColorMap[
+                                      role as keyof typeof roleColorMap
+                                    ],
+                                }}
                               />
                               <span>{label}</span>
                             </div>

@@ -2,11 +2,12 @@ import { cn } from '@/lib/utils'
 import { handleApiError } from '@/utils/error-handlers'
 import { getErrorMessage } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleVariants, roleLabelMap, roleColors } from '@/constants/roles'
+import { roleLabelMap, roleColorMap } from '@/constants/roles'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
+import { ColoredBadge } from '@/components/shared/colored-badge'
 import { useUpdateLicencaUtilizadores } from '../queries/licencas-admin-mutations'
 import { useGetLicencaUtilizadores } from '../queries/licencas-admin-queries'
 
@@ -136,14 +137,11 @@ export function LicencaUtilizadoresList({
                   <Label className='text-xs sm:text-base font-medium truncate'>
                     {fullName}
                   </Label>
-                  <span
-                    className={cn(
-                      roleVariants({ role }),
-                      'text-[9px] sm:text-[10px] px-1.5 py-0.5'
-                    )}
-                  >
-                    {roleLabelMap[role]}
-                  </span>
+                  <ColoredBadge
+                    label={roleLabelMap[role]}
+                    color={roleColorMap[role]}
+                    size='xs'
+                  />
                 </div>
                 <span className='text-[10px] sm:text-xs text-muted-foreground truncate block'>
                   {utilizador.utilizador.email}

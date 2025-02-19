@@ -14,7 +14,6 @@ import {
 } from 'recharts'
 import type { ValueType } from 'recharts/types/component/DefaultTooltipContent'
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,

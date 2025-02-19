@@ -85,7 +85,6 @@ export default function UtilizadoresAdminPage() {
       <div className='mt-10'>
         <UtilizadoresAdminTable
           utilizadores={utilizadores}
-          page={page}
           total={totalUtilizadores}
           pageCount={pageCount}
           onFiltersChange={handleFiltersChange}

@@ -44,7 +44,7 @@ export function ColoredBadge({
         backgroundColor: `${color}08`,
         color: color,
         borderColor: `${color}30`,
-        '--tw-ring-color': `${color}30`,
+        ['--tw-ring-color' as string]: `${color}30`,
       }}
     >
       {icon && (

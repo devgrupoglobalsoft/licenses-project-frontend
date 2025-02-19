@@ -4,7 +4,7 @@ import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes
 import { filterFields } from '@/pages/platform/utilizadores/components/utilizadores-table/utilizadores-constants'
 import { UtilizadorDTO } from '@/types/dtos'
 import { getColumnHeader } from '@/utils/table-utils'
-import { roleColors, roleLabelMap } from '@/constants/roles'
+import { roleColorMap, roleLabelMap } from '@/constants/roles'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -68,9 +68,11 @@ export function UtilizadoresFilterControls({
               <SelectItem key={role} value={role}>
                 <div className='flex items-center gap-2'>
                   <div
-                    className={`h-4 w-4 rounded-full ${
-                      roleColors[role as keyof typeof roleColors].indicator
-                    }`}
+                    className='h-4 w-4 rounded-full'
+                    style={{
+                      backgroundColor:
+                        roleColorMap[role as keyof typeof roleColorMap],
+                    }}
                   />
                   <span>{label}</span>
                 </div>

@@ -113,7 +113,7 @@ export function HeaderNav() {
                                 isItemActive(subItem.href) &&
                                   'bg-accent text-accent-foreground'
                               )}
-                              onClick={(e) => handleMenuItemClick(subItem)}
+                              onClick={() => handleMenuItemClick(subItem)}
                             >
                               <div className='flex items-center'>
                                 {subItem.description}

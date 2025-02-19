@@ -5,7 +5,7 @@ import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes
 import { useUpdateUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleColors, roleLabelMap } from '@/constants/roles'
+import { roleLabelMap, roleColorMap } from '@/constants/roles'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -213,10 +213,13 @@ export function UtilizadorUpdateForm({
                           <SelectItem key={role} value={role}>
                             <div className='flex items-center gap-2'>
                               <div
-                                className={`h-4 w-4 rounded-full ${
-                                  roleColors[role as keyof typeof roleColors]
-                                    .indicator
-                                }`}
+                                className='h-4 w-4 rounded-full'
+                                style={{
+                                  backgroundColor:
+                                    roleColorMap[
+                                      role as keyof typeof roleColorMap
+                                    ],
+                                }}
                               />
                               <span>{label}</span>
                             </div>

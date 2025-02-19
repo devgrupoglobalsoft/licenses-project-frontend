@@ -35,6 +35,7 @@ const initialState: AuthState = {
   userId: '',
   roleId: '',
   clientId: '',
+  licencaId: '',
   permissions: {},
   isLoaded: false,
   isAuthenticated: false,
