@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { PerfisTable } from '@/pages/platform/perfis-admin/components/perfis-admin-table'
+import { PerfisAdminTable } from '@/pages/platform/perfis-admin/components/perfis-admin-table'
 import {
   useGetPerfisPaginated,
   usePrefetchAdjacentPerfis,
@@ -83,7 +83,7 @@ export default function PerfisAdminPage() {
         ]}
       />
       <div className='mt-10'>
-        <PerfisTable
+        <PerfisAdminTable
           perfis={perfis}
           page={page}
           total={totalPerfis}

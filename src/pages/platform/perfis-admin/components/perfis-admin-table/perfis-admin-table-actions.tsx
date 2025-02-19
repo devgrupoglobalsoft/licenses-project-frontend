@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
 import PerfilAdminCreateForm from '../perfis-admin-forms/perfil-admin-create-form'
 
-export default function PerfisTableActions() {
+export default function PerfisAdminTableActions() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
 
   return (

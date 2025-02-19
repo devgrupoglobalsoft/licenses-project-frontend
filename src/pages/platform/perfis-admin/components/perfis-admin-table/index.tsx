@@ -12,7 +12,7 @@ import { AlertModal } from '@/components/shared/alert-modal'
 import DataTable from '@/components/shared/data-table'
 import { useDeleteMultiplePerfis } from '../../queries/perfis-admin-mutations'
 
-type TPerfisTableProps = {
+type TPerfisAdminTableProps = {
   perfis: PerfilDTO[]
   page: number
   total: number
@@ -22,14 +22,14 @@ type TPerfisTableProps = {
   onSortingChange?: (sorting: Array<{ id: string; desc: boolean }>) => void
 }
 
-export function PerfisTable({
+export function PerfisAdminTable({
   perfis,
   pageCount,
   total,
   onFiltersChange,
   onPaginationChange,
   onSortingChange,
-}: TPerfisTableProps) {
+}: TPerfisAdminTableProps) {
   const searchParams = new URLSearchParams(window.location.search)
   const perfilIdParam = searchParams.get('perfilId')
   const initialActiveFiltersCount = perfilIdParam ? 1 : 0
