@@ -1,4 +1,3 @@
-import React from 'react'
 import { MenuItem } from '@/types/navigation/menu.types'
 import { ChevronDown } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
@@ -64,11 +63,15 @@ export function SecondaryNav({ items, className }: SecondaryNavProps) {
                       'flex items-center space-x-2 text-xs font-medium',
                       'transition-all duration-200 ease-in-out',
                       'hover:text-white/90 focus:outline-none',
-                      'relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:scale-x-0 after:bg-white after:transition-transform after:duration-200',
-                      'hover:after:scale-x-100',
                       isItemActive(item.href, item.dropdown)
-                        ? 'text-white font-semibold after:scale-x-100'
-                        : 'text-white/70 after:scale-x-0'
+                        ? 'text-white font-semibold'
+                        : 'text-white/70',
+                      // Only apply underline effect when not a dropdown
+                      !item.dropdown && [
+                        'relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:scale-x-0 after:bg-white after:transition-transform after:duration-200',
+                        'hover:after:scale-x-100',
+                        isItemActive(item.href) && 'after:scale-x-100',
+                      ]
                     )}
                   >
                     {Icon && <Icon className='h-3.5 w-3.5' />}
