@@ -7,7 +7,7 @@ import { useUpdateUser } from '@/pages/platform/utilizadores-admin/queries/utili
 import { useAuthStore } from '@/stores/auth-store'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleColorMap, roleLabelMapAdmin } from '@/constants/roles'
+import { roleConfigAdmin } from '@/constants/roles'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -242,20 +242,17 @@ export function UtilizadorAdminUpdateForm({
                         <SelectValue placeholder='Selecione uma role' />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(roleLabelMapAdmin).map(
-                          ([role, label]) => (
+                        {Object.entries(roleConfigAdmin).map(
+                          ([role, config]) => (
                             <SelectItem key={role} value={role}>
                               <div className='flex items-center gap-2'>
                                 <div
                                   className='h-4 w-4 rounded-full'
                                   style={{
-                                    backgroundColor:
-                                      roleColorMap[
-                                        role as keyof typeof roleColorMap
-                                      ],
+                                    backgroundColor: config.color,
                                   }}
                                 />
-                                <span>{label}</span>
+                                <span>{config.label}</span>
                               </div>
                             </SelectItem>
                           )

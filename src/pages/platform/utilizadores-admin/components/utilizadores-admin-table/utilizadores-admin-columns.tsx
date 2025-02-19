@@ -3,7 +3,7 @@ import { CellAction } from '@/pages/platform/utilizadores-admin/components/utili
 import { UtilizadorDTO } from '@/types/dtos'
 import { Check, X, Shield } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { roleColorMap, roleLabelMap } from '@/constants/roles'
+import { roleConfig } from '@/constants/roles'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ColoredBadge } from '@/components/shared/colored-badge'
 import { DataTableColumnDef } from '@/components/shared/data-table-types'
@@ -69,12 +69,12 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
     },
     cell: ({ row }) => {
       const role = (row.original.roleId?.toLowerCase() ||
-        'client') as keyof typeof roleLabelMap
+        'client') as keyof typeof roleConfig
 
       return (
         <ColoredBadge
-          label={roleLabelMap[role]}
-          color={roleColorMap[role]}
+          label={roleConfig[role].label}
+          color={roleConfig[role].color}
           icon={<Shield className='h-3.5 w-3.5' />}
           size='md'
         />

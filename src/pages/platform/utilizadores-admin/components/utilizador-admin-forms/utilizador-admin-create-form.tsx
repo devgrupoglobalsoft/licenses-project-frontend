@@ -8,7 +8,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '@/stores/auth-store'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleColorMap, roleLabelMapAdmin } from '@/constants/roles'
+import { roleConfigAdmin } from '@/constants/roles'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -281,7 +281,7 @@ export function UtilizadorAdminCreateForm({
                         <SelectValue placeholder='Selecione uma role' />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(roleLabelMapAdmin).map(
+                        {Object.entries(roleConfigAdmin).map(
                           ([role, label]) => (
                             <SelectItem key={role} value={role}>
                               <div className='flex items-center gap-2'>
@@ -289,12 +289,18 @@ export function UtilizadorAdminCreateForm({
                                   className='h-4 w-4 rounded-full'
                                   style={{
                                     backgroundColor:
-                                      roleColorMap[
-                                        role as keyof typeof roleColorMap
-                                      ],
+                                      roleConfigAdmin[
+                                        role as keyof typeof roleConfigAdmin
+                                      ].color,
                                   }}
                                 />
-                                <span>{label}</span>
+                                <span>
+                                  {
+                                    roleConfigAdmin[
+                                      role as keyof typeof roleConfigAdmin
+                                    ].label
+                                  }
+                                </span>
                               </div>
                             </SelectItem>
                           )

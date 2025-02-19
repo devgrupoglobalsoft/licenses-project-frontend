@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import { handleApiError } from '@/utils/error-handlers'
 import { getErrorMessage } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleLabelMap, roleColorMap } from '@/constants/roles'
+import { roleConfig } from '@/constants/roles'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -89,7 +89,7 @@ export function LicencaUtilizadoresList({
     <div className='space-y-2 p-2 sm:space-y-4 sm:p-6'>
       {utilizadores.map((utilizador) => {
         const role = (utilizador.utilizador.roleId?.toLowerCase() ||
-          'client') as keyof typeof roleLabelMap
+          'client') as keyof typeof roleConfig
         const fullName = [
           utilizador.utilizador.firstName,
           utilizador.utilizador.lastName,
@@ -138,8 +138,8 @@ export function LicencaUtilizadoresList({
                     {fullName}
                   </Label>
                   <ColoredBadge
-                    label={roleLabelMap[role]}
-                    color={roleColorMap[role]}
+                    label={roleConfig[role].label}
+                    color={roleConfig[role].color}
                     size='xs'
                   />
                 </div>

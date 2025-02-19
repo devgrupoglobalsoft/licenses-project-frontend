@@ -5,7 +5,7 @@ import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes
 import { useUpdateUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
-import { roleLabelMap, roleColorMap } from '@/constants/roles'
+import { roleConfig } from '@/constants/roles'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -209,19 +209,16 @@ export function UtilizadorUpdateForm({
                         <SelectValue placeholder='Selecione uma role' />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(roleLabelMap).map(([role, label]) => (
+                        {Object.entries(roleConfig).map(([role, config]) => (
                           <SelectItem key={role} value={role}>
                             <div className='flex items-center gap-2'>
                               <div
                                 className='h-4 w-4 rounded-full'
                                 style={{
-                                  backgroundColor:
-                                    roleColorMap[
-                                      role as keyof typeof roleColorMap
-                                    ],
+                                  backgroundColor: config.color,
                                 }}
                               />
-                              <span>{label}</span>
+                              <span>{config.label}</span>
                             </div>
                           </SelectItem>
                         ))}
