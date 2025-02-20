@@ -281,30 +281,28 @@ export function UtilizadorAdminCreateForm({
                         <SelectValue placeholder='Selecione uma role' />
                       </SelectTrigger>
                       <SelectContent>
-                        {Object.entries(roleConfigAdmin).map(
-                          ([role, label]) => (
-                            <SelectItem key={role} value={role}>
-                              <div className='flex items-center gap-2'>
-                                <div
-                                  className='h-4 w-4 rounded-full'
-                                  style={{
-                                    backgroundColor:
-                                      roleConfigAdmin[
-                                        role as keyof typeof roleConfigAdmin
-                                      ].color,
-                                  }}
-                                />
-                                <span>
-                                  {
+                        {Object.entries(roleConfigAdmin).map(([role]) => (
+                          <SelectItem key={role} value={role}>
+                            <div className='flex items-center gap-2'>
+                              <div
+                                className='h-4 w-4 rounded-full'
+                                style={{
+                                  backgroundColor:
                                     roleConfigAdmin[
                                       role as keyof typeof roleConfigAdmin
-                                    ].label
-                                  }
-                                </span>
-                              </div>
-                            </SelectItem>
-                          )
-                        )}
+                                    ].color,
+                                }}
+                              />
+                              <span>
+                                {
+                                  roleConfigAdmin[
+                                    role as keyof typeof roleConfigAdmin
+                                  ].label
+                                }
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </FormControl>
