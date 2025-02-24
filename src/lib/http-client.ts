@@ -15,85 +15,63 @@ export class HttpClient {
   private idFuncionalidade?: string
   // private readonly apiUrl: string = import.meta.env.VITE_URL;
   private readonly apiKey: string = import.meta.env.VITE_API_KEY
-  private tokenCheckInProgress = false
-  private lastTokenCheck = 0
-  private readonly TOKEN_CHECK_INTERVAL = 30000 // 30 seconds
 
   constructor(idFuncionalidade?: string) {
     this.idFuncionalidade = idFuncionalidade
   }
 
   private async validateAndRenewToken(): Promise<boolean> {
-    const currentTime = Date.now()
-
-    if (
-      this.tokenCheckInProgress ||
-      currentTime - this.lastTokenCheck < this.TOKEN_CHECK_INTERVAL
-    ) {
-      return true
-    }
-
     try {
-      this.tokenCheckInProgress = true
-      const { token, clearAuth } = useAuthStore.getState()
+      const { token, refreshToken, clearAuth } = useAuthStore.getState()
       const navigate = useNavigationStore.getState().navigate
 
       // First validate the stored auth data
       const storedAuth = secureStorage.get('auth-storage')
-      if (!storedAuth || !token) {
-        console.log('No stored auth or token')
+      if (!storedAuth || (!token && !refreshToken)) {
+        console.log('No stored auth or tokens')
         clearAuth()
         navigate('/login')
         return false
       }
 
-      // Decode token to check expiration
-      try {
-        const decodedToken: GSResponseToken = jwtDecode(token)
-        const tokenExpiryTime = decodedToken.exp * 1000
-        const REFRESH_BUFFER = 30 * 1000 // 30 seconds buffer
-        const timeUntilExpiry = tokenExpiryTime - currentTime
-        const timeUntilRefresh = timeUntilExpiry - REFRESH_BUFFER
+      // If we have a token, check if it's valid
+      if (token) {
+        try {
+          const decodedToken: GSResponseToken = jwtDecode(token)
+          const tokenExpiryTime = decodedToken.exp * 1000
+          const currentTime = Date.now()
 
-        // Log time until refresh
-        console.log('Token status:', {
-          timeUntilExpiry:
-            Math.floor(timeUntilExpiry / 1000) + ' seconds until expiry',
-          timeUntilRefresh:
-            Math.floor(timeUntilRefresh / 1000) + ' seconds until refresh',
-          willRefreshIn:
-            timeUntilRefresh <= 0
-              ? 'Refreshing now'
-              : Math.floor(timeUntilRefresh / 1000) + ' seconds',
-        })
-
-        // If token will expire within buffer time, try to refresh
-        if (tokenExpiryTime - currentTime <= REFRESH_BUFFER) {
-          console.log('Token expiring soon, attempting refresh')
-          const TokensClient = (
-            await import('@/lib/services/auth/tokens-client')
-          ).default
-          const success = await TokensClient.getRefresh()
-
-          if (!success) {
-            console.log('Token refresh failed')
-            clearAuth()
-            navigate('/login')
-            return false
+          // If token is still valid, return true
+          if (tokenExpiryTime > currentTime) {
+            return true
           }
-          console.log('Token refreshed successfully')
+        } catch (error) {
+          console.error('Token decode error:', error)
         }
-
-        return true
-      } catch (error) {
-        console.error('Token validation error:', error)
-        clearAuth()
-        navigate('/login')
-        return false
       }
-    } finally {
-      this.lastTokenCheck = currentTime
-      this.tokenCheckInProgress = false
+
+      // If we get here, either token is invalid or we don't have one
+      // Try to refresh if we have a refresh token
+      if (refreshToken) {
+        console.log('Attempting to refresh token')
+        const TokensClient = (await import('@/lib/services/auth/tokens-client'))
+          .default
+        const success = await TokensClient.getRefresh()
+
+        if (success) {
+          console.log('Token refreshed successfully')
+          return true
+        }
+      }
+
+      // If we get here, refresh failed or we had no refresh token
+      console.log('Token validation/refresh failed')
+      clearAuth()
+      navigate('/login')
+      return false
+    } catch (error) {
+      console.error('Token validation error:', error)
+      return false
     }
   }
 
