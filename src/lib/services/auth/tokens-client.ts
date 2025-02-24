@@ -39,12 +39,14 @@ class TokensClient {
       if (response.status === 200 && response.data.data != null) {
         const loginResponse: ResponseLogin = response.data.data
 
-        // Update auth store
+        // First set the token and trigger decode
         setToken(loginResponse.token)
         setRefreshToken(loginResponse.refreshToken)
         setRefreshTokenExpiryTime(loginResponse.refreshTokenExpiryTime)
         setUser(email)
-        decodeToken()
+
+        // Ensure token is decoded before proceeding
+        await decodeToken()
 
         // Get license info
         const licenseResponse = await this.httpClient.getRequest<
@@ -60,10 +62,9 @@ class TokensClient {
 
         return true
       }
-      console.error('Login failed')
       return false
     } catch (err) {
-      console.error('Login error', err)
+      console.error('Login error:', err)
       return false
     }
   }

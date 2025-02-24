@@ -24,8 +24,10 @@ export const secureStorage = {
       ).toString()
 
       localStorage.setItem(key, encryptedValue)
+      return true
     } catch (error) {
       console.error('Error setting secure storage:', error)
+      return false
     }
   },
 
@@ -59,13 +61,22 @@ export const secureStorage = {
     if (!token) return false
     try {
       const decoded = jwtDecode(token)
-      // Only verify expiration for regular tokens
       if ('exp' in decoded) {
-        return decoded.exp! * 1000 > Date.now()
+        const expiryTime = decoded.exp! * 1000
+        const currentTime = Date.now()
+        // Don't add buffer time here, just check if token is expired
+        const isValid = expiryTime > currentTime
+        console.log('Token verification:', {
+          expiryTime: new Date(expiryTime),
+          currentTime: new Date(currentTime),
+          isValid,
+          timeLeft: Math.floor((expiryTime - currentTime) / 1000) + ' seconds',
+        })
+        return isValid
       }
-      // For refresh tokens or other types, just verify they can be decoded
       return true
-    } catch {
+    } catch (error) {
+      console.error('Token verification error:', error)
       return false
     }
   },

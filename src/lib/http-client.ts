@@ -41,35 +41,56 @@ export class HttpClient {
       // First validate the stored auth data
       const storedAuth = secureStorage.get('auth-storage')
       if (!storedAuth || !token) {
+        console.log('No stored auth or token')
         clearAuth()
         navigate('/login')
         return false
       }
 
-      // Then validate the token itself
-      if (!secureStorage.verify(token)) {
-        clearAuth()
-        navigate('/login')
-        return false
-      }
+      // Decode token to check expiration
+      try {
+        const decodedToken: GSResponseToken = jwtDecode(token)
+        const tokenExpiryTime = decodedToken.exp * 1000
+        const REFRESH_BUFFER = 30 * 1000 // 30 seconds buffer
+        const timeUntilExpiry = tokenExpiryTime - currentTime
+        const timeUntilRefresh = timeUntilExpiry - REFRESH_BUFFER
 
-      const decodedToken: GSResponseToken = jwtDecode(token)
-      const tokenExpiryTime = decodedToken.exp * 1000
+        // Log time until refresh
+        console.log('Token status:', {
+          timeUntilExpiry:
+            Math.floor(timeUntilExpiry / 1000) + ' seconds until expiry',
+          timeUntilRefresh:
+            Math.floor(timeUntilRefresh / 1000) + ' seconds until refresh',
+          willRefreshIn:
+            timeUntilRefresh <= 0
+              ? 'Refreshing now'
+              : Math.floor(timeUntilRefresh / 1000) + ' seconds',
+        })
 
-      if (tokenExpiryTime < currentTime) {
-        const TokensClient = (await import('@/lib/services/auth/tokens-client'))
-          .default
-        const success = await TokensClient.getRefresh()
+        // If token will expire within buffer time, try to refresh
+        if (tokenExpiryTime - currentTime <= REFRESH_BUFFER) {
+          console.log('Token expiring soon, attempting refresh')
+          const TokensClient = (
+            await import('@/lib/services/auth/tokens-client')
+          ).default
+          const success = await TokensClient.getRefresh()
 
-        if (!success) {
-          clearAuth()
-          navigate('/login')
-          return false
+          if (!success) {
+            console.log('Token refresh failed')
+            clearAuth()
+            navigate('/login')
+            return false
+          }
+          console.log('Token refreshed successfully')
         }
-        return true
-      }
 
-      return true
+        return true
+      } catch (error) {
+        console.error('Token validation error:', error)
+        clearAuth()
+        navigate('/login')
+        return false
+      }
     } finally {
       this.lastTokenCheck = currentTime
       this.tokenCheckInProgress = false

@@ -9,15 +9,39 @@ export default function ProtectedRoute({
   children: React.ReactNode
 }) {
   const navigate = useNavigate()
-  const { token, isAuthenticated, clearAuth } = useAuthStore()
+  const { token, isAuthenticated, isLoaded, clearAuth } = useAuthStore()
 
   useEffect(() => {
-    const storedAuth = secureStorage.get('auth-storage')
-    if (!storedAuth || !isAuthenticated || !secureStorage.verify(token)) {
-      clearAuth()
-      navigate('/login')
+    if (!isLoaded) return
+
+    const validateAuth = async () => {
+      const storedAuth = secureStorage.get('auth-storage')
+      if (!storedAuth || !isAuthenticated || !token) {
+        console.log('Auth validation failed:', {
+          storedAuth,
+          isAuthenticated,
+          hasToken: !!token,
+        })
+        clearAuth()
+        navigate('/login')
+        return
+      }
+
+      const isTokenValid = secureStorage.verify(token)
+      console.log('Protected Route - Token validation:', isTokenValid)
+
+      if (!isTokenValid) {
+        clearAuth()
+        navigate('/login')
+      }
     }
-  }, [token, isAuthenticated, clearAuth, navigate])
+
+    validateAuth()
+  }, [token, isAuthenticated, isLoaded, clearAuth, navigate])
+
+  if (!isLoaded) {
+    return null // or a loading spinner
+  }
 
   return isAuthenticated ? children : null
 }
