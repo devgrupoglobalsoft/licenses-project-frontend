@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from '@/routes/hooks'
 import TokensClient from '@/lib/services/auth/tokens-client'
+import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -25,7 +26,6 @@ type UserFormValue = z.infer<typeof formSchema>
 
 export default function UserAuthForm() {
   const router = useRouter()
-  const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
   const defaultValues = {
@@ -49,25 +49,13 @@ export default function UserAuthForm() {
       const success = await TokensClient.login(data.email, data.password)
 
       if (success) {
-        toast({
-          title: 'Success',
-          description: 'Login realizado com sucesso',
-          variant: 'default',
-        })
+        toast.success('Login realizado com sucesso')
         router.push('/')
       } else {
-        toast({
-          title: 'Error',
-          description: 'Credenciais inválidas',
-          variant: 'destructive',
-        })
+        toast.error('Credenciais inválidas')
       }
     } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Algo correu mal',
-        variant: 'destructive',
-      })
+      toast.error('Algo correu mal')
     } finally {
       setLoading(false)
     }
