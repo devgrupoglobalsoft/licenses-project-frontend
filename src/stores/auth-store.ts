@@ -21,6 +21,7 @@ interface AuthState {
 interface AuthActions {
   setToken: (token: string) => void
   setRefreshToken: (token: string) => void
+  setRefreshTokenExpiryTime: (time: string) => void
   setUser: (email: string) => void
   decodeToken: () => void
   clearAuth: () => void
@@ -53,6 +54,10 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       setRefreshToken: (refreshToken: string) => {
         set({ refreshToken })
+      },
+
+      setRefreshTokenExpiryTime: (refreshTokenExpiryTime: string) => {
+        set({ refreshTokenExpiryTime })
       },
 
       setUser: (email: string) => {

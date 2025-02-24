@@ -13,8 +13,13 @@ class TokensClient {
   }
 
   public login = async (email: string, password: string): Promise<boolean> => {
-    const { setToken, setRefreshToken, setUser, decodeToken } =
-      useAuthStore.getState()
+    const {
+      setToken,
+      setRefreshToken,
+      setRefreshTokenExpiryTime,
+      setUser,
+      decodeToken,
+    } = useAuthStore.getState()
 
     const options: AxiosRequestConfig = {
       method: 'POST',
@@ -37,6 +42,7 @@ class TokensClient {
         // Update auth store
         setToken(loginResponse.token)
         setRefreshToken(loginResponse.refreshToken)
+        setRefreshTokenExpiryTime(loginResponse.refreshTokenExpiryTime)
         setUser(email)
         decodeToken()
 
