@@ -2,6 +2,7 @@ import { GSResponseToken } from '@/types/api/responses'
 import { jwtDecode } from 'jwt-decode'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { secureStorage } from '@/utils/secure-storage'
 
 interface AuthState {
   token: string
@@ -48,6 +49,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       ...initialState,
 
       setToken: (token: string) => {
+        // During initial login, we trust the token from the server
         set({ token, isAuthenticated: !!token, isLoaded: true })
         get().decodeToken()
       },
@@ -73,6 +75,10 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
         try {
           const decoded: GSResponseToken = jwtDecode(token)
+          if (!secureStorage.verify(token)) {
+            get().clearAuth()
+            return
+          }
           set({
             name: decoded.name,
             userId: decoded.uid,
@@ -91,8 +97,10 @@ export const useAuthStore = create<AuthState & AuthActions>()(
     }),
     {
       name: 'auth-storage',
-      onRehydrateStorage: () => (state) => {
-        state?.setToken(state.token)
+      storage: {
+        getItem: (name) => secureStorage.get(name),
+        setItem: (name, value) => secureStorage.set(name, value),
+        removeItem: (name) => localStorage.removeItem(name),
       },
     }
   )
