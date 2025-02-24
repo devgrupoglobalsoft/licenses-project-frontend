@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { HeaderNavProvider } from '@/contexts/header-nav-context'
 import AdminDashboard from '@/pages/administracao/admin'
 import AdministracaoRouter from '@/pages/administracao/administracao-router'
@@ -15,7 +15,8 @@ import PerfisAdminPage from '@/pages/platform/perfis-admin'
 import UtilizadoresPage from '@/pages/platform/utilizadores'
 import UtilizadoresAdminPage from '@/pages/platform/utilizadores-admin'
 import ProfilePage from '@/pages/profile'
-import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import { Navigate, Outlet, useRoutes, useNavigate } from 'react-router-dom'
+import { useNavigationStore } from '@/utils/navigation'
 import ProtectedRoute from '@/components/auth/protected-route'
 import RoleProtectedRoute from '@/components/auth/role-protected-route'
 import RoleRouter from '@/components/auth/role-router'
@@ -30,6 +31,12 @@ const DashboardPage = lazy(() => import('@/pages/dashboard'))
 // ----------------------------------------------------------------------
 
 export default function AppRouter() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    useNavigationStore.getState().setNavigate(navigate)
+  }, [navigate])
+
   const dashboardRoutes = [
     {
       path: '/',

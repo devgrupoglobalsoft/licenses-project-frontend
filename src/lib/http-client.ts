@@ -5,6 +5,8 @@ import { ResponseApi } from '@/types/responses'
 import { jwtDecode } from 'jwt-decode'
 import { useAuthStore } from '@/stores/auth-store'
 import { BaseApiError } from '@/lib/base-client'
+import { useNavigationStore } from '@/utils/navigation'
+import { secureStorage } from '@/utils/secure-storage'
 
 // Define the base URL for your API
 const apiUrl = state.URL
@@ -21,10 +23,9 @@ export class HttpClient {
     this.idFuncionalidade = idFuncionalidade
   }
 
-  private async renewToken(): Promise<boolean> {
+  private async validateAndRenewToken(): Promise<boolean> {
     const currentTime = Date.now()
 
-    // Skip if another check is in progress or if we checked recently
     if (
       this.tokenCheckInProgress ||
       currentTime - this.lastTokenCheck < this.TOKEN_CHECK_INTERVAL
@@ -34,9 +35,21 @@ export class HttpClient {
 
     try {
       this.tokenCheckInProgress = true
-      const { token } = useAuthStore.getState()
+      const { token, clearAuth } = useAuthStore.getState()
+      const navigate = useNavigationStore.getState().navigate
 
-      if (!token) {
+      // First validate the stored auth data
+      const storedAuth = secureStorage.get('auth-storage')
+      if (!storedAuth || !token) {
+        clearAuth()
+        navigate('/login')
+        return false
+      }
+
+      // Then validate the token itself
+      if (!secureStorage.verify(token)) {
+        clearAuth()
+        navigate('/login')
         return false
       }
 
@@ -48,16 +61,12 @@ export class HttpClient {
           .default
         const success = await TokensClient.getRefresh()
 
-        if (success) {
-          // Update localStorage state
-          const { token: newToken, refreshToken } = useAuthStore.getState()
-
-          state.Token = newToken
-          state.Refresh_Token = refreshToken
-          state.save() // This will update localStorage
+        if (!success) {
+          clearAuth()
+          navigate('/login')
+          return false
         }
-
-        return success
+        return true
       }
 
       return true
@@ -70,7 +79,7 @@ export class HttpClient {
   private async withTokenRenewal<T>(
     requestFn: () => Promise<AxiosResponse<T>>
   ): Promise<AxiosResponse<T>> {
-    const tokenValid = await this.renewToken()
+    const tokenValid = await this.validateAndRenewToken()
 
     if (!tokenValid) {
       throw new Error('Unable to renew token')
