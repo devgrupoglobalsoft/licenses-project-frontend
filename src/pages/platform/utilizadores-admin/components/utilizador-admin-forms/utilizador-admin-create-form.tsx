@@ -73,7 +73,7 @@ interface UtilizadorAdminCreateFormProps {
 export function UtilizadorAdminCreateForm({
   modalClose,
 }: UtilizadorAdminCreateFormProps) {
-  const { clientId } = useAuthStore()
+  const { clienteId } = useAuthStore()
   const { data: perfisData } = useGetPerfis()
   const createUtilizador = useCreateUser()
   const [showPassword, setShowPassword] = useState(false)
@@ -120,7 +120,7 @@ export function UtilizadorAdminCreateForm({
 
       const response = await createUtilizador.mutateAsync({
         ...submitData,
-        clienteId: clientId,
+        clienteId: clienteId,
       })
 
       if (response.info.succeeded) {

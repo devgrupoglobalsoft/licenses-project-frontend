@@ -10,7 +10,7 @@ import { DataTableSkeleton } from '@/components/shared/data-table-skeleton'
 import PageHead from '@/components/shared/page-head'
 
 export default function UtilizadoresAdminPage() {
-  const { clientId } = useAuthStore()
+  const { clienteId } = useAuthStore()
   const searchParams = new URLSearchParams(window.location.search)
   const utilizadorIdParam = searchParams.get('utilizadorId')
 
@@ -24,14 +24,14 @@ export default function UtilizadoresAdminPage() {
   )
 
   const { data, isLoading } = useGetUtilizadoresPaginated(
-    clientId,
+    clienteId,
     page,
     pageSize,
     filters,
     sorting
   )
   const { prefetchPreviousPage, prefetchNextPage } =
-    usePrefetchAdjacentUtilizadores(clientId, page, pageSize, filters)
+    usePrefetchAdjacentUtilizadores(clienteId, page, pageSize, filters)
 
   const handleFiltersChange = (
     newFilters: Array<{ id: string; value: string }>

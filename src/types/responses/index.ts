@@ -63,6 +63,10 @@ export interface ResponseLogin {
   token: string
   refreshToken: string
   refreshTokenExpiryTime: string
+  data: {
+    clienteId: string
+    licencaId: string
+  }
 }
 
 export interface ResponseModulo {

@@ -12,7 +12,7 @@ interface AuthState {
   name: string
   userId: string
   roleId: string
-  clientId: string
+  clienteId: string
   licencaId: string
   permissions: Record<string, number>
   isLoaded: boolean
@@ -36,7 +36,7 @@ const initialState: AuthState = {
   name: '',
   userId: '',
   roleId: '',
-  clientId: '',
+  clienteId: '',
   licencaId: '',
   permissions: {},
   isLoaded: false,

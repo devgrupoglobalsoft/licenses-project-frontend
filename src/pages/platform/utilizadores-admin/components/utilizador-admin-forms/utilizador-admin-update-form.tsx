@@ -74,7 +74,7 @@ export function UtilizadorAdminUpdateForm({
 }: UtilizadorAdminUpdateFormProps) {
   console.log('Initial data:', initialData)
 
-  const { clientId } = useAuthStore()
+  const { clienteId } = useAuthStore()
   const { data: perfisData } = useGetPerfis()
   const updateUtilizador = useUpdateUser()
   const [showPerfilField, setShowPerfilField] = useState(
@@ -115,7 +115,7 @@ export function UtilizadorAdminUpdateForm({
     try {
       const submitData = {
         ...data,
-        clienteId: clientId,
+        clienteId: clienteId,
         perfilId:
           data.roleId.toLowerCase() === 'client' ? data.perfilId : undefined,
       }

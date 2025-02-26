@@ -39,26 +39,20 @@ class TokensClient {
       if (response.status === 200 && response.data.data != null) {
         const loginResponse: ResponseLogin = response.data.data
 
-        // First set the token and trigger decode
-        setToken(loginResponse.token)
-        setRefreshToken(loginResponse.refreshToken)
-        setRefreshTokenExpiryTime(loginResponse.refreshTokenExpiryTime)
-        setUser(email)
+        // Set all auth data at once
+        useAuthStore.setState({
+          token: loginResponse.token,
+          refreshToken: loginResponse.refreshToken,
+          refreshTokenExpiryTime: loginResponse.refreshTokenExpiryTime,
+          email: email,
+          clienteId: loginResponse.data.clienteId,
+          licencaId: loginResponse.data.licencaId,
+          isAuthenticated: true,
+          isLoaded: true,
+        })
 
-        // Ensure token is decoded before proceeding
+        // Decode token to get additional user info
         await decodeToken()
-
-        // Get license info
-        const licenseResponse = await this.httpClient.getRequest<
-          GSResponse<LicencaDTO>
-        >('/api/licencas/by-api-key')
-
-        if (licenseResponse.info.data) {
-          useAuthStore.setState({
-            clientId: licenseResponse.info.data.clienteId,
-            licencaId: licenseResponse.info.data.id,
-          })
-        }
 
         return true
       }
