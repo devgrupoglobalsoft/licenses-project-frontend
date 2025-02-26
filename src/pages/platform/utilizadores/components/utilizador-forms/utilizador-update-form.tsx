@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { useGetLicencasByCliente } from '@/pages/platform/licencas/queries/licencas-queries'
 import { useUpdateUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
@@ -25,19 +27,33 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 
-const utilizadorFormSchema = z.object({
-  firstName: z
-    .string()
-    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
-  lastName: z
-    .string()
-    .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
-  email: z.string().email({ message: 'Email inválido' }),
-  clienteId: z.string().min(1, { message: 'Cliente é obrigatório' }),
-  roleId: z.string().min(1, { message: 'Role é obrigatória' }),
-  isActive: z.boolean().default(true),
-  perfilId: z.string().optional(),
-})
+const utilizadorFormSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
+    lastName: z
+      .string()
+      .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
+    email: z.string().email({ message: 'Email inválido' }),
+    roleId: z.string().min(1, { message: 'Role é obrigatória' }),
+    clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
+    perfilId: z.string().optional(),
+    licencaId: z.string().optional(),
+    isActive: z.boolean().default(true),
+  })
+  .refine(
+    (data) => {
+      if (data.roleId === 'admin' && !data.licencaId) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'A Licença é obrigatória para administradores',
+      path: ['licencaId'],
+    }
+  )
 
 type UtilizadorFormSchemaType = z.infer<typeof utilizadorFormSchema>
 
@@ -52,6 +68,7 @@ interface UtilizadorUpdateFormProps {
     roleId: string
     isActive: boolean
     perfilId?: string
+    licencaId?: string
   }
 }
 
@@ -63,6 +80,8 @@ export function UtilizadorUpdateForm({
   const { data: clientesData } = useGetClientesSelect()
   const updateUtilizador = useUpdateUtilizador()
 
+  console.log('Initial data:', initialData)
+
   const form = useForm<UtilizadorFormSchemaType>({
     resolver: zodResolver(utilizadorFormSchema),
     defaultValues: {
@@ -70,28 +89,65 @@ export function UtilizadorUpdateForm({
       lastName: initialData.lastName,
       email: initialData.email,
       clienteId: initialData.clienteId,
+      perfilId: initialData.perfilId ?? '',
       roleId: initialData.roleId,
+      licencaId: initialData.licencaId ?? undefined,
       isActive: initialData.isActive,
-      perfilId: initialData.perfilId || '',
     },
   })
+  const watchClienteId = form.watch('clienteId')
+  const watchRole = form.watch('roleId')
+  const { data: licencasData } = useGetLicencasByCliente(watchClienteId)
+
+  console.log('Licencas data:', licencasData)
+  console.log('Initial licencaId:', initialData.licencaId)
+
+  useEffect(() => {
+    if (watchRole === 'admin' && licencasData && initialData.licencaId) {
+      const licencaExists = licencasData.some(
+        (licenca) =>
+          licenca.id.toLowerCase() === initialData.licencaId!.toLowerCase()
+      )
+      if (licencaExists) {
+        const currentValue = form.getValues('licencaId')
+        if (!currentValue) {
+          form.setValue('licencaId', initialData.licencaId)
+        }
+      }
+    }
+  }, [watchRole, licencasData])
+
+  useEffect(() => {
+    console.log('Role changed:', watchRole)
+    console.log('Available licenses:', licencasData)
+    console.log('Initial license:', initialData.licencaId)
+  }, [watchRole, licencasData, initialData.licencaId, form])
+
+  useEffect(() => {
+    console.log('Initial license ID:', initialData.licencaId)
+    console.log(
+      'Available licenses:',
+      licencasData?.map((l) => l.id)
+    )
+    console.log('Form license value:', form.getValues('licencaId'))
+  }, [licencasData, initialData.licencaId, form])
 
   const onSubmit = async (data: UtilizadorFormSchemaType) => {
     try {
+      console.log('DATA', data)
       const response = await updateUtilizador.mutateAsync({
         id: utilizadorId,
         data: {
           firstName: data.firstName,
           lastName: data.lastName,
           email: data.email,
-          clienteId: data.clienteId,
           roleId: data.roleId,
           isActive: data.isActive,
           perfilId: data.perfilId || '',
+          licencaId: data.licencaId || '',
+          clienteId: initialData.clienteId,
         },
       })
-
-      console.log(response)
 
       if (response.info.succeeded) {
         toast.success('Utilizador atualizado com sucesso!')
@@ -177,7 +233,11 @@ export function UtilizadorUpdateForm({
                 <FormItem>
                   <FormLabel>Cliente</FormLabel>
                   <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled
+                    >
                       <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
                         <SelectValue placeholder='Selecione um cliente' />
                       </SelectTrigger>
@@ -230,6 +290,36 @@ export function UtilizadorUpdateForm({
               )}
             />
           </div>
+
+          {watchRole === 'admin' && (
+            <FormField
+              control={form.control}
+              name='licencaId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Licença</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ''}
+                    >
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione uma licença' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {licencasData?.map((licenca) => (
+                          <SelectItem key={licenca.id} value={licenca.id}>
+                            {licenca.nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField

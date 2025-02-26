@@ -32,6 +32,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   }
 
   const handleUpdateClick = (utilizador: UtilizadorDTO) => {
+    console.log('Selected utilizador data:', utilizador)
     setSelectedUtilizador(utilizador)
     setIsUpdateModalOpen(true)
   }
@@ -57,6 +58,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               roleId: selectedUtilizador.roleId || '',
               isActive: Boolean(selectedUtilizador.isActive),
               perfilId: selectedUtilizador.perfisUtilizador?.[0] || '',
+              licencaId: selectedUtilizador.licencaId || undefined,
             }}
           />
         )}

@@ -16,6 +16,7 @@ export interface UpdateUtilizadorDTO {
   lastName: string
   perfilId?: string
   roleId: string
+  licencaId?: string // Add this line
 }
 
 export interface UtilizadorDTO {
@@ -32,6 +33,7 @@ export interface UtilizadorDTO {
   perfisUtilizador?: string[]
   roleId: string
   phoneNumber?: string
+  licencaId?: string
 }
 
 export interface LicencaUtilizadorDTO {
