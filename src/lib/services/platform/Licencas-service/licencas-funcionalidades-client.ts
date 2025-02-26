@@ -102,4 +102,35 @@ export class LicencasFuncionalidadesClient extends BaseApiClient {
       })
     )
   }
+
+  public async getModulosFuncionalidadesLicencaById(
+    licencaId: string
+  ): Promise<ResponseApi<GSResponse<ResponseModuloFuncionalidadeLicenca>>> {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      `/api/licencas/${licencaId}/modulos/funcionalidades`
+    )
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<ResponseModuloFuncionalidadeLicenca>
+          >(`/api/licencas/${licencaId}/modulos/funcionalidades`)
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new LicencaError(
+            'Falha ao obter módulos e funcionalidades da licença',
+            undefined,
+            error
+          )
+        }
+      })
+    )
+  }
 }

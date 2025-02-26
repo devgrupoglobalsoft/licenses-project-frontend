@@ -165,31 +165,6 @@ export class LicencasClient extends BaseApiClient {
     })
   }
 
-  public async getLicencaByApiKey(): Promise<
-    ResponseApi<GSResponse<LicencaDTO>>
-  > {
-    return this.withRetry(async () => {
-      try {
-        const response = await this.httpClient.getRequest<
-          GSResponse<LicencaDTO>
-        >('/api/licencas/by-api-key')
-
-        if (!response.info) {
-          console.error('Formato de resposta inválido:', response)
-          throw new LicencaError('Formato de resposta inválido')
-        }
-
-        return response
-      } catch (error) {
-        throw new LicencaError(
-          'Falha ao obter licença por API key',
-          undefined,
-          error
-        )
-      }
-    })
-  }
-
   public async getLicencaById(
     id: string
   ): Promise<ResponseApi<GSResponse<LicencaDTO>>> {
