@@ -2,9 +2,10 @@ import { GSResponseToken } from '@/types/api/responses'
 import { jwtDecode } from 'jwt-decode'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { debugStorage } from '@/utils/debug-storage'
 import { secureStorage } from '@/utils/secure-storage'
 
-interface AuthState {
+export interface AuthState {
   token: string
   refreshToken: string
   refreshTokenExpiryTime: string
@@ -92,18 +93,28 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       },
 
       clearAuth: () => {
-        set({ ...initialState, isLoaded: true })
+        set((state: AuthState) => {
+          const cleanState = { ...initialState, isLoaded: true }
+          return cleanState as AuthState
+        })
       },
     }),
     {
       name: 'auth-storage',
       storage: {
-        getItem: (name) => secureStorage.get(name),
+        getItem: (name) => {
+          const secureValue = secureStorage.get(name)
+          debugStorage.set(name, secureValue)
+          return secureValue
+        },
         setItem: (name, value) => {
-          console.log('Auth Store before encryption:', value)
+          debugStorage.set(name, value)
           return secureStorage.set(name, value)
         },
-        removeItem: (name) => localStorage.removeItem(name),
+        removeItem: (name) => {
+          debugStorage.remove(name)
+          localStorage.removeItem(name)
+        },
       },
     }
   )
