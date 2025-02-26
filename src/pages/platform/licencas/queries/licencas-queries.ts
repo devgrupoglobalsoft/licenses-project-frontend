@@ -105,3 +105,15 @@ export const useGetLicencasCount = () => {
     },
   })
 }
+
+export const useGetLicencasByCliente = (clienteId: string) => {
+  return useQuery({
+    queryKey: ['licencas-by-cliente', clienteId],
+    queryFn: async () => {
+      const response =
+        await LicencasService('licencas').getLicencasByCliente(clienteId)
+      return response.info.data
+    },
+    enabled: !!clienteId,
+  })
+}

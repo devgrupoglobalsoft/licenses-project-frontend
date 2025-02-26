@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGetClientesSelect } from '@/pages/platform/clientes/queries/clientes-queries'
+import { useGetLicencasByCliente } from '@/pages/platform/licencas/queries/licencas-queries'
 import { useCreateUtilizador } from '@/pages/platform/utilizadores/queries/utilizadores-mutations'
 import { Eye, EyeOff } from 'lucide-react'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
@@ -46,11 +47,24 @@ const utilizadorFormSchema = z
     clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
     perfilId: z.string({ required_error: 'O Perfil é obrigatório' }),
     roleId: z.string({ required_error: 'O Role é obrigatório' }),
+    licencaId: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As passwords não coincidem',
     path: ['confirmPassword'],
   })
+  .refine(
+    (data) => {
+      if (data.roleId === 'admin' && !data.licencaId) {
+        return false
+      }
+      return true
+    },
+    {
+      message: 'A Licença é obrigatória para administradores',
+      path: ['licencaId'],
+    }
+  )
 
 type UtilizadorFormSchemaType = z.infer<typeof utilizadorFormSchema>
 
@@ -77,8 +91,14 @@ export function UtilizadorCreateForm({
       clienteId: undefined,
       perfilId: '',
       roleId: '',
+      licencaId: undefined,
     },
   })
+
+  const watchClienteId = form.watch('clienteId')
+  const watchRole = form.watch('roleId')
+  console.log('Selected role:', watchRole)
+  const { data: licencasData } = useGetLicencasByCliente(watchClienteId)
 
   const onSubmit = async (data: UtilizadorFormSchemaType) => {
     try {
@@ -144,24 +164,59 @@ export function UtilizadorCreateForm({
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type='email'
-                    placeholder='Introduza o email'
-                    {...field}
-                    className='px-4 py-6 shadow-inner drop-shadow-xl'
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
+            <FormField
+              control={form.control}
+              name='email'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='email'
+                      placeholder='Introduza o email'
+                      {...field}
+                      className='px-4 py-6 shadow-inner drop-shadow-xl'
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='roleId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Role</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione uma role' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(roleConfig).map(([role, config]) => (
+                          <SelectItem key={role} value={role}>
+                            <div className='flex items-center gap-2'>
+                              <div
+                                className='h-4 w-4 rounded-full'
+                                style={{
+                                  backgroundColor: config.color,
+                                }}
+                              />
+                              <span>{config.label}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField
@@ -259,38 +314,35 @@ export function UtilizadorCreateForm({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name='roleId'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Role</FormLabel>
-                  <FormControl>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue placeholder='Selecione uma role' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.entries(roleConfig).map(([role, config]) => (
-                          <SelectItem key={role} value={role}>
-                            <div className='flex items-center gap-2'>
-                              <div
-                                className='h-4 w-4 rounded-full'
-                                style={{
-                                  backgroundColor: config.color,
-                                }}
-                              />
-                              <span>{config.label}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {watchRole === 'admin' && (
+              <FormField
+                control={form.control}
+                name='licencaId'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Licença</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                          <SelectValue placeholder='Selecione uma licença' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {licencasData?.map((licenca) => (
+                            <SelectItem key={licenca.id} value={licenca.id}>
+                              {licenca.nome}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
           </div>
         </div>
 

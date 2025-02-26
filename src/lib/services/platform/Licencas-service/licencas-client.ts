@@ -310,4 +310,35 @@ export class LicencasClient extends BaseApiClient {
       }
     })
   }
+
+  public async getLicencasByCliente(
+    clienteId: string
+  ): Promise<ResponseApi<GSResponse<LicencaDTO[]>>> {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      `/api/licencas/by-cliente/${clienteId}`
+    )
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<
+            GSResponse<LicencaDTO[]>
+          >(`/api/licencas/by-cliente/${clienteId}`)
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new LicencaError(
+            'Falha ao obter licenças do cliente',
+            undefined,
+            error
+          )
+        }
+      })
+    )
+  }
 }

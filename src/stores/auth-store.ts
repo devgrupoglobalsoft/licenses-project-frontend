@@ -99,7 +99,10 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       name: 'auth-storage',
       storage: {
         getItem: (name) => secureStorage.get(name),
-        setItem: (name, value) => secureStorage.set(name, value),
+        setItem: (name, value) => {
+          console.log('Auth Store before encryption:', value)
+          return secureStorage.set(name, value)
+        },
         removeItem: (name) => localStorage.removeItem(name),
       },
     }
