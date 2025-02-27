@@ -5,6 +5,7 @@ import { filterFields } from '@/pages/platform/perfis-admin/components/perfis-ad
 import { PerfisFilterControls } from '@/pages/platform/perfis-admin/components/perfis-admin-table/perfis-admin-filter-controls'
 import { PerfilDTO } from '@/types/dtos'
 import { Plus, Trash2 } from 'lucide-react'
+import { useAuthStore } from '@/stores/auth-store'
 import { getErrorMessage } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
@@ -36,6 +37,7 @@ export function PerfisAdminTable({
   const [selectedRows, setSelectedRows] = useState<string[]>([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const { licencaId } = useAuthStore()
   const deleteMultiplePerfisMutation = useDeleteMultiplePerfis()
 
   const handleFiltersChange = (
@@ -66,8 +68,10 @@ export function PerfisAdminTable({
 
   const handleDeleteMultiple = async () => {
     try {
-      const response =
-        await deleteMultiplePerfisMutation.mutateAsync(selectedRows)
+      const response = await deleteMultiplePerfisMutation.mutateAsync({
+        licencaId,
+        ids: selectedRows,
+      })
 
       if (response.info.succeeded) {
         toast.success('Perfis removidos com sucesso')

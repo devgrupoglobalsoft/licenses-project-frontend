@@ -24,11 +24,12 @@ export class PerfilAdminClient extends BaseApiClient {
   }
 
   public async getPerfisPaginated(
+    licencaId: string,
     params: PaginatedRequest
   ): Promise<ResponseApi<PaginatedResponse<PerfilDTO>>> {
     const cacheKey = this.getCacheKey(
       'POST',
-      '/api/perfis/admin/perfis-paginated',
+      `/api/perfis/licenca/${licencaId}/perfis-paginated`,
       params
     )
     return this.withCache(cacheKey, () =>
@@ -37,7 +38,7 @@ export class PerfilAdminClient extends BaseApiClient {
           const response = await this.httpClient.postRequest<
             PaginatedRequest,
             PaginatedResponse<PerfilDTO>
-          >('/api/perfis/admin/perfis-paginated', params)
+          >(`/api/perfis/licenca/${licencaId}/perfis-paginated`, params)
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
@@ -56,15 +57,23 @@ export class PerfilAdminClient extends BaseApiClient {
     )
   }
 
-  public async getPerfis(): Promise<ResponseApi<GSResponse<PerfilDTO[]>>> {
-    const cacheKey = this.getCacheKey('GET', '/api/perfis/admin')
+  public async getPerfis(
+    licencaId: string,
+    keyword: string = ''
+  ): Promise<ResponseApi<GSResponse<PerfilDTO[]>>> {
+    const cacheKey = this.getCacheKey(
+      'GET',
+      `/api/perfis/licenca/${licencaId}`,
+      { keyword }
+    )
     return this.withCache(cacheKey, () =>
       this.withRetry(async () => {
         try {
-          const response =
-            await this.httpClient.getRequest<GSResponse<PerfilDTO[]>>(
-              '/api/perfis/admin'
-            )
+          const response = await this.httpClient.getRequest<
+            GSResponse<PerfilDTO[]>
+          >(
+            `/api/perfis/licenca/${licencaId}${keyword ? `?keyword=${keyword}` : ''}`
+          )
 
           if (!response.info) {
             console.error('Formato de resposta inválido:', response)
@@ -80,6 +89,7 @@ export class PerfilAdminClient extends BaseApiClient {
   }
 
   public async createPerfil(
+    licencaId: string,
     data: CreatePerfilDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
@@ -87,7 +97,7 @@ export class PerfilAdminClient extends BaseApiClient {
         const response = await this.httpClient.postRequest<
           CreatePerfilDTO,
           GSResponse<string>
-        >('/api/perfis/admin/create', data)
+        >(`/api/perfis/licenca/${licencaId}/create`, data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
@@ -109,6 +119,7 @@ export class PerfilAdminClient extends BaseApiClient {
   }
 
   public async updatePerfil(
+    licencaId: string,
     id: string,
     data: UpdatePerfilDTO
   ): Promise<ResponseApi<GSResponse<string>>> {
@@ -117,7 +128,7 @@ export class PerfilAdminClient extends BaseApiClient {
         const response = await this.httpClient.putRequest<
           UpdatePerfilDTO,
           GSResponse<string>
-        >(`/api/perfis/admin/${id}`, data)
+        >(`/api/perfis/licenca/${licencaId}/perfil/${id}`, data)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
@@ -132,13 +143,14 @@ export class PerfilAdminClient extends BaseApiClient {
   }
 
   public async deletePerfil(
+    licencaId: string,
     id: string
-  ): Promise<ResponseApi<GSGenericResponse>> {
+  ): Promise<ResponseApi<GSResponse<string>>> {
     return this.withRetry(async () => {
       try {
-        const response = await this.httpClient.deleteRequest<GSGenericResponse>(
-          `/api/perfis/admin/${id}`
-        )
+        const response = await this.httpClient.deleteRequest<
+          GSResponse<string>
+        >(`/api/perfis/licenca/${licencaId}/perfil/${id}`)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)
@@ -261,6 +273,7 @@ export class PerfilAdminClient extends BaseApiClient {
   }
 
   public async deleteMultiplePerfis(
+    licencaId: string,
     ids: string[]
   ): Promise<ResponseApi<GSGenericResponse>> {
     return this.withRetry(async () => {
@@ -268,7 +281,7 @@ export class PerfilAdminClient extends BaseApiClient {
         const response = await this.httpClient.deleteRequestWithBody<
           { ids: string[] },
           GSGenericResponse
-        >('/api/perfis/admin/bulk-delete', { ids: ids })
+        >(`/api/perfis/licenca/${licencaId}/bulk-delete`, { ids: ids })
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)

@@ -10,8 +10,8 @@ export const useDeletePerfil = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (id: string) =>
-      PerfisService('perfis-admin').Admin.deletePerfil(id),
+    mutationFn: ({ licencaId, id }: { licencaId: string; id: string }) =>
+      PerfisService('perfis-admin').Admin.deletePerfil(licencaId, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
@@ -26,8 +26,13 @@ export const useCreatePerfil = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreatePerfilDTO) =>
-      PerfisService('perfis-admin').Admin.createPerfil(data),
+    mutationFn: ({
+      licencaId,
+      data,
+    }: {
+      licencaId: string
+      data: CreatePerfilDTO
+    }) => PerfisService('perfis-admin').Admin.createPerfil(licencaId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
@@ -42,8 +47,18 @@ export const useUpdatePerfil = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdatePerfilDTO }) =>
-      PerfisService('perfis-admin').Admin.updatePerfil(id, { ...data }),
+    mutationFn: ({
+      licencaId,
+      id,
+      data,
+    }: {
+      licencaId: string
+      id: string
+      data: UpdatePerfilDTO
+    }) =>
+      PerfisService('perfis-admin').Admin.updatePerfil(licencaId, id, {
+        ...data,
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })
@@ -104,8 +119,8 @@ export const useDeleteMultiplePerfis = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (ids: string[]) =>
-      PerfisService('perfis-admin').Admin.deleteMultiplePerfis(ids),
+    mutationFn: ({ licencaId, ids }: { licencaId: string; ids: string[] }) =>
+      PerfisService('perfis-admin').Admin.deleteMultiplePerfis(licencaId, ids),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-paginated'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin'] })

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PerfilDTO } from '@/types/dtos'
+import { useAuthStore } from '@/stores/auth-store'
 import { handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
@@ -40,12 +41,13 @@ export default function PerfilAdminUpdateForm({
       ativo: initialData.ativo,
     },
   })
-
+  const { licencaId } = useAuthStore()
   const updatePerfilMutation = useUpdatePerfil()
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await updatePerfilMutation.mutateAsync({
+        licencaId: licencaId,
         id: perfilId,
         data: values,
       })

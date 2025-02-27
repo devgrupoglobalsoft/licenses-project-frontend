@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAuthStore } from '@/stores/auth-store'
 import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
@@ -26,6 +27,7 @@ interface PerfilAdminCreateFormProps {
 
 const PerfilAdminCreateForm = ({ modalClose }: PerfilAdminCreateFormProps) => {
   const createPerfilMutation = useCreatePerfil()
+  const { licencaId } = useAuthStore()
 
   const form = useForm<PerfilAdminFormSchemaType>({
     resolver: zodResolver(perfilAdminFormSchema),
@@ -38,8 +40,11 @@ const PerfilAdminCreateForm = ({ modalClose }: PerfilAdminCreateFormProps) => {
   const onSubmit = async (values: PerfilAdminFormSchemaType) => {
     try {
       const response = await createPerfilMutation.mutateAsync({
-        nome: values.nome,
-        ativo: values.ativo,
+        licencaId,
+        data: {
+          nome: values.nome,
+          ativo: values.ativo,
+        },
       })
 
       if (response.info.succeeded) {

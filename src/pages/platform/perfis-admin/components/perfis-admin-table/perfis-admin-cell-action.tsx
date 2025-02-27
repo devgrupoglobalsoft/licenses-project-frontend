@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PerfilDTO } from '@/types/dtos'
 import { Edit, ListTree, Trash } from 'lucide-react'
+import { useAuthStore } from '@/stores/auth-store'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
@@ -19,12 +20,16 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [selectedPerfil, setSelectedPerfil] = useState<PerfilDTO | null>(null)
   const [isPerfilModulosModalOpen, setIsPerfilModulosModalOpen] =
     useState(false)
+  const { licencaId } = useAuthStore()
 
   const deletePerfilMutation = useDeletePerfil()
 
   const handleDeleteConfirm = async () => {
     try {
-      await deletePerfilMutation.mutateAsync(data.id || '')
+      await deletePerfilMutation.mutateAsync({
+        licencaId: licencaId || '',
+        id: data.id || '',
+      })
       toast.success('Perfil removido com sucesso')
     } catch (error) {
       toast.error('Erro ao remover o perfil')

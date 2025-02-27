@@ -2,6 +2,7 @@ import { useGetPerfis } from '@/pages/platform/perfis-admin/queries/perfis-admin
 import { CellAction } from '@/pages/platform/utilizadores-admin/components/utilizadores-admin-table/utilizadores-admin-cell-action'
 import { UtilizadorDTO } from '@/types/dtos'
 import { Check, X, Shield } from 'lucide-react'
+import { useAuthStore } from '@/stores/auth-store'
 import { cn } from '@/lib/utils'
 import { roleConfig } from '@/constants/roles'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -108,10 +109,11 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
       align: 'left',
     },
     cell: ({ row }) => {
+      const { licencaId } = useAuthStore()
       const perfis = row.original.perfisUtilizador
       if (!perfis || perfis.length === 0) return '-'
 
-      return <PerfilCell perfilId={perfis[0]} />
+      return <PerfilCell perfilId={perfis[0]} licencaId={licencaId!} />
     },
   },
   {
@@ -146,8 +148,14 @@ export const columns: DataTableColumnDef<UtilizadorDTO>[] = [
   },
 ]
 
-const PerfilCell = ({ perfilId }: { perfilId: string }) => {
-  const { data: perfis } = useGetPerfis()
+const PerfilCell = ({
+  perfilId,
+  licencaId,
+}: {
+  perfilId: string
+  licencaId: string
+}) => {
+  const { data: perfis } = useGetPerfis(licencaId)
   const perfil = perfis?.find((p) => p.id === perfilId)
 
   if (!perfil) return '-'

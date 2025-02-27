@@ -4,11 +4,13 @@ import {
   useGetPerfisPaginated,
   usePrefetchAdjacentPerfis,
 } from '@/pages/platform/perfis-admin/queries/perfis-admin-queries'
+import { useAuthStore } from '@/stores/auth-store'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import { DataTableSkeleton } from '@/components/shared/data-table-skeleton'
 import PageHead from '@/components/shared/page-head'
 
 export default function PerfisAdminPage() {
+  const { licencaId } = useAuthStore()
   const searchParams = new URLSearchParams(window.location.search)
   const perfilIdParam = searchParams.get('perfilId')
 
@@ -22,6 +24,7 @@ export default function PerfisAdminPage() {
   )
 
   const { data, isLoading } = useGetPerfisPaginated(
+    licencaId,
     page,
     pageSize,
     filters,
@@ -29,6 +32,7 @@ export default function PerfisAdminPage() {
   )
 
   const { prefetchPreviousPage, prefetchNextPage } = usePrefetchAdjacentPerfis(
+    licencaId,
     page,
     pageSize,
     filters

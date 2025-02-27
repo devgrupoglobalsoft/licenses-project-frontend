@@ -73,8 +73,8 @@ interface UtilizadorAdminCreateFormProps {
 export function UtilizadorAdminCreateForm({
   modalClose,
 }: UtilizadorAdminCreateFormProps) {
-  const { clienteId } = useAuthStore()
-  const { data: perfisData } = useGetPerfis()
+  const { clienteId, licencaId } = useAuthStore()
+  const { data: perfisData } = useGetPerfis(licencaId)
   const createUtilizador = useCreateUser()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
