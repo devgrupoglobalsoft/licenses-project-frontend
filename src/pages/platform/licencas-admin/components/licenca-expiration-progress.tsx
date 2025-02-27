@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useGetLicenca } from '../queries/licencas-admin-queries'
-import { useGetLicencaUtilizadores } from '../queries/licencas-admin-queries'
+import { useGetLicencaUtilizadoresRoleClient } from '../queries/licencas-admin-queries'
 
 interface LicencaExpirationProgressProps {
   licencaId: string
@@ -12,12 +12,11 @@ interface LicencaExpirationProgressProps {
 export function LicencaExpirationProgress({
   licencaId,
 }: LicencaExpirationProgressProps) {
-  const { data: licencaResponse, isLoading: isLoadingLicenca } =
+  const { data: licenca, isLoading: isLoadingLicenca } =
     useGetLicenca(licencaId)
   const { data: utilizadoresResponse, isLoading: isLoadingUsers } =
-    useGetLicencaUtilizadores(licencaId)
+    useGetLicencaUtilizadoresRoleClient(licencaId)
 
-  const licenca = licencaResponse?.info?.data
   const utilizadoresAtivos =
     utilizadoresResponse?.info?.data?.filter((u) => u.ativo)?.length || 0
   const maxUtilizadores = licenca?.numeroUtilizadores || 0

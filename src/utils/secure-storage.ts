@@ -66,12 +66,12 @@ export const secureStorage = {
         const currentTime = Date.now()
         // Don't add buffer time here, just check if token is expired
         const isValid = expiryTime > currentTime
-        console.log('Token verification:', {
-          expiryTime: new Date(expiryTime),
-          currentTime: new Date(currentTime),
-          isValid,
-          timeLeft: Math.floor((expiryTime - currentTime) / 1000) + ' seconds',
-        })
+        // console.log('Token verification:', {
+        //   expiryTime: new Date(expiryTime),
+        //   currentTime: new Date(currentTime),
+        //   isValid,
+        //   timeLeft: Math.floor((expiryTime - currentTime) / 1000) + ' seconds',
+        // })
         return isValid
       }
       return true

@@ -177,14 +177,14 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
     )
   }
 
-  public async getUtilizadoresLicenca(
+  public async getUtilizadoresRoleClientLicenca(
     licencaId: string
   ): Promise<ResponseApi<GSResponse<LicencaUtilizadorDTO[]>>> {
     return this.withRetry(async () => {
       try {
         const response = await this.httpClient.getRequest<
           GSResponse<LicencaUtilizadorDTO[]>
-        >(`/api/licencas/${licencaId}/utilizadores`)
+        >(`/api/licencas/${licencaId}/utilizadores?role=client`)
 
         if (!response.info) {
           console.error('Formato de resposta inválido:', response)

@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Switch } from '@/components/ui/switch'
 import { ColoredBadge } from '@/components/shared/colored-badge'
 import { useUpdateLicencaUtilizadores } from '../queries/licencas-admin-mutations'
-import { useGetLicencaUtilizadores } from '../queries/licencas-admin-queries'
+import { useGetLicencaUtilizadoresRoleClient } from '../queries/licencas-admin-queries'
 
 interface LicencaUtilizadoresListProps {
   licencaId: string
@@ -24,15 +24,10 @@ export function LicencaUtilizadoresList({
     data: utilizadoresResponse,
     isLoading,
     error,
-  } = useGetLicencaUtilizadores(licencaId)
+  } = useGetLicencaUtilizadoresRoleClient(licencaId)
 
   const updateLicencaMutation = useUpdateLicencaUtilizadores()
-
-  console.log('LicencaUtilizadoresList - response:', utilizadoresResponse)
-  console.log('LicencaUtilizadoresList - error:', error)
-
   const utilizadores = utilizadoresResponse?.info?.data || []
-  console.log('LicencaUtilizadoresList - utilizadores:', utilizadores)
 
   const handleToggleUser = async (userId: string, currentActive: boolean) => {
     if (!licencaId) return
