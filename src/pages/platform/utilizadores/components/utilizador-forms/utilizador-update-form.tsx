@@ -27,33 +27,20 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 
-const utilizadorFormSchema = z
-  .object({
-    firstName: z
-      .string()
-      .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
-    lastName: z
-      .string()
-      .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
-    email: z.string().email({ message: 'Email inválido' }),
-    roleId: z.string().min(1, { message: 'Role é obrigatória' }),
-    clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
-    perfilId: z.string().optional(),
-    licencaId: z.string().optional(),
-    isActive: z.boolean().default(true),
-  })
-  .refine(
-    (data) => {
-      if (data.roleId === 'admin' && !data.licencaId) {
-        return false
-      }
-      return true
-    },
-    {
-      message: 'A Licença é obrigatória para administradores',
-      path: ['licencaId'],
-    }
-  )
+const utilizadorFormSchema = z.object({
+  firstName: z
+    .string()
+    .min(1, { message: 'O Nome deve ter pelo menos 1 caráter' }),
+  lastName: z
+    .string()
+    .min(1, { message: 'O Apelido deve ter pelo menos 1 caráter' }),
+  email: z.string().email({ message: 'Email inválido' }),
+  roleId: z.string().min(1, { message: 'Role é obrigatória' }),
+  clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
+  perfilId: z.string().optional(),
+  licencaId: z.string().min(1, { message: 'A Licença é obrigatória' }),
+  isActive: z.boolean().default(true),
+})
 
 type UtilizadorFormSchemaType = z.infer<typeof utilizadorFormSchema>
 
@@ -103,7 +90,7 @@ export function UtilizadorUpdateForm({
   console.log('Initial licencaId:', initialData.licencaId)
 
   useEffect(() => {
-    if (watchRole === 'admin' && licencasData && initialData.licencaId) {
+    if (licencasData && initialData.licencaId) {
       const licencaExists = licencasData.some(
         (licenca) =>
           licenca.id.toLowerCase() === initialData.licencaId!.toLowerCase()
@@ -115,7 +102,7 @@ export function UtilizadorUpdateForm({
         }
       }
     }
-  }, [watchRole, licencasData])
+  }, [licencasData])
 
   useEffect(() => {
     console.log('Role changed:', watchRole)
@@ -206,51 +193,20 @@ export function UtilizadorUpdateForm({
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name='email'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type='email'
-                    placeholder='Introduza o email'
-                    {...field}
-                    className='px-4 py-6 shadow-inner drop-shadow-xl'
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField
               control={form.control}
-              name='clienteId'
+              name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cliente</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value}
-                      disabled
-                    >
-                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                        <SelectValue placeholder='Selecione um cliente' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {clientesData?.map((cliente) => (
-                          <SelectItem key={cliente.id} value={cliente.id}>
-                            <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
-                              <span className='truncate'>{cliente.nome}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Input
+                      type='email'
+                      placeholder='Introduza o email'
+                      {...field}
+                      className='px-4 py-6 shadow-inner drop-shadow-xl'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -291,7 +247,38 @@ export function UtilizadorUpdateForm({
             />
           </div>
 
-          {watchRole === 'admin' && (
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
+            <FormField
+              control={form.control}
+              name='clienteId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cliente</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled
+                    >
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione um cliente' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {clientesData?.map((cliente) => (
+                          <SelectItem key={cliente.id} value={cliente.id}>
+                            <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
+                              <span className='truncate'>{cliente.nome}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name='licencaId'
@@ -319,7 +306,7 @@ export function UtilizadorUpdateForm({
                 </FormItem>
               )}
             />
-          )}
+          </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField

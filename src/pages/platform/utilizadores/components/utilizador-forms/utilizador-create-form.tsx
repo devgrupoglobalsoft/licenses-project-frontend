@@ -47,24 +47,12 @@ const utilizadorFormSchema = z
     clienteId: z.string({ required_error: 'O Cliente é obrigatório' }),
     perfilId: z.string({ required_error: 'O Perfil é obrigatório' }),
     roleId: z.string({ required_error: 'O Role é obrigatório' }),
-    licencaId: z.string().optional(),
+    licencaId: z.string({ required_error: 'A Licença é obrigatória' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'As passwords não coincidem',
     path: ['confirmPassword'],
   })
-  .refine(
-    (data) => {
-      if (data.roleId === 'admin' && !data.licencaId) {
-        return false
-      }
-      return true
-    },
-    {
-      message: 'A Licença é obrigatória para administradores',
-      path: ['licencaId'],
-    }
-  )
 
 type UtilizadorFormSchemaType = z.infer<typeof utilizadorFormSchema>
 
@@ -91,7 +79,7 @@ export function UtilizadorCreateForm({
       clienteId: undefined,
       perfilId: '',
       roleId: '',
-      licencaId: undefined,
+      licencaId: '',
     },
   })
 
@@ -314,35 +302,30 @@ export function UtilizadorCreateForm({
               )}
             />
 
-            {watchRole === 'admin' && (
-              <FormField
-                control={form.control}
-                name='licencaId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Licença</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                          <SelectValue placeholder='Selecione uma licença' />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {licencasData?.map((licenca) => (
-                            <SelectItem key={licenca.id} value={licenca.id}>
-                              {licenca.nome}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            <FormField
+              control={form.control}
+              name='licencaId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Licença</FormLabel>
+                  <FormControl>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione uma licença' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {licencasData?.map((licenca) => (
+                          <SelectItem key={licenca.id} value={licenca.id}>
+                            {licenca.nome}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
 

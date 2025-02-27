@@ -182,52 +182,24 @@ export function UtilizadorAdminUpdateForm({
             />
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8'>
-            <div className='col-span-1 md:col-span-8'>
-              <FormField
-                control={form.control}
-                name='email'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type='email'
-                        placeholder='Introduza o email'
-                        {...field}
-                        className='px-4 py-6 shadow-inner drop-shadow-xl'
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='col-span-1 md:col-span-4'>
-              <FormField
-                control={form.control}
-                name='isActive'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Estado</FormLabel>
-                    <FormControl>
-                      <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
-                        <span className='text-sm text-muted-foreground'>
-                          Ativo
-                        </span>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type='email'
+                    placeholder='Introduza o email'
+                    {...field}
+                    className='px-4 py-6 shadow-inner drop-shadow-xl'
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8'>
             <FormField
@@ -265,41 +237,63 @@ export function UtilizadorAdminUpdateForm({
               )}
             />
 
-            {showPerfilField && (
-              <FormField
-                control={form.control}
-                name='perfilId'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Perfil</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => {
-                          console.log('Selected value:', value)
-                          field.onChange(value)
-                        }}
-                        value={field.value}
-                      >
-                        <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
-                          <SelectValue placeholder='Selecione um perfil' />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {perfisData?.map((perfil) => (
-                            <SelectItem key={perfil.id} value={perfil.id ?? ''}>
-                              <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
-                                <span className='truncate'>{perfil.nome}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
+            <FormField
+              control={form.control}
+              name='isActive'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Estado</FormLabel>
+                  <FormControl>
+                    <div className='flex h-[50px] items-center justify-between rounded-lg border px-4 shadow-inner drop-shadow-xl'>
+                      <span className='text-sm text-muted-foreground'>
+                        Ativo
+                      </span>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+
+          {showPerfilField && (
+            <FormField
+              control={form.control}
+              name='perfilId'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Perfil</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={(value) => {
+                        console.log('Selected value:', value)
+                        field.onChange(value)
+                      }}
+                      value={field.value}
+                    >
+                      <SelectTrigger className='px-4 py-6 shadow-inner drop-shadow-xl'>
+                        <SelectValue placeholder='Selecione um perfil' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {perfisData?.map((perfil) => (
+                          <SelectItem key={perfil.id} value={perfil.id ?? ''}>
+                            <div className='flex items-center gap-2 max-w-[200px] md:max-w-full'>
+                              <span className='truncate'>{perfil.nome}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <div className='flex flex-col-reverse md:flex-row justify-end gap-4 md:gap-8 pt-4'>

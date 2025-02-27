@@ -118,20 +118,29 @@ export function UtilizadorAdminCreateForm({
         delete submitData.perfilId
       }
 
-      const response = await createUtilizador.mutateAsync({
+      const finalData = {
         ...submitData,
         clienteId: clienteId,
-      })
+        licencaId: licencaId,
+      }
+
+      console.log('Submitting user data:', finalData)
+
+      const response = await createUtilizador.mutateAsync(finalData)
+
+      console.log('Create user response:', response)
 
       if (response.info.succeeded) {
         toast.success('Utilizador criado com sucesso!')
-        modalClose()
       } else {
         toast.error(getErrorMessage(response, 'Erro ao criar utilizador'))
       }
     } catch (error) {
       console.error('Error submitting form:', error)
       toast.error(handleApiError(error, 'Erro ao criar utilizador'))
+    } finally {
+      modalClose()
+      form.reset()
     }
   }
 

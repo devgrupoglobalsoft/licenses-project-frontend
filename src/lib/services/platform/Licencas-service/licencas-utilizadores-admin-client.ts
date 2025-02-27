@@ -46,6 +46,7 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
   ): Promise<ResponseApi<GSResponse<UtilizadorDTO>>> {
     return this.withRetry(async () => {
       try {
+        console.log('Creating user with data:', data)
         const response = await this.httpClient.postRequest<
           CreateUtilizadorDTO,
           GSResponse<UtilizadorDTO>
@@ -56,8 +57,10 @@ export class LicencasUtilizadoresAdminClient extends BaseApiClient {
           throw new LicencaError('Formato de resposta inválido')
         }
 
+        console.log('Create user response:', response)
         return response
       } catch (error) {
+        console.error('Error creating user:', error)
         throw new LicencaError(
           'Falha ao criar utilizador admin',
           undefined,

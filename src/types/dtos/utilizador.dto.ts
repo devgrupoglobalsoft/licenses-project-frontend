@@ -6,6 +6,7 @@ export interface CreateUtilizadorDTO {
   password: string
   perfilId?: string
   roleId: string
+  licencaId?: string
 }
 
 export interface UpdateUtilizadorDTO {
