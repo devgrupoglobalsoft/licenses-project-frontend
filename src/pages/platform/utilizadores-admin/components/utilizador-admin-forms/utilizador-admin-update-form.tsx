@@ -72,8 +72,6 @@ export function UtilizadorAdminUpdateForm({
   utilizadorId,
   initialData,
 }: UtilizadorAdminUpdateFormProps) {
-  console.log('Initial data:', initialData)
-
   const { clienteId, licencaId } = useAuthStore()
   const { data: perfisData } = useGetPerfis(licencaId)
   const updateUtilizador = useUpdateUser()
@@ -92,8 +90,6 @@ export function UtilizadorAdminUpdateForm({
       perfilId: initialData.perfisUtilizador?.[0] ?? initialData.perfilId ?? '',
     },
   })
-
-  console.log('Form values:', form.getValues())
 
   // Watch for role changes to show/hide perfil field
   useEffect(() => {
@@ -116,9 +112,12 @@ export function UtilizadorAdminUpdateForm({
       const submitData = {
         ...data,
         clienteId: clienteId,
+        licencaId: licencaId,
         perfilId:
           data.roleId.toLowerCase() === 'client' ? data.perfilId : undefined,
       }
+
+      console.log('SUBMIT', submitData)
 
       const response = await updateUtilizador.mutateAsync({
         id: utilizadorId,
