@@ -111,3 +111,18 @@ export const useDeleteMultipleLicencas = () => {
     },
   })
 }
+
+export const useRegenerateLicencaApiKey = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (licencaId: string) =>
+      LicencasService('licencas').regenerateLicencaApiKey(licencaId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['licencas-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['licencas'] })
+      queryClient.invalidateQueries({ queryKey: ['licencas-count'] })
+      queryClient.invalidateQueries({ queryKey: ['licencas-select'] })
+    },
+  })
+}

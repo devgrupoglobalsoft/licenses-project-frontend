@@ -1,11 +1,11 @@
-import { toast as baseToast } from '@/components/ui/use-toast';
+import { toast as baseToast } from '@/components/ui/use-toast'
 
-type ToastVariant = 'default' | 'destructive' | 'success' | 'warning';
+type ToastVariant = 'default' | 'destructive' | 'success' | 'warning'
 
 interface ToastOptions {
-  title?: string;
-  description: string;
-  variant?: ToastVariant;
+  title?: string
+  description: string
+  variant?: ToastVariant
 }
 
 export const toast = {
@@ -13,35 +13,38 @@ export const toast = {
     baseToast({
       title,
       description,
-      variant: 'success'
-    });
+      variant: 'success',
+    })
   },
 
-  error: (description: string | string[], title: string = 'Erro') => {
+  error: (
+    description: string | string[],
+    title: string = 'Ocorreu um erro'
+  ) => {
     const errorMessage = Array.isArray(description)
       ? description.join(', ')
-      : description;
+      : description
 
     baseToast({
       title,
       description: errorMessage,
-      variant: 'destructive'
-    });
+      variant: 'destructive',
+    })
   },
 
   warning: (description: string, title: string = 'Atenção') => {
     baseToast({
       title,
       description,
-      variant: 'warning'
-    });
+      variant: 'warning',
+    })
   },
 
   custom: ({ title, description, variant = 'default' }: ToastOptions) => {
     baseToast({
       title,
       description,
-      variant
-    });
-  }
-};
+      variant,
+    })
+  },
+}

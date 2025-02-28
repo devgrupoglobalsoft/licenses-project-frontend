@@ -36,6 +36,7 @@ export interface LicencaDTO {
   clienteId: string
   licencasFuncionalidades?: LicencaFuncionalidadeDTO[]
   licencasModulos?: LicencaModuloDTO[]
+  apiKey: string
 }
 
 export interface LicencaFuncionalidadeDTO {

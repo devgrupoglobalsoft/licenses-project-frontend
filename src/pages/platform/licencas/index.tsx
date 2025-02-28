@@ -27,6 +27,9 @@ export default function LicencasPage() {
     filters,
     sorting
   )
+
+  console.log(data)
+
   const { prefetchPreviousPage, prefetchNextPage } =
     usePrefetchAdjacentLicencas(page, pageSize, filters)
 

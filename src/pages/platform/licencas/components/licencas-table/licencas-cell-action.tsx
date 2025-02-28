@@ -3,9 +3,13 @@ import LicencaBlockDetailsForm from '@/pages/platform/licencas/components/licenc
 import LicencaBlockForm from '@/pages/platform/licencas/components/licenca-forms/licenca-block-form'
 import LicencaModulosForm from '@/pages/platform/licencas/components/licenca-forms/licenca-modulos-form'
 import LicencaUpdateForm from '@/pages/platform/licencas/components/licenca-forms/licenca-update-form'
-import { useDeleteLicenca } from '@/pages/platform/licencas/queries/licencas-mutations'
+import {
+  useDeleteLicenca,
+  useRegenerateLicencaApiKey,
+} from '@/pages/platform/licencas/queries/licencas-mutations'
 import { LicencaDTO } from '@/types/dtos'
-import { Edit, Lock, Unlock, Trash, ListTree } from 'lucide-react'
+import { Edit, Lock, Unlock, Trash, ListTree, Key } from 'lucide-react'
+import { getErrorMessage, handleApiError } from '@/utils/error-handlers'
 import { toast } from '@/utils/toast-utils'
 import { Button } from '@/components/ui/button'
 import { EnhancedModal } from '@/components/ui/enhanced-modal'
@@ -24,8 +28,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [selectedLicenca, setSelectedLicenca] = useState<LicencaDTO | null>(
     null
   )
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false)
 
   const deleteLicencaMutation = useDeleteLicenca()
+  const regenerateApiKey = useRegenerateLicencaApiKey()
 
   const handleDeleteConfirm = async () => {
     try {
@@ -41,6 +47,19 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const handleUpdateClick = (licenca: LicencaDTO) => {
     setSelectedLicenca(licenca)
     setIsUpdateModalOpen(true)
+  }
+
+  const handleRegenerateApiKey = async () => {
+    try {
+      const response = await regenerateApiKey.mutateAsync(data.id || '')
+      if (response.info.succeeded) {
+        toast.success('API key regenerada com sucesso')
+      } else {
+        toast.error(getErrorMessage(response, 'Erro ao regenerar API key'))
+      }
+    } catch (error) {
+      toast.error(handleApiError(error, 'Erro ao regenerar API key'))
+    }
   }
 
   return (
@@ -111,6 +130,36 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         />
       </EnhancedModal>
 
+      <EnhancedModal
+        title='API Key'
+        description='Chave de API para esta licença'
+        isOpen={isApiKeyModalOpen}
+        onClose={() => setIsApiKeyModalOpen(false)}
+        size='md'
+      >
+        <div className='space-y-4'>
+          <div className='rounded-lg border p-4 bg-muted'>
+            <p className='font-mono text-sm break-all'>
+              {data.apiKey || 'Nenhuma API key disponível'}
+            </p>
+          </div>
+          <div className='flex justify-end gap-2'>
+            <Button
+              variant='outline'
+              onClick={() => setIsApiKeyModalOpen(false)}
+            >
+              Fechar
+            </Button>
+            <Button
+              onClick={handleRegenerateApiKey}
+              disabled={regenerateApiKey.isPending}
+            >
+              {regenerateApiKey.isPending ? 'A gerar...' : 'Gerar'}
+            </Button>
+          </div>
+        </div>
+      </EnhancedModal>
+
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -161,6 +210,14 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         >
           <ListTree color='hsl(var(--primary))' className='h-4 w-4' />
           <span className='sr-only'>Módulos e Funcionalidades</span>
+        </Button>
+        <Button
+          onClick={() => setIsApiKeyModalOpen(true)}
+          variant='ghost'
+          className='h-8 w-8 p-0'
+        >
+          <Key color='hsl(var(--primary))' className='h-4 w-4' />
+          <span className='sr-only'>API Key</span>
         </Button>
       </div>
     </>
