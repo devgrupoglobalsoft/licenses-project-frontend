@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Breadcrumbs } from '@/components/shared/breadcrumbs'
 import PageHead from '@/components/shared/page-head'
+import { LicencaApiKeyCard } from './components/licenca-api-key-card'
 import { LicencaExpirationProgress } from './components/licenca-expiration-progress'
 import { LicencaUtilizadoresList } from './components/licenca-utilizadores-list'
 import { PerfisComMaisUtilizadoresChart } from './components/perfis-com-mais-utilizadores-chart'
@@ -40,9 +41,10 @@ export default function LicencasAdminPage() {
         <div className='col-span-1 md:col-span-6'>
           <div className='flex flex-col gap-6'>
             {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
-            <Card>
+            <LicencaApiKeyCard apiKey={import.meta.env.VITE_API_KEY} />
+            {/* <Card>
               <PerfisComMaisUtilizadoresChart />
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>
