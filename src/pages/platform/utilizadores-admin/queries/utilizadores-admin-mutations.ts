@@ -10,12 +10,18 @@ export const useCreateUser = () => {
     mutationFn: (data: CreateUtilizadorDTO) =>
       LicencasService('licencas').LicencasUtilizadores.Admin.createUser(data),
     onSuccess: () => {
+      // admin view queries
       queryClient.invalidateQueries({ queryKey: ['utilizadores-admin'] })
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
+
+      // administrator (licenca) view queries
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
     },
   })
 }
@@ -30,12 +36,19 @@ export const useUpdateUser = () => {
         data
       ),
     onSuccess: () => {
+      // admin view queries
       queryClient.invalidateQueries({ queryKey: ['utilizadores-admin'] })
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['utilizador-admin-basic'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
+
+      // administrator (licenca) view queries
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
+      queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
     },
   })
 }
@@ -47,12 +60,18 @@ export const useDeleteUser = () => {
     mutationFn: (id: string) =>
       LicencasService('licencas').LicencasUtilizadores.Admin.deleteUser(id),
     onSuccess: () => {
+      // admin view queries
       queryClient.invalidateQueries({ queryKey: ['utilizadores-admin'] })
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
+
+      // administrator (licenca) view queries
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
     },
   })
 }
@@ -64,12 +83,18 @@ export const useDeleteMultipleUsers = () => {
     mutationFn: (ids: string[]) =>
       UtilizadoresService('utilizadores').Admin.deleteMultipleUsers(ids),
     onSuccess: () => {
+      // admin view queries
       queryClient.invalidateQueries({ queryKey: ['utilizadores-admin'] })
       queryClient.invalidateQueries({
         queryKey: ['utilizadores-admin-paginated'],
       })
       queryClient.invalidateQueries({ queryKey: ['licenca-utilizadores'] })
       queryClient.invalidateQueries({ queryKey: ['perfis-admin-utilizadores'] })
+
+      // administrator (licenca) view queries
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-paginated'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores'] })
+      queryClient.invalidateQueries({ queryKey: ['utilizadores-count'] })
     },
   })
 }
