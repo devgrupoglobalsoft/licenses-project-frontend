@@ -88,7 +88,8 @@ export const useGetModulosSelect = () => {
     queryKey: ['modulos-select'],
     queryFn: async () => {
       const response = await ModulosService('modulos').getModulos()
-      return response.info.data || []
+      const data = response.info.data || []
+      return data.sort((a, b) => a.nome.localeCompare(b.nome))
     },
     staleTime: 30000,
   })

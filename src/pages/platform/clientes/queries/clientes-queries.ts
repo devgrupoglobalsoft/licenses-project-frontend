@@ -78,7 +78,8 @@ export const useGetClientesSelect = () => {
     queryKey: ['clientes-select'],
     queryFn: async () => {
       const response = await ClientesService('clientes').getClientes()
-      return response.info.data || []
+      const data = response.info.data || []
+      return data.sort((a, b) => a.nome.localeCompare(b.nome))
     },
     staleTime: 30000,
   })

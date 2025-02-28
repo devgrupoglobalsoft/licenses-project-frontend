@@ -117,8 +117,6 @@ export function UtilizadorAdminUpdateForm({
           data.roleId.toLowerCase() === 'client' ? data.perfilId : undefined,
       }
 
-      console.log('SUBMIT', submitData)
-
       const response = await updateUtilizador.mutateAsync({
         id: utilizadorId,
         data: submitData,

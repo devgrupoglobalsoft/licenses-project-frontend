@@ -77,7 +77,8 @@ export const useGetAreasSelect = () => {
     queryKey: ['areas-select'],
     queryFn: async () => {
       const response = await AreasService('areas').getAreas()
-      return response.info.data || []
+      const data = response.info.data || []
+      return data.sort((a, b) => a.nome.localeCompare(b.nome))
     },
     staleTime: 30000,
   })
@@ -98,7 +99,8 @@ export const useGetAplicacoesSelect = () => {
     queryKey: ['aplicacoes-select'],
     queryFn: async () => {
       const response = await AplicacoesService('aplicacoes').getAplicacoes()
-      return response.info.data || []
+      const data = response.info.data || []
+      return data.sort((a, b) => a.nome.localeCompare(b.nome))
     },
     staleTime: 30000,
   })

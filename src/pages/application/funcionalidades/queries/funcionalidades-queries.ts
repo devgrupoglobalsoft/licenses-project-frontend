@@ -111,7 +111,8 @@ export const useGetFuncionalidadesSelect = () => {
     queryFn: async () => {
       const response =
         await FuncionalidadesService('funcionalidades').getFuncionalidades()
-      return response.info.data || []
+      const data = response.info.data || []
+      return data.sort((a, b) => a.nome.localeCompare(b.nome))
     },
     staleTime: 30000,
   })

@@ -90,7 +90,8 @@ export const useGetLicencasSelect = () => {
     queryKey: ['licencas-select'],
     queryFn: async () => {
       const response = await LicencasService('licencas').getLicencas()
-      return response.info.data || []
+      const data = response.info.data || []
+      return data.sort((a, b) => a.nome.localeCompare(b.nome))
     },
     staleTime: 30000,
   })
