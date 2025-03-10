@@ -13,40 +13,48 @@ export default function ProtectedRoute({
     useAuthStore()
 
   useEffect(() => {
-    if (!isLoaded) return
-
     const validateAuth = async () => {
+      // Check if there's stored auth data
       const storedAuth = secureStorage.get('auth-storage')
       if (!storedAuth || (!token && !refreshToken)) {
-        console.log('Auth validation failed - no stored auth or tokens')
+        console.log('No stored auth or tokens')
         clearAuth()
         navigate('/login')
         return
       }
 
+      // Verify token validity
       const isTokenValid = secureStorage.verify(token)
-      console.log('Protected Route - Token validation:', isTokenValid)
 
       if (!isTokenValid) {
-        // Try to refresh token before clearing auth
+        // Try to refresh token
         const TokensClient = (await import('@/lib/services/auth/tokens-client'))
           .default
         const success = await TokensClient.getRefresh()
 
         if (!success) {
-          console.log('Token refresh failed in protected route')
+          console.log('Token refresh failed')
           clearAuth()
           navigate('/login')
         }
       }
     }
 
-    validateAuth()
+    // Run validation as soon as auth is loaded
+    if (isLoaded) {
+      validateAuth()
+    }
   }, [token, refreshToken, isAuthenticated, isLoaded, clearAuth, navigate])
 
+  // Show nothing while auth is loading
   if (!isLoaded) {
     return null
   }
 
-  return isAuthenticated ? children : null
+  // If not authenticated after loading, return null (redirect will happen in useEffect)
+  if (!isAuthenticated) {
+    return null
+  }
+
+  return children
 }
