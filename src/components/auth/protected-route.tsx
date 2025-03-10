@@ -40,8 +40,8 @@ export default function ProtectedRoute({
       }
     }
 
-    // Run validation as soon as auth is loaded
-    if (isLoaded) {
+    // Run validation immediately and when auth is loaded
+    if (!isAuthenticated) {
       validateAuth()
     }
   }, [token, refreshToken, isAuthenticated, isLoaded, clearAuth, navigate])

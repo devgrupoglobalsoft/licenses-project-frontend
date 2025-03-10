@@ -37,7 +37,16 @@ export default function AppRouter() {
     useNavigationStore.getState().setNavigate(navigate)
   }, [navigate])
 
-  const dashboardRoutes = [
+  const routes = useRoutes([
+    {
+      path: '/login',
+      element: <SignInPage />,
+      index: true,
+    },
+    {
+      path: '/resetpassword',
+      element: <ResetPasswordPage />,
+    },
     {
       path: '/',
       element: (
@@ -169,29 +178,15 @@ export default function AppRouter() {
         },
       ],
     },
-  ]
-
-  const publicRoutes = [
-    {
-      path: '/login',
-      element: <SignInPage />,
-      index: true,
-    },
-    {
-      path: '/resetpassword',
-      element: <ResetPasswordPage />,
-    },
     {
       path: '/404',
       element: <NotFound />,
     },
     {
       path: '*',
-      element: <Navigate to='/404' replace />,
+      element: <Navigate to='/login' replace />,
     },
-  ]
-
-  const routes = useRoutes([...dashboardRoutes, ...publicRoutes])
+  ])
 
   return routes
 }
