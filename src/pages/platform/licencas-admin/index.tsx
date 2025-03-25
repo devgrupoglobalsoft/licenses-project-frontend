@@ -6,7 +6,6 @@ import PageHead from '@/components/shared/page-head'
 import { LicencaApiKeyCard } from './components/licenca-api-key-card'
 import { LicencaExpirationProgress } from './components/licenca-expiration-progress'
 import { LicencaUtilizadoresList } from './components/licenca-utilizadores-list'
-import { PerfisComMaisUtilizadoresChart } from './components/perfis-com-mais-utilizadores-chart'
 
 export default function LicencasAdminPage() {
   const { licencaId } = useAuthStore()

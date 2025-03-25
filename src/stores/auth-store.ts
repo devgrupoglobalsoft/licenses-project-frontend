@@ -93,7 +93,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       },
 
       clearAuth: () => {
-        set((state: AuthState) => {
+        set((_state: AuthState) => {
           const cleanState = { ...initialState, isLoaded: true }
           return cleanState as AuthState
         })

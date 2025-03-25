@@ -2,13 +2,10 @@ import axios, { type AxiosRequestConfig } from 'axios'
 import type { ResponseLogin } from '@/types/responses'
 import { useAuthStore } from '@/stores/auth-store'
 import type { AuthState } from '@/stores/auth-store'
-import { createHttpClient, HttpClient } from '@/lib/http-client'
 
 class TokensClient {
-  private httpClient: HttpClient
-
   constructor() {
-    this.httpClient = createHttpClient('')
+    // ... existing code ...
   }
 
   public login = async (email: string, password: string): Promise<boolean> => {
