@@ -10,7 +10,9 @@ import { LicencaUtilizadoresList } from './components/licenca-utilizadores-list'
 
 export default function LicencasAdminPage() {
   const { licencaId } = useAuthStore()
-  const { data: apiKey, isLoading } = useGetLicencaApiKey(licencaId!)
+  const { data, isLoading } = useGetLicencaApiKey(licencaId!)
+
+  console.log(data)
 
   console.log('LicencasAdminPage - licencaId:', licencaId)
 
@@ -44,8 +46,8 @@ export default function LicencasAdminPage() {
             {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
             {isLoading ? (
               <div>Loading API key...</div>
-            ) : apiKey ? (
-              <LicencaApiKeyCard apiKey={apiKey} />
+            ) : data?.apiKey ? (
+              <LicencaApiKeyCard apiKey={data.apiKey} />
             ) : null}
             {/* <Card>
               <PerfisComMaisUtilizadoresChart />

@@ -124,11 +124,11 @@ export const useGetLicencaApiKey = (licencaId: string) => {
     queryKey: ['licenca-api-key', licencaId],
     queryFn: async () => {
       const response =
-        await LicencasService('licencas').getLicencaApiKey(licencaId)
+        await LicencasService('licencas').Admin.getLicencaApiKey(licencaId)
+
+      console.log(response)
       return response.info.data
     },
     enabled: !!licencaId,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
   })
 }

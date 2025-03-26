@@ -13,12 +13,14 @@ import {
 import { ResponseApi } from '@/types/responses'
 import { BaseApiClient, BaseApiError } from '@/lib/base-client'
 import { LicencaError } from './licenca-error'
+import { LicencasAdminClient } from './licencas-admin-client'
 import { LicencasFuncionalidadesClient } from './licencas-funcionalidades-client'
 import { LicencasUtilizadoresClient } from './licencas-utilizadores-client'
 
 export class LicencasClient extends BaseApiClient {
   public LicencasFuncionalidades: LicencasFuncionalidadesClient
   public LicencasUtilizadores: LicencasUtilizadoresClient
+  public Admin: LicencasAdminClient
 
   constructor(idFuncionalidade: string) {
     super(idFuncionalidade)
@@ -26,6 +28,7 @@ export class LicencasClient extends BaseApiClient {
       idFuncionalidade
     )
     this.LicencasUtilizadores = new LicencasUtilizadoresClient(idFuncionalidade)
+    this.Admin = new LicencasAdminClient(idFuncionalidade)
   }
 
   // Copy methods from original file lines 358-612
@@ -337,29 +340,5 @@ export class LicencasClient extends BaseApiClient {
         throw new LicencaError('Falha ao regenerar API key', undefined, error)
       }
     })
-  }
-
-  public async getLicencaApiKey(
-    licencaId: string
-  ): Promise<ResponseApi<GSResponse<string>>> {
-    const cacheKey = this.getCacheKey('GET', `/api/keys/${licencaId}`)
-    return this.withCache(cacheKey, () =>
-      this.withRetry(async () => {
-        try {
-          const response = await this.httpClient.getRequest<GSResponse<string>>(
-            `/api/keys/${licencaId}`
-          )
-
-          if (!response.info) {
-            console.error('Formato de resposta inválido:', response)
-            throw new LicencaError('Formato de resposta inválido')
-          }
-
-          return response
-        } catch (error) {
-          throw new LicencaError('Falha ao obter API key', undefined, error)
-        }
-      })
-    )
   }
 }
