@@ -1,3 +1,4 @@
+import { useGetLicencaApiKey } from '@/pages/platform/licencas/queries/licencas-queries'
 import { useAuthStore } from '@/stores/auth-store'
 import { Card } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -9,6 +10,7 @@ import { LicencaUtilizadoresList } from './components/licenca-utilizadores-list'
 
 export default function LicencasAdminPage() {
   const { licencaId } = useAuthStore()
+  const { data: apiKey, isLoading } = useGetLicencaApiKey(licencaId!)
 
   console.log('LicencasAdminPage - licencaId:', licencaId)
 
@@ -40,7 +42,11 @@ export default function LicencasAdminPage() {
         <div className='col-span-1 md:col-span-6'>
           <div className='flex flex-col gap-6'>
             {licencaId && <LicencaExpirationProgress licencaId={licencaId} />}
-            <LicencaApiKeyCard apiKey={import.meta.env.VITE_API_KEY} />
+            {isLoading ? (
+              <div>Loading API key...</div>
+            ) : apiKey ? (
+              <LicencaApiKeyCard apiKey={apiKey} />
+            ) : null}
             {/* <Card>
               <PerfisComMaisUtilizadoresChart />
             </Card> */}

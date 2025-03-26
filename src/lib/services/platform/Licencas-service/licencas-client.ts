@@ -338,4 +338,28 @@ export class LicencasClient extends BaseApiClient {
       }
     })
   }
+
+  public async getLicencaApiKey(
+    licencaId: string
+  ): Promise<ResponseApi<GSResponse<string>>> {
+    const cacheKey = this.getCacheKey('GET', `/api/keys/${licencaId}`)
+    return this.withCache(cacheKey, () =>
+      this.withRetry(async () => {
+        try {
+          const response = await this.httpClient.getRequest<GSResponse<string>>(
+            `/api/keys/${licencaId}`
+          )
+
+          if (!response.info) {
+            console.error('Formato de resposta inválido:', response)
+            throw new LicencaError('Formato de resposta inválido')
+          }
+
+          return response
+        } catch (error) {
+          throw new LicencaError('Falha ao obter API key', undefined, error)
+        }
+      })
+    )
+  }
 }
