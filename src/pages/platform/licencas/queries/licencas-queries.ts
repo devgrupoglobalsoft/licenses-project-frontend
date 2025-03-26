@@ -121,12 +121,10 @@ export const useGetLicencasByCliente = (clienteId: string) => {
 
 export const useGetLicencaApiKey = (licencaId: string) => {
   return useQuery({
-    queryKey: ['licenca-api-key', licencaId],
+    queryKey: ['licenca', licencaId],
     queryFn: async () => {
       const response =
         await LicencasService('licencas').Admin.getLicencaApiKey(licencaId)
-
-      console.log(response)
       return response.info.data
     },
     enabled: !!licencaId,

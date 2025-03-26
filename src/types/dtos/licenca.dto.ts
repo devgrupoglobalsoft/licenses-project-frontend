@@ -49,6 +49,11 @@ export interface LicencaModuloDTO {
   moduloId: string
 }
 
+export interface LicencaAPIKeyDTO {
+  apiKey: string
+  ativo: boolean
+}
+
 export interface BloqueioLicencaDTO {
   motivoBloqueio: string
 }
